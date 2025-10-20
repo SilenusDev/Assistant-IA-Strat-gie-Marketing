@@ -1,4 +1,5 @@
 import { For, Show, createSignal } from "solid-js";
+import { GripVertical } from "lucide-solid";
 
 import { scenarioStore } from "../stores/scenarioStore";
 import type { ScenarioDetail } from "../types";
@@ -89,13 +90,21 @@ export function ScenarioSidebar() {
         <For each={scenarioStore.state.scenarios}>
           {(scenario) => (
             <button
-              class="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-3 text-left text-sm text-slate-200 transition hover:border-primary"
+              draggable={true}
+              onDragStart={(e) => {
+                e.dataTransfer!.effectAllowed = "move";
+                e.dataTransfer!.setData("scenarioId", scenario.id.toString());
+              }}
+              class="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-3 text-left text-sm text-slate-200 transition hover:border-primary cursor-move"
               classList={{
                 "border-primary text-white": detail()?.id === scenario.id
               }}
               onClick={() => scenarioStore.selectScenario(scenario.id)}
             >
-              <p class="font-semibold">{scenario.nom}</p>
+              <p class="font-semibold flex items-center gap-2">
+                <GripVertical size={16} class="text-slate-500" />
+                {scenario.nom}
+              </p>
               <p class="text-xs text-slate-400">{scenario.thematique}</p>
             </button>
           )}

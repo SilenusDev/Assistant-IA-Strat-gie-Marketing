@@ -2,6 +2,7 @@ import { Show, onMount } from "solid-js";
 
 import { ChatPanel } from "./components/ChatPanel";
 import { ScenarioSidebar } from "./components/ScenarioSidebar";
+import { ScenarioStructure } from "./components/ScenarioStructure";
 import { scenarioStore } from "./stores/scenarioStore";
 
 export default function App() {
@@ -19,11 +20,21 @@ export default function App() {
           Co-construisez votre scénario, ajoutez des cibles et générez votre plan.
         </p>
       </header>
-      <main class="flex flex-1 flex-col gap-6 px-8 py-6 lg:flex-row">
+      <main class="flex flex-1 gap-6 px-8 py-6">
+        {/* Aside gauche - Structure du scénario */}
+        <aside class="w-80 flex-shrink-0">
+          <div class="rounded-2xl border border-slate-800/60 bg-slate-900/40 p-6 shadow-xl h-full">
+            <ScenarioStructure />
+          </div>
+        </aside>
+
+        {/* Zone centrale - Chat */}
         <section class="flex-1 rounded-2xl border border-slate-800/60 bg-slate-900/40 p-6 shadow-xl">
           <ChatPanel />
         </section>
-        <aside class="w-full lg:w-96">
+
+        {/* Aside droite - Liste des scénarios */}
+        <aside class="w-96 flex-shrink-0">
           <div class="rounded-2xl border border-slate-800/60 bg-slate-900/60 p-6 shadow-xl">
             <ScenarioSidebar />
           </div>

@@ -14,6 +14,9 @@ services:
       - backend
     environment:
       - VITE_API_BASE_URL=http://backend:5000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     networks:
       - assistant-net
 
