@@ -1,0 +1,95 @@
+# 🎯 RÈGLE PRIORITÉ ABSOLUE #1 - PROJET POC
+
+## ⚠️ CONTEXTE : PROOF OF CONCEPT (POC)
+
+**CE PROJET EST UN POC DE DÉMONSTRATION - PAS UN PROJET PRODUCTION**
+
+### 🚨 PRINCIPES FONDAMENTAUX POC
+
+1. **SIMPLICITÉ MAXIMALE**
+   - ❌ PAS de sur-ingénierie
+   - ❌ PAS de patterns complexes
+   - ❌ PAS d'optimisations prématurées
+   - ❌ PAS de fonctionnalités "nice to have"
+   - ✅ Code simple et direct
+   - ✅ Solutions évidentes en premier
+   - ✅ Minimum viable pour la démo
+
+2. **FOCUS DÉMONSTRATION**
+   - Objectif : montrer le concept en 10 minutes
+   - Priorité : que ça fonctionne, pas que ce soit parfait
+   - Accepter : code "quick and dirty" si fonctionnel
+   - Éviter : refactoring, abstractions, généralisations
+
+3. **RÈGLE DU "GOOD ENOUGH"**
+   - Si ça marche pour la démo → c'est suffisant
+   - Si ça nécessite plus de 30 min → trop complexe pour un POC
+   - Si ça ajoute une dépendance → vraiment nécessaire ?
+   - Si ça nécessite de la doc → probablement trop compliqué
+
+### ✅ APPROCHE POC CORRECTE
+
+```
+Question : "Dois-je ajouter cette fonctionnalité ?"
+Réponse : "Est-ce CRITIQUE pour la démo ?"
+  → OUI : implémenter simplement
+  → NON : ignorer complètement
+```
+
+### ❌ ANTI-PATTERNS POC À ÉVITER
+
+- Créer des composants réutilisables "au cas où"
+- Ajouter des tests exhaustifs (tests de base suffisent)
+- Implémenter la gestion d'erreurs parfaite
+- Créer des abstractions pour "faciliter l'évolution"
+- Optimiser les performances (sauf si bloquant)
+- Documenter en détail (README simple suffit)
+- Gérer tous les cas limites
+
+### ✅ BONNES PRATIQUES POC
+
+- **Copier-coller** plutôt que factoriser (si ça va plus vite)
+- **Hardcoder** des valeurs de test si nécessaire
+- **Ignorer** les warnings non bloquants
+- **Simplifier** au maximum l'architecture
+- **Utiliser** des solutions existantes (pas de réinvention)
+- **Accepter** la dette technique (c'est un POC !)
+
+### 🎯 CHECKLIST AVANT TOUTE IMPLÉMENTATION
+
+Avant d'écrire du code, se demander :
+- [ ] Est-ce visible dans la démo ?
+- [ ] Est-ce bloquant si absent ?
+- [ ] Puis-je faire plus simple ?
+- [ ] Combien de temps ça prend ? (> 30 min = trop)
+- [ ] Y a-t-il une solution déjà faite ?
+
+Si 2+ réponses négatives → **NE PAS IMPLÉMENTER**
+
+### 📝 EXEMPLES CONCRETS
+
+**❌ MAUVAIS (sur-ingénierie POC)**
+```python
+# Créer un système de cache Redis pour les réponses IA
+# Implémenter un retry avec backoff exponentiel
+# Ajouter un système de queue pour les requêtes
+# Créer des factories et des builders
+```
+
+**✅ BON (simplicité POC)**
+```python
+# Appeler directement OpenAI
+# Si ça échoue, retourner un message d'erreur simple
+# Pas de cache, pas de queue, pas de complexité
+response = openai.chat.completions.create(...)
+```
+
+### 🚀 MOTTO POC
+
+**"Make it work, not perfect"**
+**"Demo-ready, not production-ready"**
+**"Simple beats clever"**
+
+---
+
+# CETTE RÈGLE PRIME SUR TOUTES LES AUTRES POUR CE PROJET

@@ -1,0 +1,225 @@
+[
+  {
+    "id": "scénario_1",
+    "nom": "Cas clients & thought leadership SaaS",
+    "thématique": "cas clients / success stories",
+    "objectif": "améliorer la notoriété + crédibilité",
+    "cible": {
+      "segment": "SaaS B2B",
+      "persona": "Directeurs Marketing / CMO",
+      "niveau_maturité": "intermédiaire"
+    },
+    "ressources_existantes": {
+      "blog_posts": ["étude de cas produit X", "article fonctionnalité Y"],
+      "infographies": [],
+      "videos": ["témoignage client version courte"],
+      "newsletter": true,
+      "base_contacts": true,
+      "site_web": true,
+      "lead_magnets": ["book comparatif"],  
+      "social_media_presence": ["LinkedIn", "Twitter"],
+      "outil_marketing_automation": true
+    },
+    "contraintes": {
+      "budget_limite_video": true,
+      "pas_de_ressources_design": false,
+      "localisation_contenus": false
+    }
+  },
+
+  {
+    "id": "scénario_2",
+    "nom": "SEO + content hub pour PME industrielle",
+    "thématique": "refonte site & SEO content hub",
+    "objectif": "augmenter le trafic organique + génération de leads",
+    "cible": {
+      "segment": "PME industrielle",
+      "persona": "Responsable Marketing / Directeur Digital",
+      "niveau_maturité": "débutant"
+    },
+    "ressources_existantes": {
+      "blog_posts": ["quelques articles techniques anciens"],
+      "infographies": [],
+      "videos": [],
+      "newsletter": false,
+      "base_contacts": false,
+      "site_web": true,
+      "lead_magnets": [],
+      "social_media_presence": ["LinkedIn"],
+      "outil_marketing_automation": false
+    },
+    "contraintes": {
+      "budget_limite_design": true,
+      "pas_de_équipes internes content": true,
+      "localisation_contenus": false
+    }
+  },
+
+  {
+    "id": "scénario_3",
+    "nom": "Automation & nurturance pour solution B2B",
+    "thématique": "marketing automation / lead nurturing",
+    "objective": "qualifier les leads + accélérer conversion",
+    "cible": {
+      "segment": "Service B2B / SaaS",
+      "persona": "Responsable Marketing & Acquisition",
+      "niveau_maturité": "intermédiaire"
+    },
+    "ressources_existantes": {
+      "blog_posts": ["guide sur le marketing automation"],
+      "infographies": ["schéma funnel"],
+      "videos": [],
+      "newsletter": true,
+      "base_contacts": true,
+      "site_web": true,
+      "lead_magnets": ["checklist automatisation", "ebook intro"],
+      "social_media_presence": ["LinkedIn", "Facebook"],
+      "outil_marketing_automation": true
+    },
+    "contraintes": {
+      "pas_de_budget_externe": false,
+      "complexité_technique": true,
+      "localisation_contenus": false
+    }
+  },
+
+  {
+    "id": "scénario_4",
+    "nom": "LinkedIn Advocacy & personal branding dirigeants",
+    "thématique": "advocacy / leadership / personal branding",
+    "objectif": "augmenter la visibilité des dirigeants + thought leadership",
+    "cible": {
+      "segment": "Entreprises B2B / grands comptes",
+      "persona": "CEO / CMO / Dirigeant",
+      "niveau_maturité": "intermédiaire"
+    },
+    "ressources_existantes": {
+      "blog_posts": [],
+      "infographies": [],
+      "videos": [],
+      "newsletter": false,
+      "base_contacts": true,
+      "site_web": true,
+      "lead_magnets": [],
+      "social_media_presence": ["LinkedIn", "X (Twitter)"],
+      "outil_marketing_automation": false
+    },
+    "contraintes": {
+      "pas_de_contenu_existant": true,
+      "budget_limite": false,
+      "localisation_contenus": false
+    }
+  },
+
+  {
+    "id": "scénario_5",
+    "nom": "Content international & localisation",
+    "thématique": "localisation / adaptation internationale",
+    "objectif": "déployer le contenu sur plusieurs marchés / langues",
+    "cible": {
+      "segment": "SaaS / Tech B2B",
+      "persona": "Responsable Marketing International",
+      "niveau_maturité": "avancé"
+    },
+    "ressources_existantes": {
+      "blog_posts": ["articles en français"],
+      "infographies": [],
+      "videos": ["vidéo corporate FR"],
+      "newsletter": true,
+      "base_contacts": true,
+      "site_web": true,
+      "lead_magnets": ["guide français"],
+      "social_media_presence": ["LinkedIn (FR)"],
+      "outil_marketing_automation": true
+    },
+    "contraintes": {
+      "budget_localisation": true,
+      "nécessité_de_traducteurs": true,
+      "complexité_locale": true
+    }
+  },
+
+  {
+    "id": "scénario_6",
+    "nom": "Maintenance de contenu & optimisation SEO",
+    "thématique": "audit + mise à jour contenu existant",
+    "objectif": "améliorer le ROI du contenu existant et le SEO",
+    "cible": {
+      "segment": "PME / Entreprises B2B",
+      "persona": "Responsable Contenu / SEO",
+      "niveau_maturité": "intermédiaire"
+    },
+    "ressources_existantes": {
+      "blog_posts": ["50 articles publiés depuis 3 ans"],
+      "infographies": ["quelques visuels anciens"],
+      "videos": [],
+      "newsletter": true,
+      "base_contacts": true,
+      "site_web": true,
+      "lead_magnets": ["ebook ancien"],
+      "social_media_presence": ["LinkedIn"],
+      "outil_marketing_automation": true
+    },
+    "contraintes": {
+      "volumes_grands": true,
+      "ressources_rédactionnelles_limitées": true,
+      "localisation_contenus": false
+    }
+  },
+
+  {
+    "id": "scénario_7",
+    "nom": "Sales Content pour accompagner les commerciaux",
+    "thématique": "Sales Content / supports commerciaux",
+    "objectif": "équiper les commerciaux avec du contenu convaincant",
+    "cible": {
+      "segment": "Entreprise B2B / solution complexe",
+      "persona": "VP Sales / Directeur Commercial",
+      "niveau_maturité": "intermédiaire"
+    },
+    "ressources_existantes": {
+      "blog_posts": ["articles de leadership"],
+      "infographies": ["schémas techniques"],
+      "videos": ["démonstrations produit"],
+      "newsletter": true,
+      "base_contacts": true,
+      "site_web": true,
+      "lead_magnets": ["cas client", "white paper"],
+      "social_media_presence": ["LinkedIn", "X"],
+      "outil_marketing_automation": true
+    },
+    "contraintes": {
+      "budget_design": true,
+      "ressources internes limitées": true,
+      "localisation_contenus": false
+    }
+  },
+
+  {
+    "id": "scénario_8",
+    "nom": "Expansion vers un nouveau marché / nouvelle verticalité",
+    "thématique": "nouveau marché vertical",
+    "objectif": "tester un vertical / marché de niche B2B",
+    "cible": {
+      "segment": "vertical niche (ex : IoT, nettoyage industriel)",
+      "persona": "Responsable marketing vertical",
+      "niveau_maturité": "débutant"
+    },
+    "ressources_existantes": {
+      "blog_posts": [],
+      "infographies": [],
+      "videos": [],
+      "newsletter": false,
+      "base_contacts": false,
+      "site_web": true,
+      "lead_magnets": [],
+      "social_media_presence": ["LinkedIn"],
+      "outil_marketing_automation": false
+    },
+    "contraintes": {
+      "aucun contenu": true,
+      "budget_test": true,
+      "besoin de recherche de marché": true
+    }
+  }
+]

@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse de Besoin INVOX - Solutions IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 2cm;
+            }
+            .no-print { display: none; }
+            .page-break { page-break-after: always; }
+        }
+        
+        .sticky-toc {
+            position: sticky;
+            top: 2rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+        
+        .toc-link {
+            transition: all 0.2s;
+        }
+        
+        .toc-link:hover {
+            color: #3B82F6;
+            transform: translateX(4px);
+        }
+        
+        .gradient-header {
+            background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+        }
+        
+        .card-hover {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Header -->
+    <header class="gradient-header text-white py-12 shadow-xl">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center gap-4 mb-4">
+                <i data-lucide="brain-circuit" class="w-12 h-12"></i>
+                <div>
+                    <h1 class="text-4xl font-bold">Analyse de Besoin Détaillée</h1>
+                    <p class="text-blue-100 text-lg mt-2">Projet d'Intégration IA - INVOX</p>
+                </div>
+            </div>
+            <div class="flex gap-6 text-sm mt-6 flex-wrap">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    <span>Octobre 2025</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                    <span>Sam, Yannick, Xavier, Martine</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <i data-lucide="file-check" class="w-4 h-4"></i>
+                    <span>Version 1.0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-8">
+        <div class="flex gap-8">
+            
+            <!-- Table des matières sticky -->
+            <aside class="w-64 no-print">
+                <nav class="sticky-toc bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="font-bold text-lg mb-4 flex items-center gap-2">
+                        <i data-lucide="list" class="w-5 h-5 text-blue-600"></i>
+                        Sommaire
+                    </h2>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#contexte" class="toc-link block text-slate-600 hover:text-blue-600">Contexte Stratégique</a></li>
+                        <li><a href="#personas" class="toc-link block text-slate-600 hover:text-blue-600">Personas Utilisateurs</a></li>
+                        <li><a href="#douleurs" class="toc-link block text-slate-600 hover:text-blue-600">Points de Douleur</a></li>
+                        <li><a href="#workflows" class="toc-link block text-slate-600 hover:text-blue-600">Workflows</a></li>
+                        <li><a href="#benchmark" class="toc-link block text-slate-600 hover:text-blue-600">Benchmark Solutions</a></li>
+                        <li><a href="#priorisation" class="toc-link block text-slate-600 hover:text-blue-600">Priorisation RICE</a></li>
+                        <li><a href="#roi" class="toc-link block text-slate-600 hover:text-blue-600">Impact & ROI</a></li>
+                        <li><a href="#risques" class="toc-link block text-slate-600 hover:text-blue-600">Risques</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Contenu principal -->
+            <main class="flex-1 space-y-8">
+
+                <!-- Section Contexte -->
+                <section id="contexte" class="bg-white rounded-xl shadow-lg p-8 page-break">
+                    <div class="flex items-center gap-3 mb-6">
+                        <i data-lucide="target" class="w-8 h-8 text-blue-600"></i>
+                        <h2 class="text-3xl font-bold text-slate-800">Contexte & Vision Stratégique</h2>
+                    </div>
+
+                    <div class="prose max-w-none">
+                        <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-r-lg mb-6">
+                            <h3 class="text-xl font-semibold mb-3 flex items-center gap-2">
+                                <i data-lucide="building-2" class="w-5 h-5"></i>
+                                Présentation INVOX
+                            </h3>
+                            <p class="text-slate-700 leading-relaxed">
+                                <strong>INVOX</strong> est une agence de Demand Generation et Lead Generation B2B de 40 personnes, 
+                                spécialisée dans l'accompagnement des entreprises pour générer des opportunités commerciales.
+                            </p>
+                        </div>
+
+                        <div class="grid md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-lg">
+                                <i data-lucide="file-text" class="w-8 h-8 mb-3"></i>
+                                <h4 class="font-semibold mb-2">Création de contenu</h4>
+                                <p class="text-sm opacity-90">Production & diffusion</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-lg">
+                                <i data-lucide="users" class="w-8 h-8 mb-3"></i>
+                                <h4 class="font-semibold mb-2">Engagement audiences</h4>
+                                <p class="text-sm opacity-90">Stratégie d'activation</p>
+                            </div>
+                            <div class="bg-gradient-to-br from-slate-600 to-slate-700 text-white p-6 rounded-lg">
+                                <i data-lucide="zap" class="w-8 h-8 mb-3"></i>
+                                <h4 class="font-semibold mb-2">Automatisation & data</h4>
+                                <p class="text-sm opacity-90">Performance mesurable</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-orange-50 border-l-4 border-orange-500 p-6 rounded-r-lg">
+                            <h3 class="text-xl font-semibold mb-3 flex items-center gap-2">
+                                <i data-lucide="trending-up" class="w-5 h-5"></i>
+                                Transformation en cours
+                            </h3>
+                            <p class="text-slate-700 mb-4">
+                                Pivot stratégique : <strong>Production de livrables → Conseil à forte valeur ajoutée</strong>
+                            </p>
+                            <blockquote class="border-l-4 border-orange-400 pl-4 italic text-slate-600">
+                                "J'ai fait des coachings, je vous ai fait un avant-après, j'accompagne vos équipes." - Guilhem
+                            </blockquote>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section Personas -->
+                <section id="personas" class="bg-white rounded-xl shadow-lg p-8 page-break">
+                    <div class="flex items-center gap-3 mb-6">
+                        <i data-lucide="user-circle" class="w-8 h-8 text-blue-600"></i>
+                        <h2 class="text-3xl font-bold text-slate-800">Personas Utilisateurs</h2>
+                    </div>
+
+                    <!-- Persona Justine -->
+                    <div class="card-hover bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-6 mb-6 border-l-4 border-blue-600">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-blue-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold">
+                                J
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-slate-800 mb-2">Justine - Responsable Marketing Interne</h3>
+                                <div class="flex gap-2 mb-4">
+                                    <span class="bg-blue-600 text-white text-xs px-3 py-1 rounded-full">Utilisateur Principal</span>
+                                    <span class="bg-green-600 text-white text-xs px-3 py-1 rounded-full">Maturité IA : Avancé</span>
+                                </div>
+
+                                <div class="grid md:grid-cols-2 gap-4 mt-4">
+                                    <div>
+                                        <h4 class="font-semibold mb-2 flex items-center gap-2">
+                                            <i data-lucide="briefcase" class="w-4 h-4 text-blue-600"></i>
+                                            Rôle & Responsabilités
+                                        </h4>
+                                        <ul class="text-sm text-slate-700 space-y-1">
+                                            <li>• Pilote la "Content Factory" INVOX</li>
+                                            <li>• Binôme avec Guilhem (Marketing & Sales)</li>
+                                            <li>• Gère équipe matricielle (Content, Social, SEO)</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold mb-2 flex items-center gap-2">
+                                            <i data-lucide="clock" class="w-4 h-4 text-orange-600"></i>
+                                            Top 3 Tâches Chronophages
+                                        </h4>
+                                        <ul class="text-sm text-slate-700 space-y-1">
+                                            <li>• Définition sujets/angles + briefs (4-6h/sem)</li>
+                                            <li>• Gestion équipe (relances, coordination)</li>
+                                            <li>• Collecte manuelle KPIs (2-3h/mois) ❌</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 bg-white/50 p-4 rounded-lg">
+                                    <h4 class="font-semibold mb-2 flex items-center gap-2">
+                                        <i data-lucide="message-square-quote" class="w-4 h-4 text-blue-600"></i>
+                                        Besoin exprimé
+                                    </h4>
+                                    <p class="text-sm text-slate-700 italic">
+                                        "Mon idéal serait d'avoir un outil où je pose mon contexte... et il me dit qu'est-ce que je peux créer 
+                                        comme formats, m'orienter sur différents angles, mais aussi m'aider sur comment maximiser la diffusion."
+                                    </p>
+                                </div>
+
+                                <div class="mt-4 flex gap-2">
+                                    <span class="text-xs bg-slate-200 px-2 py-1 rounded">Gemini quotidien</span>
+                                    <span class="text-xs bg-slate-200 px-2 py-1 rounded">NotebookLM intensif</span>
+                                    <span class="text-xs bg-slate-200 px-2 py-1 rounded">Gems créés</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Persona Guilhem -->
+                    <div class="card-hover bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-6 mb-6 border-l-4 border-orange-600">
+                        <div class="flex items-start gap-4">
+                            <div class="bg-orange-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold">
+                                G
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-slate-800 mb-2">Guilhem - Responsable Marketing & Sales</h3>
+                                <div class="flex gap-2 mb-4">
+                                    <span class="bg-orange-600 text-white text-xs px-3 py-1 rounded-full">Sponsor Projet</span>
+                                    <span class="bg-blue-600 text-white text-xs px-3 py-1 rounded-full">Vision Stratégique</span>
+                                </div>
+
+                                <div class="grid md:grid-cols-2 gap-4 mt-4">
+                                    <div>
+                                        <h4 class="font-semibold mb-2">Points de douleur</h4>
+                                        <ul class="text-sm text-slate-700 space-y-1">
+                                            <li>• Préparation calls insuffisante (manque temps)</li>
+                                            <li>• Rédaction propales (3-4h chacune)</li>
+                                            <li>• Données commerciales dispersées</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold mb-2">Objectif</h4>
+                                        <p class="text-sm text-slate-700">
+                                            Valoriser l'<strong>accompagnement</strong> plutôt que le livrable. 
+                                            Outils d'aide à la préparation commerciale.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Équipe Production -->
+                    <div class="bg-slate-100 rounded-lg p-6">
+                        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                            <i data-lucide="users-2" class="w-6 h-6 text-slate-600"></i>
+                            Équipe Production (Content Managers/Editors)
+                        </h3>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2 text-sm">Content Mapping</h4>
+                                <p class="text-xs text-slate-600">Collecte/catégorisation données (très chronophage)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2 text-sm">SEO</h4>
+                                <p class="text-xs text-slate-600">Audit sémantique manuel (~2 jours pour 5000 mots-clés)</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2 text-sm">Social Media</h4>
+                                <p class="text-xs text-slate-600">Audit LinkedIn manuel (3-4h, non scalable)</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section Points de Douleur -->
+                <section id="douleurs" class="bg-white rounded-xl shadow-lg p-8 page-break">
+                    <div class="flex items-center gap-3 mb-6">
+                        <i data-lucide="alert-circle" class="w-8 h-8 text-orange-600"></i>
+                        <h2 class="text-3xl font-bold text-slate-800">Points de Douleur Quantifiés</h2>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Marketing Interne -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                                <i data-lucide="megaphone" class="w-6 h-6 text-blue-600"></i>
+                                Marketing Interne (Content Factory)
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead class="bg-slate-100">
+                                        <tr>
+                                            <th class="text-left p-3 rounded-tl-lg">Point de douleur</th>
+                                            <th class="text-left p-3">Fréquence</th>
+                                            <th class="text-left p-3">Temps estimé</th>
+                                            <th class="text-left p-3 rounded-tr-lg">Impact</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y">
+                                        <tr class="hover:bg-slate-50">
+                                            <td class="p-3">Définition sujets/angles + briefs</td>
+                                            <td class="p-3">Hebdomadaire</td>
+                                            <td class="p-3 font-semibold text-orange-600">4-6h/semaine</td>
+                                            <td class="p-3">Goulot création</td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-50">
+                                            <td class="p-3">Gestion équipe (relances, suivi)</td>
+                                            <td class="p-3">Quotidien</td>
+                                            <td class="p-3 font-semibold text-orange-600">Significatif</td>
+                                            <td class="p-3">Efficacité réduite</td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-50 bg-red-50">
+                                            <td class="p-3 font-semibold">Collecte manuelle KPIs</td>
+                                            <td class="p-3">Mensuel</td>
+                                            <td class="p-3 font-semibold text-red-600">2-3h/mois</td>
+                                            <td class="p-3">Pas de pilotage temps réel</td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-50">
+                                            <td class="p-3">Publication manuelle (LinkedIn, blog)</td>
+                                            <td class="p-3">Quotidien</td>
+                                            <td class="p-3">Récurrent</td>
+                                            <td class="p-3">Pas d'optimisation</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Performance Commerciale -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
+                                <i data-lucide="trending-up" class="w-6 h-6 text-orange-600"></i>
+                                Performance Commerciale
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                                    <h4 class="font-semibold mb-2">Rédaction propositions</h4>
+                                    <p class="text-sm text-slate-700 mb-2">Hebdomadaire • <span class="font-bold text-orange-600">3-4h/propale</span></p>
+                                    <p class="text-xs text-slate-600">Coût de production élevé, personnalisation fastidieuse</p>
+                                </div>
+                                <div class="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                                    <h4 class="font-semibold mb-2">Préparation calls</h4>
+                                    <p class="text-sm text-slate-700 mb-2">Quotidien • <span class="font-bold text-orange-600">Insuffisante</span></p>
+                                    <p class="text-xs text-slate-600">Manque de temps, qualité pitch réduite</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section Priorisation RICE -->
+                <section id="priorisation" class="bg-white rounded-xl shadow-lg p-8 page-break">
+                    <div class="flex items-center gap-3 mb-6">
+                        <i data-lucide="bar-chart-3" class="w-8 h-8 text-blue-600"></i>
+                        <h2 class="text-3xl font-bold text-slate-800">Priorisation RICE</h2>
+                    </div>
+
+                    <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                        <h3 class="font-semibold mb-2">Méthodologie</h3>
+                        <p class="text-sm text-slate-700 mb-2">
+                            <strong>RICE Score = (Reach × Impact × Confidence) / Effort</strong>
+                        </p>
+                        <div class="grid grid-cols-4 gap-2 text-xs">
+                            <div><strong>Reach</strong> (1-10): Nb utilisateurs</div>
+                            <div><strong>Impact</strong> (1-5): Ampleur amélioration</div>
+                            <div><strong>Confidence</strong> (0-1): Certitude</div>
+                            <div><strong>Effort</strong> (1-5): Complexité</div>
+                        </div>
+                    </div>
+
+                    <!-- Graphique RICE -->
+                    <div class="mb-8">
+                        <canvas id="riceChart" class="w-full" style="max-height: 400px;"></canvas>
+                    </div>
+
+                    <!-- Tableau des cas d'usage -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-slate-800 text-white">
+                                <tr>
+                                    <th class="text-left p-3 rounded-tl-lg">Cas d'usage</th>
+                                    <th class="text-center p-3">Reach</th>
+                                    <th class="text-center p-3">Impact</th>
+                                    <th class="text-center p-3">Conf.</th>
+                                    <th class="text-center p-3">Effort</th>
+                                    <th class="text-center p-3 rounded-tr-lg">Score</th>
+                                    <th class="text-center p-3">Priorité</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y">
+                                <tr class="bg-red-50 hover:bg-red-100">
+                                    <td class="p-3 font-semibold">Rédaction propales</td>
+                                    <td class="text-center p-3">9/10</td>
+                                    <td class="text-center p-3">5/5</td>
+                                    <td class="text-center p-3">0.9</td>
+                                    <td class="text-center p-3">2/5</td>
+                                    <td class="text-center p-3 font-bold text-lg">20.25</td>
+                                    <td class="text-center p-3"><span class="bg-red-600 text-white px-2 py-1 rounded text-xs">🔥 P0</span></td>
+                                </tr>
+                                <tr class="bg-orange-50 hover:bg-orange-100">
+                                    <td class="p-3 font-semibold">Dashboard KPIs</td>
+                                    <td class="text-center p-3">4/10</td>
+                                    <td class="text-center p-3">5/5</td>
+                                    <td class="text-center p-3">0.8</td>
+                                    <td class="text-center p-3">2/5</td>
+                                    <td class="text-center p-3 font-bold text-lg">8.0</td>
+                                    <td class="text-center p-3"><span class="bg-red-600 text-white px-2 py-1 rounded text-xs">🔥 P0</span></td>
+                                </tr>
+                                <tr class="bg-yellow-50 hover:bg-yellow-100">
+                                    <td class="p-3 font-semibold">Assistant Idéateur</td>
+                                    <td class="text-center p-3">4/10</td>
+                                    <td class="text-center p-3">5/5</td>
+                                    <td class="text-center p-3">0.75</td>
+                                    <td class="text-center p-3">4/5</td>
+                                    <td class="text-center p-3 font-bold text-lg">3.75</td>
+                                    <td class="text-center p-3"><span class="bg-blue-600 text-white px-2 py-1 rounded text-xs">🚀 P0</span></td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-3">Synthèse réunions</td>
+                                    <td class="text-center p-3">7/10</td>
+                                    <td class="text-center p-3">4/5</td>
+                                    <td class="text-center p-3">0.9</td>
+                                    <td class="text-center p-3">2/5</td>
+                                    <td class="text-center p-3 font-bold">12.6</td>
+                                    <td class="text-center p-3"><span class="bg-yellow-500 text-white px-2 py-1 rounded text-xs">P1</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Matrice Impact/Effort -->
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold mb-4">Matrice Impact / Effort</h3>
+                        <div class="bg-slate-100 p-6 rounded-lg">
+                            <canvas id="matrixChart" class="w-full" style="max-height: 400px;"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section ROI -->
+                <section id="roi" class="bg-white rounded-xl shadow-lg p-8 page-break">
+                    <div class="flex items-center gap-3 mb-6">
+                        <i data-lucide="piggy-bank" class="w-8 h-8 text-green-600"></i>
+                        <h2 class="text-3xl font-bold text-slate-800">Impact Business & ROI</h2>
+                    </div>
+
+                    <!-- Gains quantifiés -->
+                    <div class="grid md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-gradient-to-br from-green-500 to-green-600 text-white p-6 rounded-xl">
+                            <i data-lucide="clock" class="w-10 h-10 mb-3"></i>
+                            <div class="text-3xl font-bold mb-2">27-38h</div>
+                            <div class="text-sm opacity-90">Gagnées par mois</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-xl">
+                            <i data-lucide="euro" class="w-10 h-10 mb-3"></i>
+                            <div class="text-3xl font-bold mb-2">16-23k€</div>
+                            <div class="text-sm opacity-90">Valorisation annuelle</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-6 rounded-xl">
+                            <i data-lucide="calendar" class="w-10 h-10 mb-3"></i>
+                            <div class="text-3xl font-bold mb-2">24-36 mois</div>
+                            <div class="text-sm opacity-90">Retour sur investissement</div>
+                        </div>
+                    </div>
+
+                    <!-- Tableau gains détaillés -->
+                    <div class="overflow-x-auto mb-8">
+                        <table class="w-full text-sm">
+                            <thead class="bg-green-100">
+                                <tr>
+                                    <th class="text-left p-3 rounded-tl-lg">Solution</th>
+                                    <th class="text-left p-3">Utilisateur(s)</th>
+                                    <th class="text-right p-3">Gain mensuel</th>
+                                    <th class="text-right p-3 rounded-tr-lg">Valorisation (€)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y">
+                                <tr class="hover:bg-green-50">
+                                    <td class="p-3 font-semibold">Dashboard KPIs</td>
+                                    <td class="p-3">Justine</td>
+                                    <td class="text-right p-3">2-3h</td>
+                                    <td class="text-right p-3 font-bold">100-150€</td>
+                                </tr>
+                                <tr class="hover:bg-green-50">
+                                    <td class="p-3 font-semibold">Assistant Idéateur</td>
+                                    <td class="p-3">Justine</td>
+                                    <td class="text-right p-3">15-20h</td>
+                                    <td class="text-right p-3 font-bold">750-1000€</td>
+                                </tr>
+                                <tr class="hover:bg-green-50">
+                                    <td class="p-3 font-semibold">Rédaction propales</td>
+                                    <td class="p-3">Équipe sales (3p)</td>
+                                    <td class="text-right p-3">10-15h</td>
+                                    <td class="text-right p-3 font-bold">500-750€</td>
+                                </tr>
+                                <tr class="bg-green-100 font-bold">
+                                    <td class="p-3">TOTAL</td>
+                                    <td class="p-3">-</td>
+                                    <td class="text-right p-3">27-38h/mois</td>
+                                    <td class="text-right p-3 text-lg">1350-1900€/mois</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Gains qualitatifs -->
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="font-semibold mb-4 flex items-center gap-2">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-blue-600"></i>
+                            Gains Qualitatifs (Non Quantifiables)
+                        </h3>
+                        <div class="grid md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <h4 class="font-semibold mb-2">Pour Justine</h4>
+                                <ul class="space-y-1 text-slate-700">
+                                    <li>✓ Suppression tâches détestées</li>
+                                    <li>✓ Focus missions stratégiques</li>
+                                    <li>✓ Vision dispositifs complets</li>
+                                    <li>✓ Satisfaction travail améliorée</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Pour INVOX</h4>
+                                <ul class="space-y-1 text-slate-700">
+                                    <li>✓ Accélération pivot production → conseil</li>
+                                    <li>✓ Différenciation concurrentielle</li>
+                                    <li>✓ Capitalisation connaissances</li>
+                                    <li>✓ Culture IA consolidée</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Section Risques -->
+                <section id="risques" class="bg-white rounded-xl shadow-lg p-8 page-break">
+                    <div class="flex items-center gap-3 mb-6">
+                        <i data-lucide="shield-alert" class="w-8 h-8 text-red-600"></i>
+                        <h2 class="text-3xl font-bold text-slate-800">Risques & Mitigation</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Risque élevé -->
+                        <div class="border-l-4 border-red-500 bg-red-50 p-4 rounded-r-lg">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-red-500 text-white rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0 font-bold">
+                                    !
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-red-900 mb-2">Qualité corpus insuffisante</h3>
+                                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                        <div>
+                                            <span class="font-semibold">Probabilité:</span> Moyenne<br>
+                                            <span class="font-semibold">Impact:</span> Haute
+                                        </div>
+                                        <div>
+                                            <span class="font-semibold text-green-700">Mitigation:</span><br>
+                                            Audit préalable + nettoyage données + enrichissement manuel si besoin
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Risque moyen -->
+                        <div class="border-l-4 border-yellow-500 bg-yellow-50 p-4 rounded-r-lg">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-yellow-500 text-white rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0 font-bold">
+                                    ⚠
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-yellow-900 mb-2">Adoption faible équipes</h3>
+                                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                        <div>
+                                            <span class="font-semibold">Probabilité:</span> Faible<br>
+                                            <span class="font-semibold">Impact:</span> Haute
+                                        </div>
+                                        <div>
+                                            <span class="font-semibold text-green-700">Mitigation:</span><br>
+                                            Formation + quick wins démontrés + implication utilisateurs dès POC
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Risque moyen -->
+                        <div class="border-l-4 border-yellow-500 bg-yellow-50 p-4 rounded-r-lg">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-yellow-500 text-white rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0 font-bold">
+                                    ⚠
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-yellow-900 mb-2">Coût API Gemini élevé</h3>
+                                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                        <div>
+                                            <span class="font-semibold">Probabilité:</span> Moyenne<br>
+                                            <span class="font-semibold">Impact:</span> Moyenne
+                                        </div>
+                                        <div>
+                                            <span class="font-semibold text-green-700">Mitigation:</span><br>
+                                            Capping quotidien + monitoring conso + optimisation prompts
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Risque faible -->
+                        <div class="border-l-4 border-green-500 bg-green-50 p-4 rounded-r-lg">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-green-500 text-white rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0 font-bold">
+                                    ✓
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-green-900 mb-2">Indisponibilité APIs tierces</h3>
+                                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                                        <div>
+                                            <span class="font-semibold">Probabilité:</span> Faible<br>
+                                            <span class="font-semibold">Impact:</span> Moyenne
+                                        </div>
+                                        <div>
+                                            <span class="font-semibold text-green-700">Mitigation:</span><br>
+                                            Gestion erreurs + retry logic + mode dégradé + cache
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Conclusion -->
+                <section class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-xl shadow-2xl p-8">
+                    <div class="flex items-center gap-3 mb-6">
+                        <i data-lucide="check-circle-2" class="w-10 h-10"></i>
+                        <h2 class="text-3xl font-bold">Conclusion</h2>
+                    </div>
+
+                    <div class="space-y-4 text-blue-50">
+                        <p class="text-lg leading-relaxed">
+                            Cette analyse de besoin a permis d'identifier <strong class="text-white">11 cas d'usage IA</strong> 
+                            pour INVOX, couvrant 5 domaines clés : Performance commerciale, Marketing interne, 
+                            Production contenu clients, Gestion des connaissances, Efficacité opérationnelle.
+                        </p>
+
+                        <div class="grid md:grid-cols-3 gap-4 my-6">
+                            <div class="bg-white/10 backdrop-blur rounded-lg p-4">
+                                <div class="text-3xl font-bold mb-2">3</div>
+                                <div class="text-sm">Priorités P0 identifiées</div>
+                            </div>
+                            <div class="bg-white/10 backdrop-blur rounded-lg p-4">
+                                <div class="text-3xl font-bold mb-2">27-38h</div>
+                                <div class="text-sm">Gagnées par mois</div>
+                            </div>
+                            <div class="bg-white/10 backdrop-blur rounded-lg p-4">
+                                <div class="text-3xl font-bold mb-2">24-36</div>
+                                <div class="text-sm">Mois pour ROI</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white/10 backdrop-blur rounded-lg p-6 mt-6">
+                            <h3 class="font-bold text-xl mb-3">Alignement Stratégique</h3>
+                            <p class="text-sm leading-relaxed">
+                                Ces solutions s'inscrivent parfaitement dans la <strong class="text-white">transformation stratégique INVOX</strong> : 
+                                libération de temps pour missions conseil, différenciation par expertise IA, 
+                                capitalisation des connaissances internes, et amélioration de l'expérience collaborateurs.
+                            </p>
+                        </div>
+
+                        <p class="text-sm italic border-l-4 border-orange-400 pl-4 mt-6">
+                            L'IA n'est pas une fin en soi, mais un <strong class="text-white">levier de transformation</strong> 
+                            pour permettre à INVOX d'incarner pleinement sa vision : devenir le partenaire stratégique 
+                            incontournable sur le contenu B2B.
+                        </p>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-300 py-6 mt-12">
+        <div class="container mx-auto px-6 text-center text-sm">
+            <p>Document préparé par : <strong class="text-white">Sam, Yannick, Xavier, Martine</strong></p>
+            <p class="mt-2">Octobre 2025 • Version 1.0 • Statut : Validé pour passage CDC</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialiser Lucide icons
+        lucide.createIcons();
+
+        // Graphique RICE Scores
+        const riceCtx = document.getElementById('riceChart').getContext('2d');
+        new Chart(riceCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Rédaction\nPropales', 'Dashboard\nKPIs', 'Synthèse\nRéunions', 'Coach\nCommercial', 'Assistant\nIdéateur'],
+                datasets: [{
+                    label: 'Score RICE',
+                    data: [20.25, 8.0, 12.6, 9.1, 3.75],
+                    backgroundColor: [
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(249, 115, 22, 0.8)',
+                        'rgba(234, 179, 8, 0.8)',
+                        'rgba(234, 179, 8, 0.8)',
+                        'rgba(59, 130, 246, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgb(239, 68, 68)',
+                        'rgb(249, 115, 22)',
+                        'rgb(234, 179, 8)',
+                        'rgb(234, 179, 8)',
+                        'rgb(59, 130, 246)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Scores RICE des Cas d\'Usage Prioritaires',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Score RICE'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Matrice Impact/Effort
+        const matrixCtx = document.getElementById('matrixChart').getContext('2d');
+        new Chart(matrixCtx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Quick Wins (P0)',
+                    data: [
+                        {x: 2, y: 5, label: 'Dashboard KPIs'},
+                        {x: 2, y: 5, label: 'Rédaction Propales'}
+                    ],
+                    backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                    pointRadius: 15,
+                    pointHoverRadius: 18
+                }, {
+                    label: 'Major Project (P0)',
+                    data: [
+                        {x: 4, y: 5, label: 'Assistant Idéateur'}
+                    ],
+                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                    pointRadius: 15,
+                    pointHoverRadius: 18
+                }, {
+                    label: 'P1',
+                    data: [
+                        {x: 2, y: 4, label: 'Synthèse Réunions'},
+                        {x: 3, y: 4, label: 'Coach Commercial'}
+                    ],
+                    backgroundColor: 'rgba(234, 179, 8, 0.8)',
+                    pointRadius: 12,
+                    pointHoverRadius: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Matrice Impact / Effort',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.raw.label || '';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Effort (1=faible, 5=élevé)'
+                        },
+                        min: 0,
+                        max: 5
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Impact (1=faible, 5=massif)'
+                        },
+                        min: 0,
+                        max: 5
+                    }
+                }
+            }
+        });
+
+        // Smooth scroll pour navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

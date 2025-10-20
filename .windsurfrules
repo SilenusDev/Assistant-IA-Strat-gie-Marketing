@@ -1,0 +1,510 @@
+# 🎯 RÈGLE PRIORITÉ ABSOLUE #1 - PROJET POC
+
+## ⚠️ CONTEXTE : PROOF OF CONCEPT (POC)
+
+**CE PROJET EST UN POC DE DÉMONSTRATION - PAS UN PROJET PRODUCTION**
+
+### 🚨 PRINCIPES FONDAMENTAUX POC
+
+1. **SIMPLICITÉ MAXIMALE**
+   - ❌ PAS de sur-ingénierie
+   - ❌ PAS de patterns complexes
+   - ❌ PAS d'optimisations prématurées
+   - ❌ PAS de fonctionnalités "nice to have"
+   - ✅ Code simple et direct
+   - ✅ Solutions évidentes en premier
+   - ✅ Minimum viable pour la démo
+
+2. **FOCUS DÉMONSTRATION**
+   - Objectif : montrer le concept en 10 minutes
+   - Priorité : que ça fonctionne, pas que ce soit parfait
+   - Accepter : code "quick and dirty" si fonctionnel
+   - Éviter : refactoring, abstractions, généralisations
+
+3. **RÈGLE DU "GOOD ENOUGH"**
+   - Si ça marche pour la démo → c'est suffisant
+   - Si ça nécessite plus de 30 min → trop complexe pour un POC
+   - Si ça ajoute une dépendance → vraiment nécessaire ?
+   - Si ça nécessite de la doc → probablement trop compliqué
+
+## ❌ INTERDICTIONS ABSOLUES
+- **AUCUNE** IP, port, URL, path absolu, identifiant en dur dans le code
+- **TOUT** doit passer par des variables d'environnement (.env)
+- **AUCUN** mot de passe, clé API, token en clair
+- **AUCUNE** configuration spécifique à un environnement dans le code
+- **AUCUN** chemin relatif avec `../` ou `./` - utiliser uniquement variables .env
+
+## ✅ OBLIGATIONS CONFIGURATION
+- Utiliser exclusivement des variables d'environnement pour :
+  - URLs et endpoints API
+  - Ports et adresses IP (même localhost)
+  - Identifiants de base de données
+  - Clés d'API et tokens
+  - Paths de fichiers système
+  - Paramètres de connexion Kubernetes
+  - Chemins des scripts moteur (OLLAMH_SCRIPT, TEINE_ENGINE_SCRIPT, etc.)
+
+**Format obligatoire variables .env :**
+```bash
+# ❌ INTERDIT
+connection = "mysql://root:password@localhost:3306/dagda"
+
+# ✅ OBLIGATOIRE  
+connection = f"mysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+```
+
+# 🚨 RÈGLES DIAGNOSTIC ET MÉTHODOLOGIE (CRITIQUES)
+
+## 🔍 CHECKLIST DIAGNOSTIC OBLIGATOIRE
+
+**AVANT TOUTE MODIFICATION DE CONFIGURATION :**
+
+### 1. VÉRIFICATION RESSOURCES LOCALES (PRIORITÉ 1)
+```bash
+# ✅ OBLIGATOIRE - Vérifier AVANT de modifier quoi que ce soit
+podman images | grep [service_name]
+podman ps -a | grep [service_name]
+ls -la [config_files]
+```
+
+### 2. VÉRIFICATION CONNECTIVITÉ (PRIORITÉ 2)
+```bash
+# ✅ OBLIGATOIRE - Tester la connectivité réseau
+curl -f http://[host]:[port]/[endpoint] || echo "Service inaccessible"
+ping -c 1 [host] || echo "Host inaccessible"
+```
+
+### 3. VÉRIFICATION PERMISSIONS (PRIORITÉ 3)
+```bash
+# ✅ OBLIGATOIRE - Vérifier les permissions fichiers
+ls -la [script_files]
+chmod +x [script] # Si nécessaire
+```
+
+### 4. VÉRIFICATION VARIABLES ENVIRONNEMENT (PRIORITÉ 4)
+```bash
+# ✅ OBLIGATOIRE - Valider les variables requises
+grep -E "VARIABLE_NAME" .env || echo "Variable manquante"
+```
+
+## 🎯 ORDRE DE DIAGNOSTIC STRICT
+
+**RESPECTER CET ORDRE OBLIGATOIREMENT :**
+
+1. **Ressources locales** → Images, conteneurs, fichiers existants
+2. **Connectivité réseau** → Ports, services, registries
+3. **Permissions système** → Fichiers exécutables, accès
+4. **Configuration** → Variables .env, fichiers config
+5. **Logs et erreurs** → Messages d'erreur spécifiques
+
+**❌ INTERDIT :** Modifier une configuration avant d'avoir vérifié les 4 premiers points
+
+## 🔄 MÉTHODOLOGIE CAUSE RACINE
+
+### ✅ APPROCHE CORRECTE
+```
+1. Identifier le SYMPTÔME (erreur visible)
+2. Chercher la CAUSE RACINE (pourquoi ça échoue)
+3. Vérifier les DÉPENDANCES (ce dont ça dépend)
+4. Proposer la SOLUTION MINIMALE
+```
+
+### ❌ APPROCHE INTERDITE
+```
+❌ Modifier la config dès qu'on voit une erreur
+❌ Se concentrer sur les symptômes secondaires
+❌ Proposer des solutions complexes en premier
+❌ Ignorer les dépendances existantes
+```
+
+# 🤝 RÈGLES INTERACTION UTILISATEUR (CRITIQUES)
+
+## 🚨 SIGNAUX D'ALERTE UTILISATEUR
+
+### ⛔ ARRÊT IMMÉDIAT OBLIGATOIRE
+Quand l'utilisateur dit :
+- "ça fonctionnait parfaitement"
+- "ne touche pas à ça"
+- "tu vas tout casser"
+- "c'était déjà configuré"
+
+**ACTION OBLIGATOIRE :** 
+1. ARRÊTER toute modification de configuration
+2. CHERCHER pourquoi ça ne fonctionne plus
+3. RESTAURER l'état fonctionnel
+
+### ✅ VALIDATION UTILISATEUR OBLIGATOIRE
+
+**DEMANDER CONFIRMATION AVANT :**
+- Modifier un fichier de configuration existant
+- Supprimer ou recréer des ressources
+- Changer des images Docker/Podman
+- Modifier des variables d'environnement critiques
+
+**FORMAT OBLIGATOIRE :**
+```
+⚠️  CONFIRMATION REQUISE
+Je vais modifier [fichier/config] pour [raison].
+Cette action va [impact prévu].
+Confirmez-vous cette modification ? (oui/non)
+```
+
+## 📢 ÉCOUTE ACTIVE UTILISATEUR
+
+### ✅ SIGNAUX À RESPECTER
+- "ça marchait avant" → Chercher ce qui a changé, ne pas modifier
+- "j'ai déjà testé ça" → Ne pas reproposer la même solution
+- "c'est urgent" → Prioriser les solutions rapides et sûres
+- "fais simple" → Éviter les solutions complexes
+
+### ❌ SIGNAUX À ÉVITER
+- Ignorer les retours utilisateur
+- Insister sur une solution refusée
+- Proposer des modifications non demandées
+- Complexifier sans raison
+
+# 🚨 GESTION D'ERREURS ET ESCALATION
+
+## ⏹️ RÈGLE D'ARRÊT OBLIGATOIRE
+
+**ARRÊT APRÈS 2 ÉCHECS CONSÉCUTIFS :**
+```
+Tentative 1: [action] → Échec
+Tentative 2: [action modifiée] → Échec
+→ ARRÊT OBLIGATOIRE
+→ DEMANDER AIDE UTILISATEUR
+```
+
+**❌ INTERDIT :** Boucler plus de 2 fois sur la même approche
+
+## 🔄 PROCÉDURES ROLLBACK
+
+### AVANT TOUTE MODIFICATION CRITIQUE
+```bash
+# ✅ OBLIGATOIRE - Sauvegarder l'état actuel
+cp [config_file] [config_file].backup.$(date +%Y%m%d_%H%M%S)
+podman images > images_backup.txt
+```
+
+### EN CAS D'ÉCHEC
+```bash
+# ✅ OBLIGATOIRE - Restaurer l'état précédent
+cp [config_file].backup.* [config_file]
+podman tag [backup_image] [current_image]
+```
+
+## 📞 ESCALATION OBLIGATOIRE
+
+**DEMANDER AIDE QUAND :**
+- 2 tentatives de la même approche ont échoué
+- L'utilisateur exprime de la frustration
+- La solution nécessite des modifications système critiques
+- Les logs montrent des erreurs non documentées
+
+**FORMAT ESCALATION :**
+```
+🆘 ESCALATION REQUISE
+J'ai tenté [approche 1] et [approche 2] sans succès.
+Erreur persistante : [description]
+Je recommande de [action alternative] ou de consulter [expert/documentation].
+```
+
+# 📋 CONVENTIONS LOGS DAGDA-LITE (OBLIGATOIRES)
+
+## 🏷️ BALISAGE STANDARD
+**Format STRICT :** `[nom_script][evenement] message`
+
+### Événements standards obligatoires :
+- `[start]` - Démarrage d'une action
+- `[success]` - Action terminée avec succès
+- `[error]` - Erreur bloquante
+- `[warning]` - Avertissement non bloquant
+- `[info]` - Information générale
+- `[debug]` - Information de débogage
+- `[step]` - Étape d'un processus
+- `[help]` - Message d'aide utilisateur
+- `[status]` - Information de statut
+- `[stop]` - Arrêt d'une action
+- `[restart]` - Redémarrage
+- `[clean]` - Nettoyage
+- `[health]` - Vérification de santé
+- `[logs]` - Affichage de logs
+
+### Règles de balisage strictes :
+```bash
+# ✅ CORRECT
+SCRIPT_NAME="mariadb"
+echo "[$SCRIPT_NAME][start] Démarrage du service"
+echo "[$SCRIPT_NAME][success] Service démarré"
+echo "[$SCRIPT_NAME][error] Échec du démarrage"
+echo "[$SCRIPT_NAME][help] Usage: $0 {start|stop}"
+
+# ❌ INTERDIT
+echo "[$SCRIPT_NAME] start"
+echo "[STEP][$SCRIPT_NAME] action"
+echo "Démarrage du service"
+echo "ERREUR: problème détecté"
+```
+
+### Gestion des codes de retour obligatoire :
+```bash
+action_command
+if [ $? -eq 0 ]; then
+    echo "[$SCRIPT_NAME][success] Action réussie"
+else
+    echo "[$SCRIPT_NAME][error] Action échouée"
+fi
+```
+
+## 🎯 FALLBACK LOGS
+- Utiliser `[Runa...]` comme fallback si SCRIPT_NAME non défini
+- Jamais de logs sans balisage conforme
+
+# 🏗️ RÈGLES ARCHITECTURE DAGDA-LITE
+
+## 📁 STRUCTURE PROJET OBLIGATOIRE
+```
+dagda-lite/
+├── .env.example          # Template variables
+├── .env                  # Variables locales (git ignored)
+├── Nemeton/             # Services conteneurisés
+│   ├── cromlech/        # Services essentiels
+│   └── fianna/          # Services optionnels
+├── coire-anseasc/       # Moteur d'orchestration
+│   ├── awens-utils/     # Utilitaires communs
+│   └── cauldron-core/   # Moteur principal
+├── scripts/             # Points d'entrée
+├── config/              # Templates configuration
+├── tests/               # Tests unitaires
+└── docs/                # Documentation
+```
+
+## 📜 CONVENTIONS SCRIPTS BASH
+
+### Déclaration obligatoire en début de script :
+```bash
+#!/bin/bash
+# Description du script
+SCRIPT_NAME="nom_du_script"
+
+# Chargement des variables d'environnement
+source .env
+
+# Charger les utilitaires via variables .env
+source "$OLLAMH_SCRIPT" || { echo "[$SCRIPT_NAME][error] ollamh.sh non trouvé"; exit 1; }
+```
+
+### Standards nommage :
+- **Scripts** : kebab-case (teine-engine.sh)
+- **Fonctions** : snake_case (check_prerequisites)
+- **Variables** : UPPER_CASE pour .env, lower_case pour locales
+- **Pods** : `${PROJECT_NAME}-${service}-pod`
+
+### Interdictions bash strictes :
+- Jamais de `set -e` (gestion d'erreur brutale)
+- Jamais de chemins relatifs `../` ou `./`
+- Jamais de hardcoding de paths, IPs, ports
+- Jamais de terminologie mythologique dans la logique métier
+
+## 🔄 GESTION DES DÉPENDANCES
+
+### Injection de dépendances obligatoire :
+- Scripts sourcent ollamh.sh via `$OLLAMH_SCRIPT`
+- Pas d'instanciation directe de chemins
+- Container de variables .env centralisé
+
+### Architecture modulaire :
+- **ollamh.sh** : Fonctions communes et chemins
+- **imbas-logging.sh** : Système de logs unifié
+- **teine_engine.sh** : Moteur générique pods
+- **manage.sh** : Scripts spécifiques par service
+
+## 🧪 TESTS ET QUALITÉ
+
+### Tests obligatoires pour chaque script :
+- Test du balisage logs conforme
+- Test des variables .env requises
+- Test des codes de retour
+- Test de la gestion d'erreurs
+
+### Validation avant commit :
+```bash
+# Vérifier balisage logs
+grep -r "\[.*\]\[.*\]" scripts/ --include="*.sh"
+
+# Vérifier absence chemins relatifs
+grep -r "\.\.\/" . --include="*.sh" && echo "❌ Chemins relatifs détectés"
+
+# Vérifier hardcoding
+grep -r "localhost\|127.0.0.1\|:3306\|:8000" . --include="*.sh" && echo "❌ Hardcoding détecté"
+```
+
+## 📝 DOCUMENTATION DAGDA-LITE
+
+### README.md obligatoire sections :
+- Variables .env requises avec exemples
+- Convention de balisage logs
+- Architecture des chemins
+- Instructions installation rootless Podman
+
+### Commentaires code :
+- Expliquer le "pourquoi" pas le "comment"
+- Documenter les variables .env utilisées
+- Expliquer la logique métier sans mythologie
+
+## 🚀 PERFORMANCE ET OPTIMISATION
+
+### Pods et conteneurs :
+- Lazy loading des services optionnels (fianna)
+- Mise en cache des images Podman
+- Nettoyage automatique des conteneurs orphelins
+- Monitoring des ressources CPU/RAM
+
+### Scripts :
+- Éviter les boucles infinies dans wait_for_service
+- Timeout sur toutes les opérations réseau
+- Parallélisation quand possible (démarrage multiple pods)
+
+## 🔐 SÉCURITÉ DAGDA-LITE
+
+### Variables d'environnement :
+- Jamais de secrets en dur dans le code
+- .env.example sans valeurs sensibles
+- Validation stricte des variables requises
+- Chiffrement des secrets en production
+
+### Pods et réseau :
+- Réseau isolé par projet
+- Ports mappés uniquement selon .env
+- Pas de privilèges root dans les conteneurs
+- Validation des images avant pull
+
+## 🌐 PORTABILITÉ
+
+### Configuration externalisée :
+- Tout configurable via .env
+- Paths adaptables selon l'environnement
+- Support multi-architecture (x86_64, arm64)
+- Compatible distributions Linux principales
+
+### Standards industrie :
+- YAML Kubernetes pour les pods
+- JSON pour les fichiers de statut
+- Markdown pour la documentation
+- Shell POSIX compatible
+
+## 🎯 CONVENTIONS SPÉCIFIQUES DAGDA-LITE
+
+### Gestion d'erreurs centralisée :
+```bash
+# Standard pour toutes les fonctions
+function_name() {
+    echo "[$SCRIPT_NAME][start] Description action"
+    
+    # Logique fonction
+    if [ condition ]; then
+        echo "[$SCRIPT_NAME][success] Action réussie"
+        return 0
+    else
+        echo "[$SCRIPT_NAME][error] Action échouée"
+        return 1
+    fi
+}
+```
+
+### Actions pods standardisées :
+- `start` : Démarrer un service
+- `stop` : Arrêter un service  
+- `restart` : Redémarrer un service
+- `status` : Afficher le statut
+- `health` : Vérifier la santé
+- `logs` : Afficher les logs
+- `clean` : Nettoyer complètement
+
+### Logging structuré :
+- Niveau debug pour développement
+- Niveau info pour opérations normales
+- Niveau warning pour situations récupérables
+- Niveau error pour échecs bloquants
+- Codes de retour cohérents (0=succès, 1=erreur, 2=warning)
+
+### Rate limiting et ressources :
+- Timeout par défaut : 30s pour démarrage pods
+- Intervalle retry : 2s entre tentatives
+- Max attempts : 30 tentatives par défaut
+- Cleanup automatique après échec
+
+# 📚 EXEMPLES DIAGNOSTIC BON VS MAUVAIS
+
+## ✅ BON DIAGNOSTIC - Exemple FastAPI
+```
+1. Vérifier images locales AVANT modification
+   → podman images | grep fastapi
+   → Image trouvée : localhost/dagda-lite-fastapi:latest
+
+2. Identifier cause racine
+   → Registry 192.168.1.43:8908 inaccessible
+   → curl -f http://192.168.1.43:8908/v2/ → Échec
+
+3. Solution minimale
+   → podman tag localhost/dagda-lite-fastapi:latest 192.168.1.43:8908/dagda-lite-fastapi:latest
+   → Pas de modification de configuration
+```
+
+## ❌ MAUVAIS DIAGNOSTIC - À éviter
+```
+❌ Voir erreur registry → Modifier immédiatement pod.yml
+❌ Proposer image python:3.11-slim sans vérifier local
+❌ Ignorer signal utilisateur "ça fonctionnait parfaitement"
+❌ Se concentrer sur erreurs mkdir secondaires
+❌ Proposer solutions complexes (construire image, registry local)
+```
+
+## ✅ BON PROCESSUS - Permissions
+```
+1. Identifier erreur : "Permission non accordée"
+2. Vérifier permissions : ls -la launch-sidhe.sh
+3. Solution directe : chmod +x launch-sidhe.sh
+4. Pas de modification de code
+```
+
+## ❌ MAUVAIS PROCESSUS - À éviter
+```
+❌ Proposer réécriture du script
+❌ Modifier la logique d'appel
+❌ Chercher des causes complexes
+❌ Ignorer l'erreur de permission évidente
+```
+
+# 🔍 CHECKLIST VALIDATION CODE
+
+Avant tout commit, vérifier :
+- [ ] **DIAGNOSTIC COMPLET** : Ressources locales → Connectivité → Permissions → Config
+- [ ] **SIGNAUX UTILISATEUR** : Respecté les indications "ça fonctionnait"
+- [ ] **CAUSE RACINE** : Identifiée avant symptômes
+- [ ] **SOLUTION MINIMALE** : Pas de modification inutile
+- [ ] **BACKUP CRÉÉ** : Sauvegarde avant modification critique
+- [ ] **VALIDATION UTILISATEUR** : Confirmation pour actions critiques
+- [ ] **ARRÊT APRÈS 2 ÉCHECS** : Pas de boucle infinie
+- [ ] SCRIPT_NAME déclaré en début de script
+- [ ] Balisage `[script][evenement]` sur tous les logs
+- [ ] Variables .env utilisées (aucun hardcoding)
+- [ ] Aucun chemin relatif `../` dans le code
+- [ ] Gestion des codes de retour avec if/else
+- [ ] Messages d'aide avec balisage `[script][help]`
+- [ ] Terminologie technique pure (pas de mythologie)
+- [ ] Test fonctionnel du script avant commit
+
+# 🎯 RÈGLES SPÉCIALES WINDSURF/VIBE-CODING
+
+## 🚀 EFFICACITÉ MAXIMALE
+- **Solutions simples AVANT complexes**
+- **Vérifications préalables OBLIGATOIRES**
+- **Écoute active utilisateur PRIORITAIRE**
+- **Arrêt intelligent après 2 échecs**
+
+## 🎨 VIBE-CODING OPTIMAL
+- **Diagnostic méthodique et intelligent**
+- **Respect des configurations existantes**
+- **Communication claire avec l'utilisateur**
+- **Gestion d'erreurs proactive**

@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cahier des Charges - Solutions IA INVOX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .section-a4 {
+            min-height: 297mm;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+            border-radius: 8px;
+        }
+        
+        .toc-link {
+            transition: all 0.2s;
+        }
+        
+        .toc-link:hover {
+            transform: translateX(4px);
+        }
+        
+        .toc-link.active {
+            color: #3B82F6;
+            font-weight: 600;
+            border-left: 3px solid #3B82F6;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-header {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-priority {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+        
+        .badge-win {
+            background: #FFEDD5;
+            color: #9A3412;
+        }
+        
+        .badge-major {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+    
+    <!-- Sidebar TOC -->
+    <aside class="fixed left-0 top-0 h-screen w-64 bg-white border-r border-slate-200 overflow-y-auto p-6 z-50">
+        <div class="mb-8">
+            <div class="flex items-center gap-2 mb-2">
+                <i data-lucide="layers" class="text-blue-500"></i>
+                <h2 class="font-bold text-lg">INVOX</h2>
+            </div>
+            <p class="text-xs text-slate-500">Cahier des Charges IA</p>
+        </div>
+        
+        <nav class="space-y-1 text-sm">
+            <a href="#sommaire" class="toc-link block py-2 px-3 text-slate-600 hover:text-blue-500 rounded">Sommaire</a>
+            <a href="#solution1" class="toc-link block py-2 px-3 text-slate-600 hover:text-blue-500 rounded">1. Dashboard KPIs</a>
+            <a href="#solution2" class="toc-link block py-2 px-3 text-slate-600 hover:text-blue-500 rounded">2. Assistant Idéateur</a>
+            <a href="#solution3" class="toc-link block py-2 px-3 text-slate-600 hover:text-blue-500 rounded">3. Propales IA</a>
+            <a href="#planning" class="toc-link block py-2 px-3 text-slate-600 hover:text-blue-500 rounded">4. Planning</a>
+            <a href="#budget" class="toc-link block py-2 px-3 text-slate-600 hover:text-blue-500 rounded">5. Budget & ROI</a>
+            <a href="#risques" class="toc-link block py-2 px-3 text-slate-600 hover:text-blue-500 rounded">6. Risques</a>
+            <a href="#gouvernance" class="toc-link block py-2 px-3 text-slate-600 hover:text-blue-500 rounded">7. Gouvernance</a>
+        </nav>
+        
+        <div class="mt-8 pt-6 border-t border-slate-200">
+            <p class="text-xs text-slate-400">Version 1.0</p>
+            <p class="text-xs text-slate-400">Octobre 2025</p>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="ml-64 p-8">
+        
+        <!-- Header -->
+        <div class="section-a4 gradient-header text-white p-12 relative overflow-hidden">
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-4">
+                    <i data-lucide="rocket" size="48"></i>
+                    <div>
+                        <h1 class="text-4xl font-bold mb-2">Cahier des Charges</h1>
+                        <p class="text-blue-100 text-xl">Solutions IA Prioritaires - INVOX</p>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-4 gap-4 mt-8">
+                    <div>
+                        <p class="text-blue-200 text-sm">Projet</p>
+                        <p class="font-semibold">IA Marketing & Commercial</p>
+                    </div>
+                    <div>
+                        <p class="text-blue-200 text-sm">Client</p>
+                        <p class="font-semibold">INVOX</p>
+                    </div>
+                    <div>
+                        <p class="text-blue-200 text-sm">Date</p>
+                        <p class="font-semibold">Octobre 2025</p>
+                    </div>
+                    <div>
+                        <p class="text-blue-200 text-sm">Statut</p>
+                        <span class="badge bg-green-500 text-white">Prêt</span>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute top-0 right-0 w-96 h-96 bg-blue-400 opacity-20 rounded-full blur-3xl"></div>
+        </div>
+        
+        <!-- Sommaire Exécutif -->
+        <div id="sommaire" class="section-a4 p-12">
+            <div class="flex items-center gap-3 mb-6">
+                <i data-lucide="file-text" class="text-blue-500" size="32"></i>
+                <h2 class="text-3xl font-bold text-slate-800">Sommaire Exécutif</h2>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-6 mb-8">
+                <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="gauge" class="text-blue-500"></i>
+                        <h3 class="font-semibold text-slate-700">Dashboard KPIs</h3>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-3">Automatisation collecte données marketing</p>
+                    <div class="flex items-center justify-between">
+                        <span class="badge-win badge">Quick Win</span>
+                        <span class="text-2xl font-bold text-blue-600">2-3h/mois</span>
+                    </div>
+                </div>
+                
+                <div class="bg-orange-50 p-6 rounded-lg border border-orange-200">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="sparkles" class="text-orange-500"></i>
+                        <h3 class="font-semibold text-slate-700">Assistant Idéateur</h3>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-3">Génération dispositifs campagne complets</p>
+                    <div class="flex items-center justify-between">
+                        <span class="badge-major badge">Major</span>
+                        <span class="text-2xl font-bold text-orange-600">15-20h/mois</span>
+                    </div>
+                </div>
+                
+                <div class="bg-green-50 p-6 rounded-lg border border-green-200">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i data-lucide="file-check" class="text-green-500"></i>
+                        <h3 class="font-semibold text-slate-700">Propales IA</h3>
+                    </div>
+                    <p class="text-sm text-slate-600 mb-3">Rédaction propositions commerciales</p>
+                    <div class="flex items-center justify-between">
+                        <span class="badge-win badge">Quick Win</span>
+                        <span class="text-2xl font-bold text-green-600">10-15h/mois</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-slate-100 p-8 rounded-lg">
+                <h3 class="font-semibold text-lg mb-4 flex items-center gap-2">
+                    <i data-lucide="target" class="text-orange-500"></i>
+                    Gains Attendus
+                </h3>
+                <div class="grid grid-cols-4 gap-6">
+                    <div>
+                        <p class="text-sm text-slate-600 mb-1">Temps gagné/mois</p>
+                        <p class="text-3xl font-bold text-slate-800">27-38h</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-600 mb-1">Valorisation annuelle</p>
+                        <p class="text-3xl font-bold text-green-600">19 500€</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-600 mb-1">Investissement</p>
+                        <p class="text-3xl font-bold text-blue-600">54 500€</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-600 mb-1">ROI Breakeven</p>
+                        <p class="text-3xl font-bold text-orange-600">48 mois</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Matrice Valeur/Effort -->
+            <div class="mt-8">
+                <h3 class="font-semibold text-lg mb-4">Matrice Valeur / Effort</h3>
+                <canvas id="matriceValeurEffort" height="100"></canvas>
+            </div>
+        </div>
+        
+        <!-- Solution 1 -->
+        <div id="solution1" class="section-a4 p-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-blue-100 p-3 rounded-lg">
+                    <i data-lucide="gauge" class="text-blue-600" size="32"></i>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-800">Solution #1</h2>
+                    <p class="text-slate-600">Dashboard KPIs Marketing Automatisé</p>
+                </div>
+            </div>
+            
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-8 rounded-r-lg">
+                <p class="text-sm text-slate-600 mb-2 font-semibold">Citation Justine :</p>
+                <p class="italic text-slate-700">"Les chiffres, c'est peut-être le moins rigolo de mon boulot. S'il y a une solution qui permet de remonter ça automatiquement, c'est génial"</p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h3 class="font-semibold mb-3 flex items-center gap-2">
+                        <i data-lucide="alert-circle" class="text-orange-500"></i>
+                        Problème
+                    </h3>
+                    <p class="text-slate-600">Collecte manuelle mensuelle des KPIs depuis LinkedIn, YouTube, HubSpot, WordPress et Airtable. Tâche chronophage (2-3h/mois) empêchant le pilotage temps réel.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-3 flex items-center gap-2">
+                        <i data-lucide="target" class="text-green-500"></i>
+                        Objectif
+                    </h3>
+                    <p class="text-slate-600">Automatiser 100% la collecte et consolidation des KPIs dans un dashboard temps réel accessible en 1 clic.</p>
+                </div>
+            </div>
+            
+            <!-- Architecture -->
+            <div class="mb-8">
+                <h3 class="font-semibold text-lg mb-4">Architecture Technique</h3>
+                <div class="bg-white border border-slate-200 rounded-lg p-6">
+                    <div class="mermaid">
+graph TB
+    A[Cloud Scheduler<br/>Déclenchement 2h00] --> B[Cloud Function Python]
+    B --> C[LinkedIn API]
+    B --> D[YouTube API]
+    B --> E[Google Analytics]
+    B --> F[HubSpot API]
+    B --> G[Airtable API]
+    B --> H[Google Sheets<br/>Base données]
+    H --> I[Looker Studio<br/>Dashboard Justine]
+    
+    style A fill:#DBEAFE
+    style B fill:#BFDBFE
+    style I fill:#3B82F6,color:#fff
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stack -->
+            <div>
+                <h3 class="font-semibold text-lg mb-4">Stack Retenue</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="layout-dashboard" class="text-blue-500"></i>
+                            <span class="font-semibold">Frontend</span>
+                        </div>
+                        <p class="text-sm text-slate-600">Looker Studio (Google Data Studio)</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="server" class="text-orange-500"></i>
+                            <span class="font-semibold">Backend</span>
+                        </div>
+                        <p class="text-sm text-slate-600">Google Cloud Functions (Python 3.11)</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="database" class="text-green-500"></i>
+                            <span class="font-semibold">Stockage</span>
+                        </div>
+                        <p class="text-sm text-slate-600">Google Sheets</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="dollar-sign" class="text-blue-500"></i>
+                            <span class="font-semibold">Coût</span>
+                        </div>
+                        <p class="text-sm text-slate-600">&lt;10€/mois</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Solution 2 -->
+        <div id="solution2" class="section-a4 p-12 bg-gradient-to-br from-white to-orange-50">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-orange-100 p-3 rounded-lg">
+                    <i data-lucide="sparkles" class="text-orange-600" size="32"></i>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-800">Solution #2</h2>
+                    <p class="text-slate-600">Assistant IA Idéateur & Planificateur</p>
+                </div>
+            </div>
+            
+            <div class="bg-orange-50 border-l-4 border-orange-500 p-6 mb-8 rounded-r-lg">
+                <p class="text-sm text-slate-600 mb-2 font-semibold">Citation Justine :</p>
+                <p class="italic text-slate-700">"Mon idéal serait d'avoir un outil où je pose mon contexte... et il me dit qu'est-ce que je peux créer comme formats, m'orienter sur différents angles, mais aussi m'aider sur comment maximiser la diffusion (campagne ads, budget, etc.)"</p>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-orange-200">
+                    <div class="text-3xl font-bold text-orange-600 mb-2">15-20h</div>
+                    <p class="text-sm text-slate-600">Temps gagné / mois</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-orange-200">
+                    <div class="text-3xl font-bold text-blue-600 mb-2">6-8</div>
+                    <p class="text-sm text-slate-600">Formats recommandés</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-orange-200">
+                    <div class="text-3xl font-bold text-green-600 mb-2">&lt;2min</div>
+                    <p class="text-sm text-slate-600">Temps génération</p>
+                </div>
+            </div>
+            
+            <!-- Architecture -->
+            <div class="mb-8">
+                <h3 class="font-semibold text-lg mb-4">Architecture Technique</h3>
+                <div class="bg-white border border-slate-200 rounded-lg p-6">
+                    <div class="mermaid">
+graph LR
+    A[Interface React<br/>Justine] --> B[Backend FastAPI]
+    B --> C[Qdrant<br/>Vector DB]
+    B --> D[PostgreSQL]
+    B --> E[Gemini 1.5 Pro<br/>LLM]
+    C --> F[Corpus Blog]
+    C --> G[YouTube]
+    C --> H[Google Drive]
+    B --> I[Notion API]
+    B --> J[Airtable API]
+    
+    style A fill:#FED7AA
+    style E fill:#F97316,color:#fff
+    style I fill:#DBEAFE
+    style J fill:#DBEAFE
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Roadmap -->
+            <div>
+                <h3 class="font-semibold text-lg mb-4">Roadmap Déploiement</h3>
+                <div class="space-y-3">
+                    <div class="bg-white p-4 rounded-lg border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-semibold">POC (S1-S2)</span>
+                            <span class="badge bg-blue-100 text-blue-700">2 semaines</span>
+                        </div>
+                        <p class="text-sm text-slate-600">Génération formats + angles (sans analyse corpus)</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border-l-4 border-orange-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-semibold">MVP (S3-S6)</span>
+                            <span class="badge bg-orange-100 text-orange-700">4 semaines</span>
+                        </div>
+                        <p class="text-sm text-slate-600">+ Analyse corpus + Exports Notion</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border-l-4 border-green-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-semibold">v1 (S7-S8)</span>
+                            <span class="badge bg-green-100 text-green-700">2 semaines</span>
+                        </div>
+                        <p class="text-sm text-slate-600">+ Plan diffusion + Budget + Export Airtable</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Solution 3 -->
+        <div id="solution3" class="section-a4 p-12">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-green-100 p-3 rounded-lg">
+                    <i data-lucide="file-check" class="text-green-600" size="32"></i>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-800">Solution #3</h2>
+                    <p class="text-slate-600">Rédaction Propositions Commerciales</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-6 mb-8">
+                <div class="bg-green-50 p-6 rounded-lg border border-green-200">
+                    <h3 class="font-semibold mb-3">Gains Estimés</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="clock" class="text-green-600" size="16"></i>
+                            <span class="text-sm">1.5-2h gagnées / propale</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="trending-up" class="text-green-600" size="16"></i>
+                            <span class="text-sm">10-15h/mois équipe</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="check-circle" class="text-green-600" size="16"></i>
+                            <span class="text-sm">Cohérence templates</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-6 rounded-lg border border-slate-200">
+                    <h3 class="font-semibold mb-3">Workflow</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">1</div>
+                            <span>Clic HubSpot → Webhook</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">2</div>
+                            <span>Récupération données deal</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">3</div>
+                            <span>Génération Gemini (&lt;3min)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">4</div>
+                            <span>Export Google Docs</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stack -->
+            <div>
+                <h3 class="font-semibold text-lg mb-4">Stack Technique</h3>
+                <div class="bg-white border border-slate-200 rounded-lg p-6">
+                    <div class="mermaid">
+graph LR
+    A[HubSpot Deal<br/>Bouton Générer] --> B[Webhook]
+    B --> C[Cloud Function]
+    C --> D[HubSpot API<br/>Données]
+    C --> E[Google Drive<br/>Propales similaires]
+    C --> F[Gemini 1.5 Pro<br/>Génération]
+    F --> G[Google Docs<br/>Brouillon]
+    
+    style A fill:#FED7AA
+    style F fill:#3B82F6,color:#fff
+    style G fill:#86EFAC
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Planning -->
+        <div id="planning" class="section-a4 p-12 bg-gradient-to-br from-white to-blue-50">
+            <div class="flex items-center gap-3 mb-6">
+                <i data-lucide="calendar" class="text-blue-500" size="32"></i>
+                <h2 class="text-3xl font-bold text-slate-800">Planning Global</h2>
+            </div>
+            
+            <div class="mb-8">
+                <canvas id="ganttChart" height="120"></canvas>
+            </div>
+            
+            <div class="grid grid-cols-5 gap-4">
+                <div class="bg-blue-100 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-blue-700 mb-1">S1-S2</div>
+                    <p class="text-sm font-semibold mb-1">Sprint 1</p>
+                    <p class="text-xs text-slate-600">Dashboard KPIs</p>
+                </div>
+                <div class="bg-green-100 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-green-700 mb-1">S3-S5</div>
+                    <p class="text-sm font-semibold mb-1">Sprint 2</p>
+                    <p class="text-xs text-slate-600">Propales IA</p>
+                </div>
+                <div class="bg-orange-100 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-orange-700 mb-1">S6-S8</div>
+                    <p class="text-sm font-semibold mb-1">Sprint 3</p>
+                    <p class="text-xs text-slate-600">Assistant POC</p>
+                </div>
+                <div class="bg-purple-100 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-purple-700 mb-1">S9-S10</div>
+                    <p class="text-sm font-semibold mb-1">Sprint 4</p>
+                    <p class="text-xs text-slate-600">Assistant MVP</p>
+                </div>
+                <div class="bg-slate-100 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-slate-700 mb-1">S11-S12</div>
+                    <p class="text-sm font-semibold mb-1">Sprint 5</p>
+                    <p class="text-xs text-slate-600">Formation</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Budget & ROI -->
+        <div id="budget" class="section-a4 p-12">
+            <div class="flex items-center gap-3 mb-6">
+                <i data-lucide="dollar-sign" class="text-green-500" size="32"></i>
+                <h2 class="text-3xl font-bold text-slate-800">Budget & ROI</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h3 class="font-semibold mb-4">Répartition Développement</h3>
+                    <canvas id="budgetDevChart"></canvas>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-4">Coûts Exploitation Annuels</h3>
+                    <canvas id="budgetExploitChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="bg-slate-100 p-6 rounded-lg mb-8">
+                <div class="grid grid-cols-3 gap-6 text-center">
+                    <div>
+                        <p class="text-sm text-slate-600 mb-1">Investissement Initial</p>
+                        <p class="text-3xl font-bold text-blue-600">54 500€</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-600 mb-1">Gains Annuels</p>
+                        <p class="text-3xl font-bold text-green-600">19 500€</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-600 mb-1">Breakeven</p>
+                        <p class="text-3xl font-bold text-orange-600">48 mois</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="font-semibold mb-4">Projection ROI sur 4 ans</h3>
+                <canvas id="roiChart" height="80"></canvas>
+            </div>
+        </div>
+        
+        <!-- Risques -->
+        <div id="risques" class="section-a4 p-12 bg-gradient-to-br from-white to-red-50">
+            <div class="flex items-center gap-3 mb-6">
+                <i data-lucide="alert-triangle" class="text-red-500" size="32"></i>
+                <h2 class="text-3xl font-bold text-slate-800">Risques & Mitigations</h2>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="font-semibold mb-4">Matrice des Risques</h3>
+                <canvas id="risquesMatrix" height="100"></canvas>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-red-500 text-white px-3 py-1 rounded font-bold text-sm">CRITIQUE</div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold mb-2">Adoption faible équipe</h4>
+                            <p class="text-sm text-slate-600 mb-2">Probabilité: Moyenne | Impact: Élevé | Score: 15</p>
+                            <p class="text-sm text-slate-700"><strong>Mitigation:</strong> Formation intensive + Champions internes</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-r-lg">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-yellow-500 text-white px-3 py-1 rounded font-bold text-sm">MOYEN</div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold mb-2">Qualité IA insuffisante</h4>
+                            <p class="text-sm text-slate-600 mb-2">Probabilité: Faible | Impact: Élevé | Score: 9</p>
+                            <p class="text-sm text-slate-700"><strong>Mitigation:</strong> POC obligatoire avant MVP + Tests qualitatifs</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-r-lg">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-yellow-500 text-white px-3 py-1 rounded font-bold text-sm">MOYEN</div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold mb-2">Coûts API dépassés</h4>
+                            <p class="text-sm text-slate-600 mb-2">Probabilité: Moyenne | Impact: Moyen | Score: 6</p>
+                            <p class="text-sm text-slate-700"><strong>Mitigation:</strong> Monitoring quotas + Fallback modèles</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-green-500 text-white px-3 py-1 rounded font-bold text-sm">FAIBLE</div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold mb-2">Intégrations cassées</h4>
+                            <p class="text-sm text-slate-600 mb-2">Probabilité: Faible | Impact: Moyen | Score: 3</p>
+                            <p class="text-sm text-slate-700"><strong>Mitigation:</strong> Tests automatisés + Alertes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gouvernance -->
+        <div id="gouvernance" class="section-a4 p-12">
+            <div class="flex items-center gap-3 mb-6">
+                <i data-lucide="users" class="text-blue-500" size="32"></i>
+                <h2 class="text-3xl font-bold text-slate-800">Gouvernance & Organisation</h2>
+            </div>
+            
+            <div class="mb-8">
+                <h3 class="font-semibold text-lg mb-4">Équipe Projet</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                                J
+                            </div>
+                            <div>
+                                <p class="font-semibold">Justine</p>
+                                <p class="text-sm text-slate-600">Product Owner</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600">Validation besoins, recette fonctionnelle</p>
+                        <p class="text-xs text-slate-500 mt-2">⏱️ 4h/semaine</p>
+                    </div>
+                    
+                    <div class="bg-orange-50 p-6 rounded-lg border border-orange-200">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white font-bold">
+                                G
+                            </div>
+                            <div>
+                                <p class="font-semibold">Guilhem</p>
+                                <p class="text-sm text-slate-600">Sponsor</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600">Arbitrages, budget, vision stratégique</p>
+                        <p class="text-xs text-slate-500 mt-2">⏱️ 2h/semaine</p>
+                    </div>
+                    
+                    <div class="bg-slate-50 p-6 rounded-lg border border-slate-200">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-12 h-12 bg-slate-600 rounded-full flex items-center justify-center text-white font-bold">
+                                S
+                            </div>
+                            <div>
+                                <p class="font-semibold">Sam</p>
+                                <p class="text-sm text-slate-600">Tech Lead</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600">Architecture, qualité code, DevOps</p>
+                        <p class="text-xs text-slate-500 mt-2">⏱️ 100%</p>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-6 rounded-lg border border-purple-200">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                                Y
+                            </div>
+                            <div>
+                                <p class="font-semibold">Yannick</p>
+                                <p class="text-sm text-slate-600">Dev IA</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600">Prompts, LLM, intégrations APIs</p>
+                        <p class="text-xs text-slate-500 mt-2">⏱️ 100%</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-6 rounded-lg border border-green-200">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
+                                X
+                            </div>
+                            <div>
+                                <p class="font-semibold">Xavier</p>
+                                <p class="text-sm text-slate-600">Dev Frontend</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600">Interfaces, UX</p>
+                        <p class="text-xs text-slate-500 mt-2">⏱️ 60%</p>
+                    </div>
+                    
+                    <div class="bg-red-50 p-6 rounded-lg border border-red-200">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center text-white font-bold">
+                                M
+                            </div>
+                            <div>
+                                <p class="font-semibold">Martine</p>
+                                <p class="text-sm text-slate-600">QA</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600">Tests, recette, documentation</p>
+                        <p class="text-xs text-slate-500 mt-2">⏱️ 40%</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-blue-50 p-6 rounded-lg">
+                <h3 class="font-semibold text-lg mb-4">Rituels Agiles</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="calendar-check" class="text-blue-500 mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-sm">Daily Standup</p>
+                            <p class="text-xs text-slate-600">Quotidien - 15min - Équipe dev</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="layout-list" class="text-blue-500 mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-sm">Sprint Planning</p>
+                            <p class="text-xs text-slate-600">Début sprint - 2h - Équipe complète</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="presentation" class="text-blue-500 mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-sm">Sprint Review</p>
+                            <p class="text-xs text-slate-600">Fin sprint - 1h - Équipe + Clients</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="message-circle" class="text-blue-500 mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-sm">Demo Client</p>
+                            <p class="text-xs text-slate-600">Hebdomadaire - 30min - Tous</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="section-a4 gradient-header text-white p-12">
+            <div class="text-center">
+                <i data-lucide="check-circle" size="64" class="mx-auto mb-4"></i>
+                <h2 class="text-3xl font-bold mb-4">Document Prêt pour Validation</h2>
+                <p class="text-blue-100 mb-8">Version 1.0 - Octobre 2025</p>
+                
+                <div class="grid grid-cols-3 gap-8 mt-8">
+                    <div class="text-left">
+                        <p class="text-blue-200 text-sm mb-2">Préparé par</p>
+                        <p class="font-semibold">Équipe Projet IA</p>
+                        <p class="text-sm text-blue-100">Sam, Yannick, Xavier, Martine</p>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-blue-200 text-sm mb-2">Client</p>
+                        <p class="font-semibold">INVOX</p>
+                        <p class="text-sm text-blue-100">Agence Demand Generation B2B</p>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-blue-200 text-sm mb-2">Contact</p>
+                        <p class="font-semibold">Justine & Guilhem</p>
+                        <p class="text-sm text-blue-100">Product Owner & Sponsor</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 pt-6 border-t border-blue-400">
+                    <p class="text-xs text-blue-200">Document confidentiel - Usage interne INVOX uniquement</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+        
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#3B82F6',
+                primaryTextColor: '#1e293b',
+                primaryBorderColor: '#2563EB',
+                lineColor: '#64748b',
+                secondaryColor: '#F97316',
+                tertiaryColor: '#86EFAC'
+            }
+        });
+        
+        // Smooth scroll + Active state TOC
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+        
+        // Matrice Valeur/Effort
+        const ctxMatrice = document.getElementById('matriceValeurEffort').getContext('2d');
+        new Chart(ctxMatrice, {
+            type: 'bubble',
+            data: {
+                datasets: [{
+                    label: 'Dashboard KPIs',
+                    data: [{ x: 2, y: 8, r: 15 }],
+                    backgroundColor: 'rgba(59, 130, 246, 0.6)',
+                    borderColor: '#3B82F6',
+                    borderWidth: 2
+                }, {
+                    label: 'Assistant Idéateur',
+                    data: [{ x: 8, y: 9, r: 25 }],
+                    backgroundColor: 'rgba(249, 115, 22, 0.6)',
+                    borderColor: '#F97316',
+                    borderWidth: 2
+                }, {
+                    label: 'Propales IA',
+                    data: [{ x: 4, y: 7, r: 18 }],
+                    backgroundColor: 'rgba(34, 197, 94, 0.6)',
+                    borderColor: '#22C55E',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: false }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Effort (semaines)', font: { weight: 'bold' } },
+                        min: 0,
+                        max: 10
+                    },
+                    y: {
+                        title: { display: true, text: 'Valeur Business', font: { weight: 'bold' } },
+                        min: 0,
+                        max: 10
+                    }
+                }
+            }
+        });
+        
+        // Gantt Chart (Timeline)
+        const ctxGantt = document.getElementById('ganttChart').getContext('2d');
+        new Chart(ctxGantt, {
+            type: 'bar',
+            data: {
+                labels: ['Sprint 1', 'Sprint 2', 'Sprint 3', 'Sprint 4', 'Sprint 5'],
+                datasets: [{
+                    label: 'Dashboard KPIs',
+                    data: [2, 0, 0, 0, 0],
+                    backgroundColor: '#3B82F6'
+                }, {
+                    label: 'Propales IA',
+                    data: [0, 3, 0, 0, 0],
+                    backgroundColor: '#22C55E'
+                }, {
+                    label: 'Assistant (POC)',
+                    data: [0, 0, 3, 0, 0],
+                    backgroundColor: '#F97316'
+                }, {
+                    label: 'Assistant (MVP)',
+                    data: [0, 0, 0, 2, 0],
+                    backgroundColor: '#F97316'
+                }, {
+                    label: 'Formation',
+                    data: [0, 0, 0, 0, 2],
+                    backgroundColor: '#64748B'
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        title: { display: true, text: 'Semaines' }
+                    },
+                    y: {
+                        stacked: true
+                    }
+                }
+            }
+        });
+        
+        // Budget Dev (Donut)
+        const ctxBudgetDev = document.getElementById('budgetDevChart').getContext('2d');
+        new Chart(ctxBudgetDev, {
+            type: 'doughnut',
+            data: {
+                labels: ['Dashboard', 'Assistant', 'Propales'],
+                datasets: [{
+                    data: [11500, 33500, 9500],
+                    backgroundColor: ['#3B82F6', '#F97316', '#22C55E'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: { display: false }
+                }
+            }
+        });
+        
+        // Budget Exploitation (Donut)
+        const ctxBudgetExploit = document.getElementById('budgetExploitChart').getContext('2d');
+        new Chart(ctxBudgetExploit, {
+            type: 'doughnut',
+            data: {
+                labels: ['Dashboard', 'Assistant', 'Propales'],
+                datasets: [{
+                    data: [2120, 4420, 1644],
+                    backgroundColor: ['#3B82F6', '#F97316', '#22C55E'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: { display: false }
+                }
+            }
+        });
+        
+        // ROI Chart
+        const ctxROI = document.getElementById('roiChart').getContext('2d');
+        new Chart(ctxROI, {
+            type: 'line',
+            data: {
+                labels: ['An 0', 'An 1', 'An 2', 'An 3', 'An 4'],
+                datasets: [{
+                    label: 'Coûts Cumulés',
+                    data: [54500, 62684, 70868, 79052, 87236],
+                    borderColor: '#EF4444',
+                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }, {
+                    label: 'Gains Cumulés',
+                    data: [0, 19500, 39000, 58500, 78000],
+                    borderColor: '#22C55E',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: false }
+                },
+                scales: {
+                    y: {
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString() + '€';
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                }
+            }
+        });
+        
+        // Matrice Risques
+        const ctxRisques = document.getElementById('risquesMatrix').getContext('2d');
+        new Chart(ctxRisques, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Adoption faible',
+                    data: [{ x: 2, y: 3 }],
+                    backgroundColor: '#EF4444',
+                    borderColor: '#DC2626',
+                    pointRadius: 20,
+                    pointHoverRadius: 25
+                }, {
+                    label: 'Qualité IA',
+                    data: [{ x: 1, y: 3 }],
+                    backgroundColor: '#F59E0B',
+                    borderColor: '#D97706',
+                    pointRadius: 15,
+                    pointHoverRadius: 20
+                }, {
+                    label: 'Coûts API',
+                    data: [{ x: 2, y: 2 }],
+                    backgroundColor: '#F59E0B',
+                    borderColor: '#D97706',
+                    pointRadius: 12,
+                    pointHoverRadius: 17
+                }, {
+                    label: 'Intégrations',
+                    data: [{ x: 1, y: 2 }],
+                    backgroundColor: '#22C55E',
+                    borderColor: '#16A34A',
+                    pointRadius: 8,
+                    pointHoverRadius: 13
+                }, {
+                    label: 'Délais',
+                    data: [{ x: 2, y: 2 }],
+                    backgroundColor: '#F59E0B',
+                    borderColor: '#D97706',
+                    pointRadius: 12,
+                    pointHoverRadius: 17
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'right' },
+                    title: { display: false }
+                },
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Probabilité', font: { weight: 'bold' } },
+                        min: 0,
+                        max: 3,
+                        ticks: {
+                            callback: function(value) {
+                                const labels = ['', 'Faible', 'Moyenne', 'Élevée'];
+                                return labels[value] || '';
+                            }
+                        }
+                    },
+                    y: {
+                        title: { display: true, text: 'Impact', font: { weight: 'bold' } },
+                        min: 0,
+                        max: 3,
+                        ticks: {
+                            callback: function(value) {
+                                const labels = ['', 'Faible', 'Moyen', 'Élevé'];
+                                return labels[value] || '';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

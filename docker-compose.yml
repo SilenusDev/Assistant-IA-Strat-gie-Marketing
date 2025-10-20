@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: poc-solidjs-frontend
+    container_name: ${PROJECT_NAME:-ai-marketing-assistant}-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_BASE_URL=http://backend:5000
+    networks:
+      - assistant-net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: poc-flask-backend
+    container_name: ${PROJECT_NAME:-ai-marketing-assistant}-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DB_HOST=${DB_HOST:-db}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_USER=${DB_USER:-assistant}
+      - DB_PASS=${DB_PASS:-assistant_pass}
+      - DB_NAME=${DB_NAME:-assistantdb}
+    volumes:
+      - ./backend:/app
+      - ./dataset.json:/dataset.json:ro
+    depends_on:
+      - db
+    networks:
+      - assistant-net
+
+  db:
+    image: mariadb:10.11
+    container_name: ${PROJECT_NAME:-ai-marketing-assistant}-db
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=${DB_PASS:-assistant_pass}
+      - MARIADB_DATABASE=${DB_NAME:-assistantdb}
+      - MARIADB_USER=${DB_USER:-assistant}
+      - MARIADB_PASSWORD=${DB_PASS:-assistant_pass}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "3306:3306"
+    networks:
+      - assistant-net
+
+volumes:
+  mariadb_data:
+
+networks:
+  assistant-net:
+    driver: bridge
