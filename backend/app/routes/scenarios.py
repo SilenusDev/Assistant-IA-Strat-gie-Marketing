@@ -15,7 +15,7 @@ from ..services.scenario_service import ScenarioService
 
 def init_scenario_routes(bp):
     scenario_schema = ScenarioSchema()
-    scenarios_schema = ScenarioSchema(many=True)
+    scenarios_schema = ScenarioDetailSchema(many=True)  # Utiliser ScenarioDetailSchema pour inclure les configurations
     scenario_detail_schema = ScenarioDetailSchema()
     create_schema = ScenarioCreateSchema()
 

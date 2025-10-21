@@ -4,11 +4,14 @@ import { nanoid } from "nanoid";
 import { chatStore } from "../stores/chatStore";
 import { scenarioStore } from "../stores/scenarioStore";
 import { configurationStore } from "../stores/configurationStore";
+import { progressStore } from "../stores/progressStore";
 import { ActionButtonGroup } from "./ActionButtonGroup";
 import { SuggestionCard } from "./SuggestionCard";
 import { ConfigurationSelector } from "./ConfigurationSelector";
 import { ObjectifFlow } from "./ObjectifFlow";
 import { CibleFlow } from "./CibleFlow";
+import { ProgressBar } from "./ProgressBar";
+import { PlanSummary } from "./PlanSummary";
 import { suggestNewScenario, batchCreateScenarios, type ScenarioSuggestion } from "../api/client";
 import { handleConfigurationReady, handleNextToCibles, handleGeneratePlan } from "../handlers/configurationHandlers";
 import { Loader2 } from "lucide-solid";
@@ -145,6 +148,11 @@ Sélectionnez ceux qui vous intéressent :`,
 
   return (
     <div class="flex h-full flex-col">
+      {/* Barre de progression */}
+      <Show when={scenarioStore.state.selectedScenario !== null}>
+        <ProgressBar currentStep={progressStore.state.currentStep} />
+      </Show>
+
       {/* Formulaire de saisie en haut */}
       <form class="mb-4 flex gap-2" onSubmit={handleSubmit}>
         <input
@@ -188,14 +196,17 @@ Sélectionnez ceux qui vous intéressent :`,
                       when={message.content === "suggestions"}
                       fallback={
                         <Show
-                          when={message.content === "objectif_flow"}
+                          when={message.content === "plan_summary"}
                           fallback={
                             <Show
-                              when={message.content === "cible_flow"}
+                              when={message.content === "objectif_flow"}
                               fallback={
                                 <Show
-                                  when={message.content === "config_selection"}
+                                  when={message.content === "cible_flow"}
                                   fallback={
+                                    <Show
+                                      when={message.content === "config_selection"}
+                                      fallback={
                                     <Show
                                       when={message.content.startsWith("success_confirmation:")}
                                       fallback={
@@ -287,6 +298,13 @@ Sélectionnez ceux qui vous intéressent :`,
                 </Show>
               }
             >
+              {/* PlanSummary */}
+              <div class="mr-auto text-left w-full">
+                <PlanSummary />
+              </div>
+            </Show>
+          }
+        >
                       {/* Cartes de suggestions */}
                       <div class="mr-auto text-left w-full space-y-3">
                         <div class="grid grid-cols-1 gap-3">

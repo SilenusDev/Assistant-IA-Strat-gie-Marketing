@@ -6,6 +6,30 @@ import { ScenarioModal } from "./ScenarioModal";
 import { fetchScenarioDetail, deleteScenario } from "../api/client";
 import type { ScenarioDetail } from "../types";
 
+// Calcule la progression d'un scénario (0%, 33%, 66%, 100%)
+function calculateProgress(scenario: any): number {
+  // Récupérer la configuration la plus avancée
+  const configs = scenario.configurations || [];
+  if (configs.length === 0) return 0;
+  
+  let maxProgress = 0;
+  
+  for (const config of configs) {
+    const hasObjectifs = config.objectifs && config.objectifs.length > 0;
+    const hasCibles = config.cibles && config.cibles.length > 0;
+    const hasPlan = config.plans && config.plans.length > 0;
+    
+    let progress = 0;
+    if (hasObjectifs) progress = 33;
+    if (hasObjectifs && hasCibles) progress = 66;
+    if (hasObjectifs && hasCibles && hasPlan) progress = 100;
+    
+    if (progress > maxProgress) maxProgress = progress;
+  }
+  
+  return maxProgress;
+}
+
 export function ScenarioSidebar() {
   const [showCreate, setShowCreate] = createSignal(false);
   const [nom, setNom] = createSignal("");
@@ -119,26 +143,41 @@ export function ScenarioSidebar() {
       </Show>
       <div class="flex-1 space-y-2 overflow-y-auto">
         <For each={scenarioStore.state.scenarios}>
-          {(scenario) => (
-            <button
-              draggable={true}
-              onDragStart={(e) => {
-                e.dataTransfer!.effectAllowed = "move";
-                e.dataTransfer!.setData("scenarioId", scenario.id.toString());
-              }}
-              class="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-3 text-left text-sm text-slate-200 transition hover:border-primary hover:bg-slate-800 cursor-pointer"
-              classList={{
-                "border-primary text-white": detail()?.id === scenario.id
-              }}
-              onClick={() => handleCardClick(scenario.id)}
-            >
-              <p class="font-semibold flex items-center gap-2">
-                <GripVertical size={16} class="text-slate-500" />
-                {scenario.nom}
-              </p>
-              <p class="text-xs text-slate-400">{scenario.thematique}</p>
-            </button>
-          )}
+          {(scenario) => {
+            const progress = calculateProgress(scenario);
+            return (
+              <button
+                draggable={true}
+                onDragStart={(e) => {
+                  e.dataTransfer!.effectAllowed = "move";
+                  e.dataTransfer!.setData("scenarioId", scenario.id.toString());
+                }}
+                class="w-full rounded-lg border border-slate-800 bg-slate-900 text-left text-sm text-slate-200 transition hover:border-primary hover:bg-slate-800 cursor-pointer overflow-hidden"
+                classList={{
+                  "border-primary text-white": detail()?.id === scenario.id
+                }}
+                onClick={() => handleCardClick(scenario.id)}
+              >
+                <div class="px-3 py-3">
+                  <p class="font-semibold flex items-center gap-2">
+                    <GripVertical size={16} class="text-slate-500" />
+                    {scenario.nom}
+                  </p>
+                  <p class="text-xs text-slate-400">{scenario.thematique}</p>
+                </div>
+                
+                {/* Barre de progression */}
+                <div class="relative h-[3px] w-full bg-gradient-to-r from-red-500 via-orange-500 via-yellow-500 to-green-500">
+                  <div 
+                    class="absolute top-0 right-0 h-full bg-slate-900/80 transition-all duration-500"
+                    style={{
+                      width: `${100 - progress}%`
+                    }}
+                  />
+                </div>
+              </button>
+            );
+          }}
         </For>
       </div>
       <Show when={detail()}>

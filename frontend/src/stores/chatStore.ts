@@ -65,6 +65,21 @@ function resetChat() {
   setError(null);
 }
 
+function clearMessages(keepMessageIds: string[] = []) {
+  setMessages((list) => list.filter(m => keepMessageIds.includes(m.id)));
+}
+
+function addSuccessMessage(content: string) {
+  const id = nanoid();
+  pushMessage({
+    id,
+    author: "assistant",
+    content,
+    createdAt: new Date()
+  });
+  return id;
+}
+
 export const chatStore = {
   messages,
   actions,
@@ -74,5 +89,7 @@ export const chatStore = {
   triggerAction,
   resetChat,
   addMessage: pushMessage,
-  removeMessage
+  removeMessage,
+  clearMessages,
+  addSuccessMessage
 };

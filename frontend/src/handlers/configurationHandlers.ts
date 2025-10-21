@@ -6,8 +6,13 @@
 import { nanoid } from "nanoid";
 import { configurationStore } from "../stores/configurationStore";
 import { chatStore } from "../stores/chatStore";
+import { progressStore } from "../stores/progressStore";
 
 export const startConfigurationFlow = async (scenarioId: number) => {
+  // Réinitialiser la progression
+  progressStore.reset();
+  progressStore.setStep(0); // Étape configuration
+  
   // Définir le scénario courant dans le store
   configurationStore.state.currentScenarioId = scenarioId;
   
@@ -23,7 +28,7 @@ Pour commencer, souhaitez-vous créer une nouvelle configuration ou utiliser une
   });
   
   chatStore.addMessage({
-    id: nanoid(),
+    id: "config_selection",
     author: "assistant",
     content: "config_selection",
     createdAt: new Date()
@@ -31,19 +36,17 @@ Pour commencer, souhaitez-vous créer une nouvelle configuration ou utiliser une
 };
 
 export const handleConfigurationReady = async (configId: number) => {
-  // Retirer le message de sélection de config
-  chatStore.removeMessage("config_selection");
-  
   await configurationStore.selectConfiguration(configId);
   
-  chatStore.addMessage({
-    id: nanoid(),
-    author: "assistant",
-    content: `✅ Configuration prête ! Définissons maintenant vos objectifs (maximum 2).
-
-Je vous propose des objectifs pertinents basés sur votre scénario...`,
-    createdAt: new Date()
-  });
+  // Mettre à jour la progression
+  progressStore.setConfigCompleted(true);
+  progressStore.setStep(1); // Étape objectifs
+  
+  // Clear du chat et message de succès
+  const successId = chatStore.addSuccessMessage(
+    "🎉 Parfait Justine ! Votre configuration est prête. Passons aux objectifs !"
+  );
+  chatStore.clearMessages([successId]);
   
   chatStore.addMessage({
     id: "objectif_flow",
@@ -54,17 +57,15 @@ Je vous propose des objectifs pertinents basés sur votre scénario...`,
 };
 
 export const handleNextToCibles = async () => {
-  // Retirer le flow objectifs
-  chatStore.removeMessage("objectif_flow");
+  // Mettre à jour la progression
+  progressStore.setObjectifsCount(configurationStore.state.selectedObjectifs.length);
+  progressStore.setStep(2); // Étape cibles
   
-  chatStore.addMessage({
-    id: nanoid(),
-    author: "assistant",
-    content: `👍 Excellent choix ! Passons maintenant aux cibles (maximum 3).
-
-Je vous propose des personas adaptés à vos objectifs...`,
-    createdAt: new Date()
-  });
+  // Clear du chat et message de succès
+  const successId = chatStore.addSuccessMessage(
+    "👏 Excellent choix ! Vos objectifs sont bien définis. Place aux cibles !"
+  );
+  chatStore.clearMessages([successId]);
   
   chatStore.addMessage({
     id: "cible_flow",
@@ -76,34 +77,40 @@ Je vous propose des personas adaptés à vos objectifs...`,
 
 
 export const handleGeneratePlan = async () => {
-  const generatingId = nanoid();
+  // Mettre à jour la progression
+  progressStore.setCiblesCount(configurationStore.state.selectedCibles.length);
+  
+  // Clear du chat et message de succès
+  const successId = chatStore.addSuccessMessage(
+    "🚀 Bravo ! Votre stratégie prend forme. Générons votre plan maintenant !"
+  );
+  chatStore.clearMessages([successId]);
+  
+  // Afficher spinner de génération
   chatStore.addMessage({
-    id: generatingId,
+    id: "generating_plan",
     author: "assistant",
-    content: "generating_plan",
+    content: "⏳ Génération de votre plan marketing en cours...",
     createdAt: new Date()
   });
   
   try {
     const result = await configurationStore.generatePlan();
     
-    chatStore.removeMessage(generatingId);
+    // Mettre à jour la progression
+    progressStore.setPlanGenerated(true);
+    
+    // Clear et afficher le récapitulatif
+    chatStore.clearMessages([]);
     
     chatStore.addMessage({
-      id: nanoid(),
+      id: "plan_summary",
       author: "assistant",
-      content: `🎉 Félicitations Justine ! Votre plan de contenu est prêt !
-
-J'ai généré ${result.articles.length} articles stratégiques adaptés à vos objectifs et cibles.
-
-Vous pouvez maintenant :
-• Consulter les détails du plan dans la configuration
-• Modifier les articles selon vos besoins
-• Générer du contenu pour chaque article`,
+      content: "plan_summary",
       createdAt: new Date()
     });
   } catch (error) {
-    chatStore.removeMessage(generatingId);
+    chatStore.removeMessage("generating_plan");
     chatStore.addMessage({
       id: nanoid(),
       author: "assistant",
@@ -111,4 +118,12 @@ Vous pouvez maintenant :
       createdAt: new Date()
     });
   }
+};
+
+export const handleNewStrategy = () => {
+  // Réinitialiser tout pour une nouvelle stratégie
+  progressStore.reset();
+  chatStore.resetChat();
+  configurationStore.state.currentScenarioId = null;
+  configurationStore.state.currentConfigId = null;
 };

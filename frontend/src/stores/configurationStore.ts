@@ -313,6 +313,17 @@ async function generatePlan() {
       `/api/configurations/${state.currentConfigId}/generate-plan`,
       { method: "POST" }
     );
+    
+    // IMPORTANT : Recharger la configuration COMPLÈTE pour récupérer les articles
+    const updatedConfig = await request(`/api/configurations/${state.currentConfigId}`);
+    
+    // Mettre à jour la configuration dans la liste
+    setState({
+      configurations: state.configurations.map(c => 
+        c.id === state.currentConfigId ? updatedConfig : c
+      )
+    });
+    
     return response;
   } catch (error) {
     console.error("Erreur génération plan:", error);

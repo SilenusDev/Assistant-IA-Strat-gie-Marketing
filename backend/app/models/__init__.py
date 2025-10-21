@@ -122,8 +122,8 @@ class Plan(db.Model, TimestampMixin):
     )
 
     configuration = relationship("Configuration", back_populates="plans")
-    items = relationship("PlanItem", back_populates="plan", cascade="all, delete-orphan")
-    articles = relationship("Article", back_populates="plan", cascade="all, delete-orphan")
+    items = relationship("PlanItem", back_populates="plan", cascade="all, delete-orphan", lazy="selectin")
+    articles = relationship("Article", back_populates="plan", cascade="all, delete-orphan", lazy="selectin")
 
 
 class PlanItem(db.Model, TimestampMixin):

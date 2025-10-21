@@ -62,7 +62,7 @@ class ConfigurationDetailSchema(ConfigurationSchema):
 
 
 class ScenarioDetailSchema(ScenarioSchema):
-    configurations = fields.List(fields.Nested(ConfigurationSchema))
+    configurations = fields.List(fields.Nested(ConfigurationDetailSchema))
 
 
 class ScenarioCreateSchema(Schema):

@@ -1,4 +1,5 @@
 import { CheckCircle, XCircle } from "lucide-solid";
+import { progressStore } from "../stores/progressStore";
 import type { ConfigurationDetail } from "../types";
 
 interface ProgressIndicatorProps {
@@ -11,27 +12,35 @@ export function ProgressIndicator(props: ProgressIndicatorProps) {
       <h4 class="text-sm font-semibold text-slate-100 mb-3">Progression</h4>
       <div class="space-y-2">
         <div class="flex items-center gap-2 text-xs">
-          <CheckCircle size={16} class="text-green-500" />
+          {progressStore.state.configCompleted ? (
+            <CheckCircle size={16} class="text-green-500" />
+          ) : (
+            <XCircle size={16} class="text-slate-600" />
+          )}
           <span class="text-slate-300">Configuration définie</span>
         </div>
         <div class="flex items-center gap-2 text-xs">
-          {props.configuration.objectifs && props.configuration.objectifs.length > 0 ? (
+          {progressStore.state.objectifsCount > 0 ? (
             <CheckCircle size={16} class="text-green-500" />
           ) : (
             <XCircle size={16} class="text-slate-600" />
           )}
-          <span class="text-slate-300">Objectifs ({props.configuration.objectifs?.length || 0})</span>
+          <span class="text-slate-300">
+            Objectifs ({progressStore.state.objectifsCount}/2)
+          </span>
         </div>
         <div class="flex items-center gap-2 text-xs">
-          {props.configuration.cibles && props.configuration.cibles.length > 0 ? (
+          {progressStore.state.ciblesCount > 0 ? (
             <CheckCircle size={16} class="text-green-500" />
           ) : (
             <XCircle size={16} class="text-slate-600" />
           )}
-          <span class="text-slate-300">Cibles ({props.configuration.cibles?.length || 0})</span>
+          <span class="text-slate-300">
+            Cibles ({progressStore.state.ciblesCount}/3)
+          </span>
         </div>
         <div class="flex items-center gap-2 text-xs">
-          {props.configuration.plans && props.configuration.plans.length > 0 ? (
+          {progressStore.state.planGenerated ? (
             <CheckCircle size={16} class="text-green-500" />
           ) : (
             <XCircle size={16} class="text-slate-600" />
