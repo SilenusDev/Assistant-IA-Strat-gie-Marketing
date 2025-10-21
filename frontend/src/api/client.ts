@@ -152,3 +152,20 @@ export function deleteScenario(id: number): Promise<{ message: string }> {
     method: "DELETE"
   });
 }
+
+// ============================================
+// OBJECTIFS & CIBLES IA
+// ============================================
+
+export function requestAIObjectifs(scenarioId: number): Promise<{ objectifs: any[] }> {
+  return request(`/api/objectifs/suggest-ai/${scenarioId}`, {
+    method: "POST"
+  });
+}
+
+export function requestAICibles(scenarioId: number, configurationId?: number): Promise<{ cibles: any[] }> {
+  return request(`/api/cibles/suggest-ai/${scenarioId}`, {
+    method: "POST",
+    body: JSON.stringify({ configuration_id: configurationId })
+  });
+}

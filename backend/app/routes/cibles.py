@@ -36,3 +36,20 @@ def init_cible_routes(bp):
             }), 201
         except ValueError as exc:
             return jsonify({"error": str(exc)}), 400
+    
+    @bp.route("/cibles/suggest-ai/<int:scenario_id>", methods=["POST"])
+    def suggest_cibles_ai(scenario_id: int):
+        """Génère des suggestions de cibles via IA en évitant les doublons."""
+        payload = request.get_json(silent=True) or {}
+        configuration_id = payload.get("configuration_id")
+        
+        try:
+            suggestions = CibleService.suggest_cibles_for_scenario(
+                scenario_id, 
+                configuration_id
+            )
+            return jsonify({"cibles": suggestions}), 200
+        except LookupError as exc:
+            return jsonify({"error": str(exc)}), 404
+        except Exception as exc:
+            return jsonify({"error": f"Erreur lors de la génération: {str(exc)}"}), 500

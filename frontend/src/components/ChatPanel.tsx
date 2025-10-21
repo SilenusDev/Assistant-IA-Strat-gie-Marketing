@@ -7,8 +7,10 @@ import { configurationStore } from "../stores/configurationStore";
 import { ActionButtonGroup } from "./ActionButtonGroup";
 import { SuggestionCard } from "./SuggestionCard";
 import { ConfigurationSelector } from "./ConfigurationSelector";
+import { ObjectifFlow } from "./ObjectifFlow";
+import { CibleFlow } from "./CibleFlow";
 import { suggestNewScenario, batchCreateScenarios, type ScenarioSuggestion } from "../api/client";
-import { handleConfigurationReady } from "../handlers/configurationHandlers";
+import { handleConfigurationReady, handleNextToCibles, handleGeneratePlan } from "../handlers/configurationHandlers";
 import { Loader2 } from "lucide-solid";
 
 export function ChatPanel() {
@@ -186,11 +188,17 @@ Sélectionnez ceux qui vous intéressent :`,
                       when={message.content === "suggestions"}
                       fallback={
                         <Show
-                          when={message.content === "config_selection"}
+                          when={message.content === "objectif_flow"}
                           fallback={
                             <Show
-                              when={message.content.startsWith("success_confirmation:")}
+                              when={message.content === "cible_flow"}
                               fallback={
+                                <Show
+                                  when={message.content === "config_selection"}
+                                  fallback={
+                                    <Show
+                                      when={message.content.startsWith("success_confirmation:")}
+                                      fallback={
                                 <div
                                   classList={{
                                     "ml-auto text-right": message.author === "user",
@@ -265,6 +273,20 @@ Sélectionnez ceux qui vous intéressent :`,
                         </Show>
                       }
                     >
+                      {/* CibleFlow */}
+                      <div class="mr-auto text-left w-full">
+                        <CibleFlow onGeneratePlan={handleGeneratePlan} />
+                      </div>
+                    </Show>
+                  }
+                >
+                  {/* ObjectifFlow */}
+                  <div class="mr-auto text-left w-full">
+                    <ObjectifFlow onNextStep={handleNextToCibles} />
+                  </div>
+                </Show>
+              }
+            >
                       {/* Cartes de suggestions */}
                       <div class="mr-auto text-left w-full space-y-3">
                         <div class="grid grid-cols-1 gap-3">

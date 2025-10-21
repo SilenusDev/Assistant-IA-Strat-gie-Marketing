@@ -72,6 +72,7 @@ class CibleService:
         """
         Génère des suggestions de cibles pertinentes pour un scénario via IA.
         Prend en compte les objectifs déjà sélectionnés si une configuration est fournie.
+        Évite les doublons en excluant les cibles existantes.
 
         Args:
             scenario_id: ID du scénario
@@ -86,6 +87,14 @@ class CibleService:
         scenario = Scenario.query.filter_by(id=scenario_id).first()
         if not scenario:
             raise LookupError(f"Scenario {scenario_id} not found")
+
+        # Récupérer les cibles existantes pour éviter les doublons
+        existing_cibles = CibleService.get_all_cibles()
+        existing_labels = [cible.label for cible in existing_cibles]
+        
+        existing_context = ""
+        if existing_labels:
+            existing_context = f"\n\nCibles DÉJÀ EXISTANTES à NE PAS proposer :\n" + "\n".join([f"- {label}" for label in existing_labels])
 
         # Récupérer les objectifs si une configuration est fournie
         objectifs_context = ""
@@ -105,7 +114,7 @@ class CibleService:
 Scénario :
 - Nom : {scenario.nom}
 - Thématique : {scenario.thematique}
-- Description : {scenario.description or "Non spécifiée"}{objectifs_context}
+- Description : {scenario.description or "Non spécifiée"}{objectifs_context}{existing_context}
 
 Votre mission :
 1. Analysez le scénario{" et les objectifs" if objectifs_context else ""}
@@ -114,6 +123,8 @@ Votre mission :
    - Un label clair (fonction/rôle) - max 60 caractères
    - Une description persona détaillée (responsabilités, défis, motivations)
    - Un segment de marché précis
+   - Être DIFFÉRENTE des cibles déjà existantes listées ci-dessus
+   - Être INÉDITE et innovante
 
 Répondez UNIQUEMENT au format JSON suivant (sans markdown, juste le JSON) :
 {{

@@ -1,5 +1,5 @@
 import { For, Show, createSignal } from "solid-js";
-import { Plus } from "lucide-solid";
+import { Plus, Loader2 } from "lucide-solid";
 
 interface Configuration {
   id: number;
@@ -16,12 +16,20 @@ interface ConfigurationSelectorProps {
 export function ConfigurationSelector(props: ConfigurationSelectorProps) {
   const [showCreate, setShowCreate] = createSignal(false);
   const [nom, setNom] = createSignal("");
+  const [isCreating, setIsCreating] = createSignal(false);
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (nom().trim()) {
-      props.onCreateNew(nom().trim());
-      setNom("");
-      setShowCreate(false);
+      setIsCreating(true);
+      try {
+        await props.onCreateNew(nom().trim());
+        setNom("");
+        setShowCreate(false);
+      } catch (error) {
+        console.error("Erreur création config:", error);
+      } finally {
+        setIsCreating(false);
+      }
     }
   };
 
@@ -66,17 +74,21 @@ export function ConfigurationSelector(props: ConfigurationSelectorProps) {
               <div class="flex gap-2">
                 <button
                   onClick={handleCreate}
-                  disabled={!nom().trim()}
-                  class="flex-1 px-3 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  disabled={!nom().trim() || isCreating()}
+                  class="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
                 >
-                  Créer
+                  <Show when={isCreating()}>
+                    <Loader2 size={16} class="animate-spin" />
+                  </Show>
+                  <span>{isCreating() ? "Création..." : "Créer"}</span>
                 </button>
                 <button
                   onClick={() => {
                     setShowCreate(false);
                     setNom("");
                   }}
-                  class="px-3 py-2 rounded-lg bg-slate-700 text-slate-200 text-sm hover:bg-slate-600 transition"
+                  disabled={isCreating()}
+                  class="px-3 py-2 rounded-lg bg-slate-700 text-slate-200 text-sm hover:bg-slate-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Annuler
                 </button>

@@ -68,6 +68,7 @@ class ObjectifService:
     def suggest_objectifs_for_scenario(scenario_id: int) -> list[dict[str, str]]:
         """
         Génère des suggestions d'objectifs pertinents pour un scénario via IA.
+        Évite les doublons en excluant les objectifs existants.
 
         Args:
             scenario_id: ID du scénario
@@ -82,13 +83,21 @@ class ObjectifService:
         if not scenario:
             raise LookupError(f"Scenario {scenario_id} not found")
 
+        # Récupérer les objectifs existants pour éviter les doublons
+        existing_objectifs = ObjectifService.get_all_objectifs()
+        existing_labels = [obj.label for obj in existing_objectifs]
+        
+        existing_context = ""
+        if existing_labels:
+            existing_context = f"\n\nObjectifs DÉJÀ EXISTANTS à NE PAS proposer :\n" + "\n".join([f"- {label}" for label in existing_labels])
+
         # Construire le prompt pour OpenAI
         prompt = f"""Vous êtes un expert en stratégie marketing B2B.
 
 Scénario à analyser :
 - Nom : {scenario.nom}
 - Thématique : {scenario.thematique}
-- Description : {scenario.description or "Non spécifiée"}
+- Description : {scenario.description or "Non spécifiée"}{existing_context}
 
 Votre mission :
 1. Analysez ce scénario marketing
@@ -96,7 +105,8 @@ Votre mission :
 3. Chaque objectif doit être :
    - Spécifique au contexte du scénario
    - Mesurable et actionnable
-   - Différent des autres objectifs proposés
+   - DIFFÉRENT des objectifs déjà existants listés ci-dessus
+   - INÉDIT et innovant
    - Formulé de manière concise (max 80 caractères)
 
 Répondez UNIQUEMENT au format JSON suivant (sans markdown, juste le JSON) :

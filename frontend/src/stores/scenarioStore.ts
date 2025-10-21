@@ -69,6 +69,7 @@ async function createScenario(payload: {
     refreshScenarios();
     await selectScenario(created.id);
     setState({ loading: false });
+    return created; // Retourner le scénario créé
   } catch (error) {
     setState({ error: (error as Error).message, loading: false });
     throw error;
