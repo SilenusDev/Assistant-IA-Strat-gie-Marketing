@@ -15,12 +15,16 @@ function pushMessage(message: ChatMessage) {
   setMessages((list) => [...list, message]);
 }
 
+function removeMessage(id: string) {
+  setMessages((list) => list.filter(m => m.id !== id));
+}
+
 async function processResponse(response: ChatResponse) {
   if (response.scenario) {
     scenarioStore.setSelectedScenario(response.scenario);
     scenarioStore.refreshScenarios();
   }
-  setActions(response.buttons ?? []);
+  setActions(response.actions ?? []);
   pushMessage({
     id: nanoid(),
     author: "assistant",
@@ -68,5 +72,7 @@ export const chatStore = {
   error,
   sendMessage,
   triggerAction,
-  resetChat
+  resetChat,
+  addMessage: pushMessage,
+  removeMessage
 };

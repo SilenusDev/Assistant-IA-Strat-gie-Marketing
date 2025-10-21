@@ -42,6 +42,17 @@ def init_scenario_routes(bp):
             return jsonify({"error": "Scenario not found"}), 404
         return jsonify(scenario_detail_schema.dump(scenario)), 200
 
+    @bp.route("/scenarios/<int:scenario_id>", methods=["DELETE"])
+    def delete_scenario(scenario_id: int):
+        """Supprime un scénario."""
+        try:
+            ScenarioService.delete_scenario(scenario_id)
+            return jsonify({"message": "Scenario deleted successfully"}), 200
+        except LookupError:
+            return jsonify({"error": "Scenario not found"}), 404
+        except Exception as exc:
+            return jsonify({"error": str(exc)}), 500
+
     @bp.route("/scenarios/<int:scenario_id>/objectifs", methods=["POST"])
     def add_objectif(scenario_id: int):
         """Ajoute un objectif à un scénario."""
@@ -161,3 +172,37 @@ def init_scenario_routes(bp):
             )
         except LookupError:
             return jsonify({"error": "Scenario not found"}), 404
+
+    @bp.route("/scenarios/suggest-new", methods=["POST"])
+    def suggest_new_scenario():
+        """Génère plusieurs suggestions de nouveaux scénarios basées sur les scénarios existants."""
+        try:
+            suggestions = ScenarioService.suggest_new_scenario()
+            return jsonify(suggestions), 200
+        except Exception as exc:
+            return jsonify({"error": str(exc)}), 500
+
+    @bp.route("/scenarios/batch-create", methods=["POST"])
+    def batch_create_scenarios():
+        """Crée plusieurs scénarios en une seule requête."""
+        payload = request.get_json(silent=True) or {}
+        scenarios_data = payload.get("scenarios", [])
+        
+        if not scenarios_data:
+            return jsonify({"error": "No scenarios provided"}), 400
+        
+        try:
+            created_scenarios = []
+            for scenario_data in scenarios_data:
+                data = create_schema.load(scenario_data)
+                scenario = ScenarioService.create_scenario(data)
+                created_scenarios.append(scenario)
+            
+            return jsonify({
+                "count": len(created_scenarios),
+                "scenarios": scenarios_schema.dump(created_scenarios)
+            }), 201
+        except ValueError as exc:
+            return jsonify({"error": str(exc)}), 400
+        except Exception as exc:
+            return jsonify({"error": str(exc)}), 500

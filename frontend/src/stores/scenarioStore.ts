@@ -28,8 +28,12 @@ const [scenarios] = createResource(reloadCounter, async () => {
   setState({ loading: true, error: null });
   try {
     const data = await listScenarios();
-    setState({ scenarios: data, loading: false });
-    return data;
+    // Tri par updated_at descendant (plus récent en premier)
+    const sorted = data.sort((a, b) => 
+      new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+    );
+    setState({ scenarios: sorted, loading: false });
+    return sorted;
   } catch (error) {
     setState({ error: (error as Error).message, loading: false });
     return [];

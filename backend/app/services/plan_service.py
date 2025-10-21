@@ -2,14 +2,18 @@
 
 from __future__ import annotations
 
+import json
 import logging
 from datetime import datetime, timezone
 from typing import Any
 
+import openai
+from flask import current_app
+
 from ..ai import OpenAIClient, PlanGenerationSchema
 from ..ai.prompts import PROMPT_GENERATE_PLAN, SYSTEM_PROMPT_BASE, build_context_summary
 from ..extensions import db
-from ..models import Plan, PlanItem, Scenario
+from ..models import Article, Configuration, Plan, PlanItem, Scenario
 
 logger = logging.getLogger(__name__)
 
@@ -246,3 +250,143 @@ class PlanService:
 
         schema = PlanSchema()
         return schema.dump(plan)
+
+    @staticmethod
+    def generate_plan_with_articles(configuration_id: int) -> dict[str, Any]:
+        """
+        Génère un plan avec 5 articles pour une configuration.
+        Utilise OpenAI pour créer des articles pertinents basés sur les objectifs et cibles.
+
+        Args:
+            configuration_id: ID de la configuration
+
+        Returns:
+            Dict avec le plan créé et ses articles
+
+        Raises:
+            LookupError: Si la configuration n'existe pas
+            ValueError: Si la configuration n'a pas les prérequis
+        """
+        configuration = Configuration.query.filter_by(id=configuration_id).first()
+        if not configuration:
+            raise LookupError(f"Configuration {configuration_id} not found")
+
+        # Vérifier les prérequis
+        if not configuration.objectifs or not configuration.cibles:
+            raise ValueError(
+                "La configuration doit avoir au moins 1 objectif et 1 cible"
+            )
+
+        scenario = configuration.scenario
+
+        # Construire le contexte pour l'IA
+        objectifs_list = [f"- {obj.label}" for obj in configuration.objectifs]
+        cibles_list = [
+            f"- {cible.label} ({cible.segment})" for cible in configuration.cibles
+        ]
+
+        prompt = f"""Vous êtes un expert en content marketing B2B.
+
+Configuration à développer :
+- Scénario : {scenario.nom}
+- Thématique : {scenario.thematique}
+- Description : {scenario.description or "Non spécifiée"}
+
+Objectifs :
+{chr(10).join(objectifs_list)}
+
+Cibles :
+{chr(10).join(cibles_list)}
+
+Votre mission :
+1. Créez un plan de contenu stratégique
+2. Proposez EXACTEMENT 5 articles/contenus pertinents
+3. Chaque article doit :
+   - Avoir un titre accrocheur et SEO-friendly (max 100 caractères)
+   - Un résumé de 2-3 phrases expliquant l'angle et la valeur (max 200 caractères)
+   - Être adapté aux objectifs et cibles
+   - Couvrir différents aspects du scénario
+
+Répondez UNIQUEMENT au format JSON suivant (sans markdown, juste le JSON) :
+{{
+  "resume": "Résumé global du plan de contenu en 2-3 phrases",
+  "articles": [
+    {{
+      "nom": "Titre de l'article",
+      "resume": "Résumé détaillé de l'article et de son angle"
+    }}
+  ]
+}}"""
+
+        try:
+            # Appeler OpenAI
+            client = openai.OpenAI(api_key=current_app.config["OPENAI_API_KEY"])
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "Vous êtes un expert en content marketing B2B. Vous répondez toujours en JSON valide.",
+                    },
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=0.8,
+                max_tokens=1500,
+            )
+
+            # Extraire la réponse
+            content = response.choices[0].message.content.strip()
+
+            # Parser le JSON
+            result = json.loads(content)
+
+            # Créer le plan en base
+            plan = Plan(
+                configuration_id=configuration_id,
+                resume=result.get("resume", "Plan de contenu généré"),
+                generated_at=datetime.now(timezone.utc),
+            )
+
+            db.session.add(plan)
+            db.session.flush()  # Pour obtenir l'ID du plan
+
+            # Créer les 5 articles
+            articles_data = result.get("articles", [])
+            created_articles = []
+
+            for article_data in articles_data[:5]:  # Limiter à 5 articles
+                article = Article(
+                    plan_id=plan.id,
+                    nom=article_data.get("nom", "Article sans titre"),
+                    resume=article_data.get("resume"),
+                )
+                db.session.add(article)
+                created_articles.append(article)
+
+            db.session.commit()
+
+            logger.info(
+                "[plan_service][success] Plan avec articles généré",
+                extra={
+                    "configuration_id": configuration_id,
+                    "plan_id": plan.id,
+                    "articles_count": len(created_articles),
+                },
+            )
+
+            return {
+                "plan_id": plan.id,
+                "resume": plan.resume,
+                "articles": [
+                    {"id": a.id, "nom": a.nom, "resume": a.resume}
+                    for a in created_articles
+                ],
+            }
+
+        except Exception as exc:
+            db.session.rollback()
+            logger.error(
+                "[plan_service][error] Erreur lors de la génération du plan",
+                extra={"configuration_id": configuration_id, "error": str(exc)},
+            )
+            raise

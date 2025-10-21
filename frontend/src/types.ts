@@ -16,12 +16,10 @@ export interface Cible {
   maturite?: "awareness" | "consideration" | "decision" | null;
 }
 
-export interface Ressource {
+export interface Article {
   id: number;
-  type: string;
-  titre: string;
-  url?: string | null;
-  note?: string | null;
+  nom: string;
+  resume?: string | null;
 }
 
 export interface PlanItem {
@@ -38,6 +36,7 @@ export interface Plan {
   resume?: string | null;
   generated_at: Timestamp;
   items: PlanItem[];
+  articles: Article[];
 }
 
 export interface ScenarioSummary {
@@ -50,11 +49,22 @@ export interface ScenarioSummary {
   updated_at: Timestamp;
 }
 
-export interface ScenarioDetail extends ScenarioSummary {
+export interface Configuration {
+  id: number;
+  scenario_id: number;
+  nom: string;
+  created_at: Timestamp;
+  updated_at: Timestamp;
+}
+
+export interface ConfigurationDetail extends Configuration {
   objectifs: Objectif[];
   cibles: Cible[];
-  ressources: Ressource[];
   plans: Plan[];
+}
+
+export interface ScenarioDetail extends ScenarioSummary {
+  configurations: Configuration[];
 }
 
 export interface ChatMessage {
@@ -73,6 +83,6 @@ export interface ChatAction {
 
 export interface ChatResponse {
   message: string;
-  buttons: ChatAction[];
+  actions: ChatAction[];
   scenario?: ScenarioDetail | null;
 }

@@ -14,12 +14,10 @@ class CibleSchema(Schema):
     segment = fields.Str(allow_none=True)
 
 
-class RessourceSchema(Schema):
+class ArticleSchema(Schema):
     id = fields.Int(dump_only=True)
-    type = fields.Str(required=True)
-    titre = fields.Str(required=True)
-    url = fields.Str(allow_none=True)
-    note = fields.Str(allow_none=True)
+    nom = fields.Str(required=True)
+    resume = fields.Str(allow_none=True, validate=validate.Length(max=255))
 
 
 class PlanItemSchema(Schema):
@@ -36,6 +34,7 @@ class PlanSchema(Schema):
     resume = fields.Str(allow_none=True)
     generated_at = fields.DateTime()
     items = fields.List(fields.Nested(PlanItemSchema))
+    articles = fields.List(fields.Nested(ArticleSchema))
 
 
 class ScenarioSchema(Schema):
@@ -48,14 +47,36 @@ class ScenarioSchema(Schema):
     updated_at = fields.DateTime()
 
 
-class ScenarioDetailSchema(ScenarioSchema):
+class ConfigurationSchema(Schema):
+    id = fields.Int(dump_only=True)
+    scenario_id = fields.Int(required=True)
+    nom = fields.Str(required=True, validate=validate.Length(min=1, max=150))
+    created_at = fields.DateTime()
+    updated_at = fields.DateTime()
+
+
+class ConfigurationDetailSchema(ConfigurationSchema):
     objectifs = fields.List(fields.Nested(ObjectifSchema))
     cibles = fields.List(fields.Nested(CibleSchema))
-    ressources = fields.List(fields.Nested(RessourceSchema))
     plans = fields.List(fields.Nested(PlanSchema))
+
+
+class ScenarioDetailSchema(ScenarioSchema):
+    configurations = fields.List(fields.Nested(ConfigurationSchema))
 
 
 class ScenarioCreateSchema(Schema):
     nom = fields.Str(required=True, validate=validate.Length(min=1, max=150))
     thematique = fields.Str(required=True, validate=validate.Length(min=1, max=150))
     description = fields.Str(load_default=None, allow_none=True)
+
+
+class ConfigurationCreateSchema(Schema):
+    scenario_id = fields.Int(required=True)
+    nom = fields.Str(required=True, validate=validate.Length(min=1, max=150))
+
+
+class ArticleCreateSchema(Schema):
+    plan_id = fields.Int(required=True)
+    nom = fields.Str(required=True, validate=validate.Length(min=1, max=150))
+    resume = fields.Str(allow_none=True, validate=validate.Length(max=255))

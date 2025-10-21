@@ -6,7 +6,7 @@ import type {
 
 const API_BASE = "";
 
-async function request<T>(
+export async function request<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
@@ -73,13 +73,6 @@ export function addCible(scenarioId: number, payload: { label: string; persona?:
   });
 }
 
-export function addRessource(scenarioId: number, payload: { type: string; titre: string; url?: string; note?: string }): Promise<any> {
-  return request(`/api/scenarios/${scenarioId}/ressources`, {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
-}
-
 export function exportJSON(scenarioId: number): Promise<Blob> {
   return fetch(`${API_BASE}/api/scenarios/${scenarioId}/export/json`)
     .then(res => {
@@ -94,4 +87,68 @@ export function exportCSV(scenarioId: number): Promise<Blob> {
       if (!res.ok) throw new Error("Export failed");
       return res.blob();
     });
+}
+
+// ============================================
+// CONFIGURATIONS
+// ============================================
+
+export function listConfigurations(scenarioId: number): Promise<any[]> {
+  return request(`/api/scenarios/${scenarioId}/configurations`);
+}
+
+export function fetchConfigurationDetail(configId: number): Promise<any> {
+  return request(`/api/configurations/${configId}`);
+}
+
+export function createConfiguration(scenarioId: number, payload: { nom: string }): Promise<any> {
+  return request(`/api/scenarios/${scenarioId}/configurations`, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+}
+
+export function deleteConfiguration(configId: number): Promise<void> {
+  return request(`/api/configurations/${configId}`, {
+    method: "DELETE"
+  });
+}
+
+export function addObjectifToConfiguration(configId: number, payload: { label: string; description?: string }): Promise<any> {
+  return request(`/api/configurations/${configId}/objectifs`, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+}
+
+export function addCibleToConfiguration(configId: number, payload: { label: string; persona?: string; segment?: string }): Promise<any> {
+  return request(`/api/configurations/${configId}/cibles`, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+}
+
+export interface ScenarioSuggestion {
+  nom: string;
+  thematique: string;
+  description: string;
+}
+
+export function suggestNewScenario(): Promise<{ suggestions: ScenarioSuggestion[] }> {
+  return request("/api/scenarios/suggest-new", {
+    method: "POST"
+  });
+}
+
+export function batchCreateScenarios(scenarios: ScenarioSuggestion[]): Promise<{ count: number; scenarios: ScenarioSummary[] }> {
+  return request("/api/scenarios/batch-create", {
+    method: "POST",
+    body: JSON.stringify({ scenarios })
+  });
+}
+
+export function deleteScenario(id: number): Promise<{ message: string }> {
+  return request(`/api/scenarios/${id}`, {
+    method: "DELETE"
+  });
 }

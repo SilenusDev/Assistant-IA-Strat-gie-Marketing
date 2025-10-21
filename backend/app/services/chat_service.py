@@ -318,22 +318,16 @@ class ChatService:
     def _build_context(scenario: Scenario) -> dict[str, Any]:
         """Construit le contexte pour OpenAI."""
         from ..schemas.scenario import (
-            CibleSchema,
-            ObjectifSchema,
-            RessourceSchema,
+            ConfigurationSchema,
             ScenarioSchema,
         )
 
         scenario_schema = ScenarioSchema()
-        objectif_schema = ObjectifSchema(many=True)
-        cible_schema = CibleSchema(many=True)
-        ressource_schema = RessourceSchema(many=True)
+        configuration_schema = ConfigurationSchema(many=True)
 
         return {
             "scenario": scenario_schema.dump(scenario),
-            "objectifs": objectif_schema.dump(scenario.objectifs),
-            "cibles": cible_schema.dump(scenario.cibles),
-            "ressources": ressource_schema.dump(scenario.ressources),
+            "configurations": configuration_schema.dump(scenario.configurations),
             "historique": ChatService.get_conversation_history(scenario.id, limit=5),
         }
 
