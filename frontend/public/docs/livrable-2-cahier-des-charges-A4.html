@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livrable 2 — Cahier des Charges | INVOX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+      startOnLoad: true, 
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#278bc7',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#1e6a9e',
+        lineColor: '#278bc7',
+        secondaryColor: '#4db8ff',
+        tertiaryColor: '#e0f2fe'
+      }
+    });
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* === FORMAT A4 POUR IMPRESSION/PDF === */
+    @page {
+      size: A4 portrait;
+      margin: 20mm;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+      background-attachment: fixed; 
+      color: #0f172a; 
+      line-height: 1.6; 
+    }
+    
+    /* Mode impression : fond blanc */
+    @media print {
+      body {
+        background: white !important;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .no-print {
+        display: none !important;
+      }
+      
+      .page-break {
+        page-break-after: always;
+        break-after: page;
+      }
+      
+      .page-break-before {
+        page-break-before: always;
+        break-before: page;
+      }
+      
+      .avoid-break {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      
+      .glass { background: white; border: 1px solid #e2e8f0; box-shadow: none; backdrop-filter: none; }
+      .hero { display: none; }
+    }
+    
+    h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; font-weight: 700; }
+    .doc { max-width: 1400px; margin: 0 auto; padding: 60px 40px; }
+    .hero { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 30px; padding: 60px; text-align: center; margin-bottom: 50px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
+    .hero h1 { font-size: 56px; color: #fff; margin-bottom: 20px; text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2); }
+    .hero .sub { font-size: 24px; color: rgba(255, 255, 255, 0.95); margin-bottom: 30px; }
+    .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 25px; padding: 50px; margin-bottom: 40px; box-shadow: 0 15px 50px rgba(31, 38, 135, 0.2); }
+    .title { font-size: 36px; color: #278bc7; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 3px solid #278bc7; }
+    .subtitle { font-size: 26px; color: #1e6a9e; margin: 30px 0 20px 0; }
+    .badge { display: inline-block; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 700; color: #fff; margin: 5px; }
+    .badge-p0 { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); }
+    .badge-p1 { background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); }
+    .badge-p2 { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); }
+    .badge-p3 { background: linear-gradient(135deg, #64748b 0%, #475569 100%); }
+    .quote { background: rgba(39, 139, 199, 0.08); border-left: 5px solid #278bc7; border-radius: 12px; padding: 25px 30px; margin: 25px 0; font-style: italic; color: #334155; font-size: 15px; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); margin: 30px 0; }
+    thead { background: linear-gradient(135deg, #278bc7 0%, #1e6a9e 100%); }
+    th { color: #fff; padding: 18px; text-align: left; font-weight: 700; font-size: 14px; text-transform: uppercase; }
+    td { padding: 18px; background: #fff; border-bottom: 1px solid #e2e8f0; font-size: 14px; color: #475569; }
+    tbody tr:hover td { background: #f8fafc; }
+    .chart { background: #fff; border-radius: 20px; padding: 35px; margin: 30px 0; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); }
+    .chart-c { position: relative; height: 400px; }
+    .mermaid { background: #fff; padding: 35px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); margin: 30px 0; }
+    .card { background: #fff; border-left: 5px solid #278bc7; border-radius: 15px; padding: 25px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); }
+    .card h4 { color: #278bc7; font-size: 20px; margin-bottom: 12px; }
+    .info-box { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border: 2px solid #278bc7; border-radius: 15px; padding: 25px; margin: 25px 0; }
+    .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 5px solid #f59e0b; border-radius: 12px; padding: 25px; margin: 25px 0; }
+    @media print { body { background: #fff; } .glass { box-shadow: none; border: 1px solid #e2e8f0; page-break-inside: avoid; } .hero { background: #278bc7; page-break-after: always; } }
+  </style>
+</head>
+<body>
+
+<div class="doc">
+  
+  <!-- HERO HEADER -->
+  <div class="hero">
+    <h1>Livrable 2<br>Cahier des Charges<br>Fonctionnel & Technique</h1>
+    <div class="sub">INVOX — Stratégie de Pivot vers le Conseil par l'IA</div>
+    <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 30px;">
+      <div style="background: rgba(255, 255, 255, 0.2); padding: 12px 24px; border-radius: 15px; color: #fff; font-weight: 600;">📅 Date de rendu : 23 octobre 2025</div>
+      <div style="background: rgba(255, 255, 255, 0.2); padding: 12px 24px; border-radius: 15px; color: #fff; font-weight: 600;">👥 Équipe projet</div>
+      <div style="background: rgba(255, 255, 255, 0.2); padding: 12px 24px; border-radius: 15px; color: #fff; font-weight: 600;">📋 Cahier des charges complet</div>
+    </div>
+  </div>
+
+  <!-- SECTION CONTEXTE -->
+  <div class="glass avoid-break">
+    <h2 class="title">Contexte & Rappel</h2>
+    
+    <p style="font-size: 17px; color: #475569; margin-bottom: 25px; line-height: 1.8;">
+      Suite au <strong>Livrable 1 (Analyse de besoins)</strong> basé sur 4 interviews, INVOX vise à industrialiser 
+      la <strong>content factory</strong>, automatiser le <strong>pré-audit</strong> client et structurer le 
+      <strong>knowledge management</strong>. Ce cahier des charges décrit les problématiques priorisées, 
+      les hypothèses de solution, le périmètre fonctionnel et les contraintes techniques à respecter.
+    </p>
+
+    <div class="info-box">
+      <h4 style="color: #0c4a6e; margin-bottom: 15px; font-size: 20px;">📊 Synthèse Livrable 1 — Besoins Identifiés</h4>
+      <p style="color: #0c4a6e; font-size: 15px; margin-bottom: 12px;">
+        7 cas d'usage prioritaires ont été identifiés lors de l'analyse de besoins (détails dans Livrable 1) :
+      </p>
+      <ul style="list-style: none; padding: 0;">
+        <li style="padding: 6px 0; color: #0c4a6e; font-size: 14px;">• Automatisation content-mapping</li>
+        <li style="padding: 6px 0; color: #0c4a6e; font-size: 14px;">• Analyse sémantique (5 000 mots-clés)</li>
+        <li style="padding: 6px 0; color: #0c4a6e; font-size: 14px;">• Pré-audit automatisé</li>
+        <li style="padding: 6px 0; color: #0c4a6e; font-size: 14px;">• Assistant de production</li>
+        <li style="padding: 6px 0; color: #0c4a6e; font-size: 14px;">• Dashboard KPI centralisé</li>
+        <li style="padding: 6px 0; color: #0c4a6e; font-size: 14px;">• Optimisation processus commercial</li>
+        <li style="padding: 6px 0; color: #0c4a6e; font-size: 14px;">• Knowledge management</li>
+      </ul>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 30px 0;">
+      <div style="background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(220, 38, 38, 0.15) 100%); border: 2px solid #dc2626; border-radius: 15px; padding: 20px; text-align: center;">
+        <div style="font-size: 32px; font-weight: 900; color: #dc2626; margin-bottom: 8px;">P0</div>
+        <div style="color: #991b1b; font-weight: 600; font-size: 14px;">Critique</div>
+      </div>
+      <div style="background: linear-gradient(135deg, rgba(234, 88, 12, 0.1) 0%, rgba(234, 88, 12, 0.15) 100%); border: 2px solid #ea580c; border-radius: 15px; padding: 20px; text-align: center;">
+        <div style="font-size: 32px; font-weight: 900; color: #ea580c; margin-bottom: 8px;">P1</div>
+        <div style="color: #c2410c; font-weight: 600; font-size: 14px;">Haute</div>
+      </div>
+      <div style="background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0.15) 100%); border: 2px solid #2563eb; border-radius: 15px; padding: 20px; text-align: center;">
+        <div style="font-size: 32px; font-weight: 900; color: #2563eb; margin-bottom: 8px;">P2</div>
+        <div style="color: #1e40af; font-weight: 600; font-size: 14px;">Moyenne</div>
+      </div>
+      <div style="background: linear-gradient(135deg, rgba(100, 116, 139, 0.1) 0%, rgba(100, 116, 139, 0.15) 100%); border: 2px solid #64748b; border-radius: 15px; padding: 20px; text-align: center;">
+        <div style="font-size: 32px; font-weight: 900; color: #64748b; margin-bottom: 8px;">P3</div>
+        <div style="color: #475569; font-weight: 600; font-size: 14px;">Long terme</div>
+      </div>
+    </div>
+  </div>
+  <!-- SECTION PROBLÉMATIQUES -->
+  <div class="glass avoid-break">
+    <h2 class="title">1. Problématiques Hiérarchisées & Hypothèses de Solutions</h2>
+    
+    <p style="font-size: 16px; color: #475569; margin-bottom: 25px;">
+      Méthode : priorisation en <strong>P0</strong> (critique immédiat), <strong>P1</strong> (haute), 
+      <strong>P2</strong> (moyenne), <strong>P3</strong> (long terme). Pour chaque problématique : 
+      justification, solution envisagée, argumentaire sur le caractère inclusif et accessible.
+    </p>
+
+    <h3 class="subtitle">Graphique de Priorisation</h3>
+    <div class="chart avoid-break">
+      <div class="chart-c">
+        <canvas id="prioChart"></canvas>
+      </div>
+    </div>
+
+    <h3 class="subtitle">Tableau des Problématiques & Solutions</h3>
+    <table class="avoid-break">
+      <thead>
+        <tr>
+          <th style="width: 10%;">Priorité</th>
+          <th style="width: 30%;">Problématique</th>
+          <th style="width: 30%;">Hypothèse(s) de Solution</th>
+          <th style="width: 30%;">Argumentaire & Caractère Inclusif</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="badge badge-p0">P0</span></td>
+          <td><strong>Dispersion des données</strong><br>Impossibilité d'automatiser (briefs, assets, exports SEO) sans centralisation</td>
+          <td>Centralisation immédiate sur <strong>Notion</strong> (ou base structurée) + API sync (Make/n8n) vers HubSpot</td>
+          <td style="font-size: 13px;">Permet toutes les automatisations ultérieures. <strong>Inclusif :</strong> accès différencié par rôles, métadonnées pour accessibilité (transcriptions, tags multilingues)</td>
+        </tr>
+
+        <tr>
+          <td><span class="badge badge-p1">P1</span></td>
+          <td><strong>Traitement sémantique lourd</strong><br>~5 000 mots-clés par client, 2 jours de travail manuel</td>
+          <td>Pipeline automatisé : ingestion CSV → job Node/Python (tokenisation + clustering) → LLM/IA enrichissement → export structuré</td>
+          <td style="font-size: 13px;">Réduit 2 jours → ~2 heures (ROI immédiat). <strong>Inclusif :</strong> normalisation vocabulaire, métadonnées pour filtrage par niveau de lecture</td>
+        </tr>
+
+        <tr>
+          <td><span class="badge badge-p1">P1</span></td>
+          <td><strong>Pré-audit manuel long</strong><br>3–4h de préparation, frein commercial</td>
+          <td>Formulaire public + scraping minimal → génération rapport synthétique automatisé (produit d'appel)</td>
+          <td style="font-size: 13px;">Accélère cycle commercial (gain 95%). <strong>Inclusif :</strong> rapport accessible (PDF textuel, résumé vocal si besoin)</td>
+        </tr>
+
+        <tr>
+          <td><span class="badge badge-p2">P2</span></td>
+          <td><strong>Routage rédaction non standardisé</strong><br>Perte de qualité et de temps</td>
+          <td>Templates de brief + assistant IA de pré-brief (génération d'angles) + routage automatique selon expertise</td>
+          <td style="font-size: 13px;">Standardise qualité. <strong>Inclusif :</strong> indicateurs sur contraintes (longueur, niveau Flesch) pour adapter style</td>
+        </tr>
+
+        <tr>
+          <td><span class="badge badge-p2">P2</span></td>
+          <td><strong>Absence dashboard KPI consolidé</strong><br>Données éparpillées (YouTube, LinkedIn, WordPress)</td>
+          <td>ETL périodique vers Metabase / Looker Studio avec connecteurs API</td>
+          <td style="font-size: 13px;">Permet pilotage opérationnel. <strong>Inclusif :</strong> dashboard exportable et compatible lecteurs d'écran</td>
+        </tr>
+
+        <tr>
+          <td><span class="badge badge-p3">P3</span></td>
+          <td><strong>Gouvernance IA / charte d'usage non définie</strong><br>Risque de "shadow AI" et usage hétérogène</td>
+          <td>Rédaction charte IA + formations courtes + contrôle d'utilisation (logs, revue périodique)</td>
+          <td style="font-size: 13px;">Réduit risques éthiques. <strong>Inclusif :</strong> usage responsable, sensibilisation aux biais IA</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="warning-box">
+      <h4 style="color: #92400e; margin-bottom: 15px; font-size: 20px;">💡 Justification Synthétique</h4>
+      <ul style="list-style: none; padding: 0;">
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• La <strong>centralisation (P0)</strong> est prérequis à toutes les autres solutions</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• Le <strong>pipeline sémantique et pré-audit (P1)</strong> apportent un ROI rapide et mesurable</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• L'<strong>assistant et dashboard (P2)</strong> améliorent la productivité quotidienne</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• La <strong>gouvernance (P3)</strong> sécurise l'usage à long terme</li>
+      </ul>
+    </div>
+
+    <h3 class="subtitle">Matrice Effort / Impact</h3>
+    <div class="chart avoid-break">
+      <div class="chart-c">
+        <canvas id="matrixChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <!-- SECTION PÉRIMÈTRE -->
+  <div class="glass avoid-break">
+    <h2 class="title">2. Périmètre Projet</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin: 30px 0;">
+      <div>
+        <h3 class="subtitle">✅ Inclusions (ce qui sera livré)</h3>
+        <ul style="list-style: none; padding: 0; color: #475569;">
+          <li style="padding: 10px 0; padding-left: 25px; position: relative; font-size: 15px;">
+            <span style="position: absolute; left: 0; color: #16a34a; font-size: 18px;">●</span>
+            Base centrale (Notion + schéma taxonomie) et sync HubSpot (RDV & contacts)
+          </li>
+          <li style="padding: 10px 0; padding-left: 25px; position: relative; font-size: 15px;">
+            <span style="position: absolute; left: 0; color: #16a34a; font-size: 18px;">●</span>
+            Pipeline sémantique automatisé (ingestion → IA → export structuré)
+          </li>
+          <li style="padding: 10px 0; padding-left: 25px; position: relative; font-size: 15px;">
+            <span style="position: absolute; left: 0; color: #16a34a; font-size: 18px;">●</span>
+            Module pré-audit (formulaire public + générateur rapport synthétique)
+          </li>
+          <li style="padding: 10px 0; padding-left: 25px; position: relative; font-size: 15px;">
+            <span style="position: absolute; left: 0; color: #16a34a; font-size: 18px;">●</span>
+            Assistant de pré-brief (templates + IA) et workflow routage rédaction
+          </li>
+          <li style="padding: 10px 0; padding-left: 25px; position: relative; font-size: 15px;">
+            <span style="position: absolute; left: 0; color: #16a34a; font-size: 18px;">●</span>
+            Tableau KPI initial (connecteurs : YouTube, LinkedIn, WordPress) + exports CSV
+          </li>
+          <li style="padding: 10px 0; padding-left: 25px; position: relative; font-size: 15px;">
+            <span style="position: absolute; left: 0; color: #16a34a; font-size: 18px;">●</span>
+            Charte IA de base + guide opérationnel pour l'équipe
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="subtitle">❌ Exclusions (hors périmètre)</h3>
+        <ul style="list-style: none; padding: 0; color: #475569;">
+          <li style="padding: 10px 0; padding-left: 25px; position: relative; font-size: 15px;">
+            <span style="position: absolute; left: 0; color: #dc2626; font-size: 18px;">●</span>
+            Refonte complète du CRM (HubSpot reste tel quel sauf sync champs ciblés)
+          </li>
+          <li style="padding: 10px 0; padding-left: 25px; position: relative; font-size: 15px;">
+            <span style="position: absolute; left: 0; color: #dc2626; font-size: 18px;">●</span>
+            Développement plateforme propriétaire lourde (préférer intégration APIs)
+          </li>
+          <li style="padding: 10px 0; padding-left: 25px; position: relative; font-size: 15px;">
+            <span style="position: absolute; left: 0; color: #dc2626; font-size: 18px;">●</span>
+            Maintenance continue au-delà du POC/phase 1 (contrat distinct)
+          </li>
+          <li style="padding: 10px 0; padding-left: 25px; position: relative; font-size: 15px;">
+            <span style="position: absolute; left: 0; color: #dc2626; font-size: 18px;">●</span>
+            Migration complète des données historiques (seulement 6 derniers mois)
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="subtitle">🎯 Critères de Succès</h3>
+    <div class="info-box">
+      <ul style="list-style: none; padding: 0;">
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• Réduction temps traitement sémantique : ~2 jours → ≤ 2 heures (exigence performance P1)</li>
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• Pré-audit automatisé fonctionnel : rapport généré en < 10 min pour un lead</li>
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• Accès unique aux briefs et assets (Notion) avec droits par rôle</li>
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• Dashboard KPI initial opérationnel et mis à jour automatiquement (données journalières/hebdo)</li>
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• Satisfaction utilisateurs ≥ 8/10 après phase pilote (3 clients tests)</li>
+      </ul>
+    </div>
+
+    <h3 class="subtitle">User Stories — Fonctions Attendues</h3>
+    <p style="font-size: 15px; color: #475569; margin-bottom: 20px;">
+      Les user stories ci-dessous décrivent les fonctions attendues, la priorité et les critères d'acceptation (AC).
+    </p>
+
+    <table class="avoid-break">
+      <thead>
+        <tr>
+          <th style="width: 45%;">User Story</th>
+          <th style="width: 10%;">Priorité</th>
+          <th style="width: 45%;">Critères d'Acceptation (AC)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>En tant que</strong> commercial, <strong>je veux</strong> lancer un pré-audit depuis un formulaire public qui génère automatiquement un rapport synthétique, <strong>afin de</strong> préparer le RDV et accélérer la propale.</td>
+          <td><span class="badge badge-p1">P1</span></td>
+          <td style="font-size: 13px;">AC: formulaire → collecte site+LinkedIn → rapport PDF/textuel créé < 10 min ; export HubSpot possible</td>
+        </tr>
+
+        <tr>
+          <td><strong>En tant que</strong> chef de projet contenu, <strong>je veux</strong> importer un fichier sémantique et obtenir une taxonomie automatique et un fichier catégorisé, <strong>afin de</strong> planifier briefs.</td>
+          <td><span class="badge badge-p0">P0</span></td>
+          <td style="font-size: 13px;">AC: import CSV → job terminé < 2h pour 5 000 lignes ; sortie JSON/CSV structuré ; logs d'erreur</td>
+        </tr>
+
+        <tr>
+          <td><strong>En tant que</strong> rédacteur, <strong>je veux</strong> recevoir un brief standardisé avec angles et checklist SEO, <strong>afin de</strong> produire rapidement un article conforme.</td>
+          <td><span class="badge badge-p2">P2</span></td>
+          <td style="font-size: 13px;">AC: brief généré automatiquement ; champs obligatoires (titre, mots-clés, CTA) ; checklist SEO attachée</td>
+        </tr>
+
+        <tr>
+          <td><strong>En tant que</strong> responsable data, <strong>je veux</strong> un dashboard consolidé (YouTube/LinkedIn/Blog), <strong>afin de</strong> suivre la performance des campagnes.</td>
+          <td><span class="badge badge-p2">P2</span></td>
+          <td style="font-size: 13px;">AC: connexion API ; rafraîchissement quotidien ; KPI clés visibles (impressions, vues, CTR)</td>
+        </tr>
+
+        <tr>
+          <td><strong>En tant qu'</strong>administrateur, <strong>je veux</strong> définir des droits par rôle dans Notion, <strong>afin de</strong> protéger les données sensibles.</td>
+          <td><span class="badge badge-p0">P0</span></td>
+          <td style="font-size: 13px;">AC: roles CRUD ; logs d'accès ; intégration SSO souhaitée (optionnelle phase 1)</td>
+        </tr>
+
+        <tr>
+          <td><strong>En tant que</strong> manager, <strong>je veux</strong> consulter les transcriptions de réunions enrichies par IA, <strong>afin de</strong> capitaliser le knowledge.</td>
+          <td><span class="badge badge-p3">P3</span></td>
+          <td style="font-size: 13px;">AC: transcription automatique ; résumé + action items ; indexation dans base Notion</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="warning-box">
+      <h4 style="color: #92400e; margin-bottom: 15px; font-size: 20px;">📝 Note sur l'Estimation</h4>
+      <p style="color: #78350f; font-size: 14px;">
+        Chaque user story doit être estimée en <strong>J/H (jours-homme)</strong> en phase de sprint planning. 
+        Estimation indicative : P0/P1 = 5-10 J/H, P2 = 3-5 J/H, P3 = 2-3 J/H (hors scope détaillé ici).
+      </p>
+    </div>
+  </div>
+  <!-- SECTION ARCHITECTURE -->
+  <div class="glass avoid-break">
+    <h2 class="title">3. Architecture Cible — Vue Fonctionnelle</h2>
+    
+    <p style="font-size: 16px; color: #475569; margin-bottom: 25px;">
+      Diagramme simplifié des composants principaux et flux de données (HubSpot ↔ Notion ↔ Make/n8n ↔ IA ↔ Dashboard).
+    </p>
+
+    <h3 class="subtitle">Diagramme d'Architecture Globale</h3>
+    <div class="mermaid avoid-break">
+graph TB
+    subgraph Entrées["🌐 Entrées Externes"]
+        A[Formulaire Public / Lead]
+        B[Sources Externes<br/>Site, LinkedIn, YouTube]
+    end
+    
+    subgraph Orchestration["⚙️ Couche Orchestration"]
+        C[Make / n8n<br/>Webhooks, Sync, Jobs]
+        D[Pipeline Sémantique<br/>Node/Python<br/>Tokenisation, Clustering]
+    end
+    
+    subgraph Stockage["💾 Stockage & Outils"]
+        E[Notion<br/>Base Centrale]
+        F[HubSpot<br/>CRM]
+        G[Metabase / Looker<br/>Dashboard]
+    end
+    
+    subgraph IA["🤖 Intelligence Artificielle"]
+        H[LLM / API IA<br/>Enrichissement, Génération]
+    end
+    
+    A --> C
+    B --> C
+    C --> E
+    C --> F
+    C --> D
+    D --> H
+    H --> D
+    D --> E
+    E --> G
+    F --> G
+    
+    style A fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#0f172a
+    style B fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#0f172a
+    style C fill:#e0f2fe,stroke:#278bc7,stroke-width:2px,color:#0f172a
+    style D fill:#e0f2fe,stroke:#278bc7,stroke-width:2px,color:#0f172a
+    style E fill:#278bc7,stroke:#1e6a9e,stroke-width:3px,color:#fff
+    style F fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#0f172a
+    style G fill:#dbeafe,stroke:#2563eb,stroke-width:2px,color:#0f172a
+    style H fill:#fce7f3,stroke:#ec4899,stroke-width:2px,color:#0f172a
+    </div>
+
+    <div class="info-box">
+      <h4 style="color: #0c4a6e; margin-bottom: 15px; font-size: 20px;">🔑 Principes d'Architecture</h4>
+      <ul style="list-style: none; padding: 0;">
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• <strong>Micro-services simples</strong> — Jobs stateless, communications via APIs/webhooks</li>
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• <strong>Notion comme hub central</strong> — Métadonnées & assets structurés (alternative : Postgres si besoin futur)</li>
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• <strong>Éviter vendor-lock</strong> — Privilégier n8n (open-source) vs Make/Zapier propriétaires</li>
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• <strong>Scalabilité</strong> — File d'attente (Redis/RabbitMQ) pour jobs lourds</li>
+      </ul>
+    </div>
+
+    <h3 class="subtitle">Flux Détaillé : Pipeline Sémantique</h3>
+    <div class="mermaid avoid-break">
+flowchart LR
+    A[📄 Import CSV<br/>5000 mots-clés] --> B[🔍 Validation<br/>Format, Encodage]
+    B --> C[⚡ Tokenisation<br/>NLP Processing]
+    C --> D[🎯 Clustering<br/>K-means / DBSCAN]
+    D --> E[🤖 Enrichissement IA<br/>Catégorisation LLM]
+    E --> F[📊 Export Structuré<br/>JSON / CSV]
+    F --> G[💾 Stockage Notion]
+    
+    style A fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#0f172a
+    style B fill:#e0f2fe,stroke:#278bc7,stroke-width:2px,color:#0f172a
+    style C fill:#e0f2fe,stroke:#278bc7,stroke-width:2px,color:#0f172a
+    style D fill:#e0f2fe,stroke:#278bc7,stroke-width:2px,color:#0f172a
+    style E fill:#fce7f3,stroke:#ec4899,stroke-width:2px,color:#0f172a
+    style F fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#0f172a
+    style G fill:#278bc7,stroke:#1e6a9e,stroke-width:3px,color:#fff
+    </div>
+
+    <h3 class="subtitle">Flux Détaillé : Pré-Audit Automatisé</h3>
+    <div class="mermaid avoid-break">
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#e0f2fe','primaryTextColor':'#0f172a','primaryBorderColor':'#278bc7','lineColor':'#278bc7','secondaryColor':'#fce7f3','tertiaryColor':'#fef3c7','noteBkgColor':'#fff','noteTextColor':'#0f172a','actorTextColor':'#0f172a','labelTextColor':'#0f172a'}}}%%
+sequenceDiagram
+    participant U as Utilisateur
+    participant F as Formulaire Web
+    participant S as Scraper
+    participant IA as LLM/IA
+    participant N as Notion
+    participant H as HubSpot
+    participant R as Rapport PDF
+    
+    U->>F: Saisie URL + LinkedIn
+    F->>S: Déclenchement scraping
+    S->>S: Extraction données (site, profils)
+    S->>IA: Analyse & synthèse
+    IA->>N: Stockage données structurées
+    IA->>R: Génération rapport
+    R->>U: Téléchargement PDF
+    N->>H: Sync contact/lead
+    H->>U: Email suivi automatique
+    </div>
+
+    <h3 class="subtitle">Stack Technique Recommandée</h3>
+    <table class="avoid-break">
+      <thead>
+        <tr>
+          <th>Composant</th>
+          <th>Technologies</th>
+          <th>Justification</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Orchestration</strong></td>
+          <td>n8n (open-source) ou Make</td>
+          <td>Workflows visuels, webhooks, intégrations natives</td>
+        </tr>
+        <tr>
+          <td><strong>Pipeline sémantique</strong></td>
+          <td>Python (spaCy, scikit-learn) + Node.js</td>
+          <td>NLP mature, performance, écosystème riche</td>
+        </tr>
+        <tr>
+          <td><strong>Base centrale</strong></td>
+          <td>Notion API + PostgreSQL (backup)</td>
+          <td>Interface utilisateur, API robuste, extensible</td>
+        </tr>
+        <tr>
+          <td><strong>IA / LLM</strong></td>
+          <td>OpenAI GPT-4 / Claude / Gemini</td>
+          <td>Qualité génération, API stable, multilingue</td>
+        </tr>
+        <tr>
+          <td><strong>Dashboard</strong></td>
+          <td>Metabase (open-source) ou Looker Studio</td>
+          <td>Connecteurs natifs, visualisations, exports</td>
+        </tr>
+        <tr>
+          <td><strong>File d'attente</strong></td>
+          <td>Redis Queue ou RabbitMQ</td>
+          <td>Gestion jobs asynchrones, scalabilité</td>
+        </tr>
+        <tr>
+          <td><strong>Monitoring</strong></td>
+          <td>Sentry + Prometheus / Grafana</td>
+          <td>Alerting, métriques performance, logs</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="warning-box">
+      <h4 style="color: #92400e; margin-bottom: 15px; font-size: 20px;">⚠️ Considérations Techniques</h4>
+      <ul style="list-style: none; padding: 0;">
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• <strong>Scalabilité</strong> : Prévoir workers concurrents pour traitement parallèle (5 000 lignes)</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• <strong>Résilience</strong> : Retry automatique sur échec API, timeout configurables</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• <strong>Coûts IA</strong> : Estimer tokens LLM (GPT-4 : ~$0.03/1K tokens) — budget mensuel à prévoir</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• <strong>Backup</strong> : Sauvegardes quotidiennes Notion + exports CSV automatiques</li>
+      </ul>
+    </div>
+  </div>
+  <!-- SECTION CONTRAINTES -->
+  <div class="glass avoid-break">
+    <h2 class="title">4. Contraintes Techniques & Normes</h2>
+    
+    <h3 class="subtitle">🔗 Interopérabilité</h3>
+    <div class="card avoid-break">
+      <h4>APIs REST/GraphQL</h4>
+      <p style="color: #64748b; font-size: 15px; margin-bottom: 10px;">
+        Chaque composant doit exposer ou consommer des APIs. Webhooks pour temps réel.
+      </p>
+      <ul style="list-style: none; padding: 0; color: #64748b; font-size: 14px;">
+        <li style="padding: 5px 0;">• <strong>Format d'échange :</strong> JSON (UTF-8), CSV pour imports/exports volumineux</li>
+        <li style="padding: 5px 0;">• <strong>Connecteurs :</strong> Make / n8n / Zapier pour POC ; prévoir abstraction pour éviter vendor-lock</li>
+        <li style="padding: 5px 0;">• <strong>Versioning API :</strong> Utiliser semantic versioning (v1, v2) pour évolutions</li>
+      </ul>
+    </div>
+
+    <h3 class="subtitle">🔒 Sécurité & Authentification</h3>
+    <div class="card avoid-break">
+      <h4>Protocoles de Sécurité</h4>
+      <ul style="list-style: none; padding: 0; color: #64748b; font-size: 14px;">
+        <li style="padding: 8px 0;">• <strong>Transport :</strong> TLS 1.2+ obligatoire pour toutes communications</li>
+        <li style="padding: 8px 0;">• <strong>Authentification :</strong> OAuth2 / JWT pour API internes ; SSO (SAML/OIDC) optionnel phase 2</li>
+        <li style="padding: 8px 0;">• <strong>Logs d'audit :</strong> Journalisation des accès aux données sensibles (briefs client, mailing lists)</li>
+        <li style="padding: 8px 0;">• <strong>Secrets management :</strong> Variables d'environnement, pas de hardcoding API keys</li>
+        <li style="padding: 8px 0;">• <strong>Rate limiting :</strong> Protection contre abus (formulaire public : 10 req/min/IP)</li>
+      </ul>
+    </div>
+
+    <h3 class="subtitle">⚖️ RGPD & Conformité</h3>
+    <div class="card avoid-break">
+      <h4>Respect de la Réglementation</h4>
+      <ul style="list-style: none; padding: 0; color: #64748b; font-size: 14px;">
+        <li style="padding: 8px 0;">• <strong>Consentement explicite :</strong> Pour données personnelles collectées via formulaire public (checkbox RGPD)</li>
+        <li style="padding: 8px 0;">• <strong>Droits utilisateurs :</strong> Mécanismes pour accès / rectification / suppression (Right to be forgotten)</li>
+        <li style="padding: 8px 0;">• <strong>Minimisation données :</strong> Stocker uniquement champs nécessaires, pseudonymisation si possible</li>
+        <li style="padding: 8px 0;">• <strong>DPO :</strong> Désigner un Data Protection Officer si traitement > 250 personnes</li>
+        <li style="padding: 8px 0;">• <strong>Registre des traitements :</strong> Documenter finalités, durées de conservation, destinataires</li>
+        <li style="padding: 8px 0;">• <strong>Transferts hors UE :</strong> Clauses contractuelles types si hébergement US (OpenAI, etc.)</li>
+      </ul>
+    </div>
+
+    <h3 class="subtitle">⚡ Performances & Scalabilité</h3>
+    <div class="card avoid-break">
+      <h4>Exigences de Performance</h4>
+      <table style="width: 100%; margin-top: 15px;">
+        <thead style="background: #f1f5f9;">
+          <tr>
+            <th style="padding: 12px; color: #0f172a; font-size: 13px;">Composant</th>
+            <th style="padding: 12px; color: #0f172a; font-size: 13px;">Exigence</th>
+            <th style="padding: 12px; color: #0f172a; font-size: 13px;">Solution Technique</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 12px; font-size: 13px;">Pipeline sémantique</td>
+            <td style="padding: 12px; font-size: 13px;">5 000 lignes en ≤ 2h</td>
+            <td style="padding: 12px; font-size: 13px;">Batch processing + workers concurrents (4-8 workers)</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-size: 13px;">Pré-audit</td>
+            <td style="padding: 12px; font-size: 13px;">Rapport en < 10 min</td>
+            <td style="padding: 12px; font-size: 13px;">Scraping asynchrone + cache Redis (1h TTL)</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-size: 13px;">Dashboard</td>
+            <td style="padding: 12px; font-size: 13px;">Chargement < 3s</td>
+            <td style="padding: 12px; font-size: 13px;">Agrégations pré-calculées + CDN pour assets</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-size: 13px;">API Notion</td>
+            <td style="padding: 12px; font-size: 13px;">Disponibilité 99%</td>
+            <td style="padding: 12px; font-size: 13px;">Retry automatique + fallback PostgreSQL</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="color: #64748b; font-size: 14px; margin-top: 15px;">
+        <strong>File d'attente :</strong> RabbitMQ / SQS / Redis Queue pour jobs lourds (éviter timeouts).<br>
+        <strong>Monitoring :</strong> Sentry / Prometheus / Grafana pour alerting et métriques temps réel.
+      </p>
+    </div>
+
+    <h3 class="subtitle">♿ Accessibilité & Inclusion</h3>
+    <div class="card avoid-break">
+      <h4>Respect WCAG 2.1 AA</h4>
+      <ul style="list-style: none; padding: 0; color: #64748b; font-size: 14px;">
+        <li style="padding: 8px 0;">• <strong>Interfaces publiques :</strong> Formulaire pré-audit conforme WCAG (navigation clavier, contrastes, labels)</li>
+        <li style="padding: 8px 0;">• <strong>Formats export :</strong> PDF textuel (pas d'images scannées), transcripts pour audio/vidéo</li>
+        <li style="padding: 8px 0;">• <strong>Versions simplifiées :</strong> Rapport pré-audit en version "facile à lire" (FALC)</li>
+        <li style="padding: 8px 0;">• <strong>Design inclusif :</strong> Textes lisibles (min 16px), contrastes 4.5:1, navigation logique</li>
+        <li style="padding: 8px 0;">• <strong>Multilingue :</strong> Support FR/EN pour interfaces et rapports (phase 2)</li>
+      </ul>
+    </div>
+
+    <h3 class="subtitle">🧪 Tests & Qualité</h3>
+    <div class="card avoid-break">
+      <h4>Stratégie de Tests</h4>
+      <ul style="list-style: none; padding: 0; color: #64748b; font-size: 14px;">
+        <li style="padding: 8px 0;">• <strong>Tests unitaires :</strong> Couverture > 70% pour pipeline sémantique et APIs critiques</li>
+        <li style="padding: 8px 0;">• <strong>Tests d'intégration :</strong> Flux end-to-end (formulaire → rapport, CSV → export)</li>
+        <li style="padding: 8px 0;">• <strong>Tests de performance :</strong> Benchmarks avant recette (5 000 lignes, 100 req/s dashboard)</li>
+        <li style="padding: 8px 0;">• <strong>Tests d'accessibilité :</strong> Audit WCAG avec outils automatisés (axe, Lighthouse)</li>
+        <li style="padding: 8px 0;">• <strong>Recette fonctionnelle :</strong> 3 cas réels avec clients pilotes avant déploiement général</li>
+      </ul>
+    </div>
+
+    <div class="warning-box">
+      <h4 style="color: #92400e; margin-bottom: 15px; font-size: 20px;">📋 Livrables Techniques Attendus</h4>
+      <ul style="list-style: none; padding: 0;">
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• Spécifications fonctionnelles détaillées (user stories & AC)</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• Schéma d'architecture + scripts/recipes Make/n8n pour POC</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• Code pipeline sémantique + documentation d'installation</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• Dashboard initial et guide administrateur (gestion accès Notion)</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• Charte IA et guide de gouvernance</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• Plan de tests + rapport de recette</li>
+      </ul>
+    </div>
+  </div>
+  <!-- SECTION ROADMAP -->
+  <div class="glass avoid-break">
+    <h2 class="title">5. Roadmap & Ressources</h2>
+    
+    <h3 class="subtitle">📅 Phasage Proposé (6 mois POC → Industrialisation)</h3>
+    <p style="font-size: 16px; color: #475569; margin-bottom: 25px;">
+      Proposition de phasage en <strong>sprints de 2-4 semaines</strong> avec livrables incrémentaux et tests continus.
+    </p>
+
+    <table class="avoid-break">
+      <thead>
+        <tr>
+          <th style="width: 20%;">Phase</th>
+          <th style="width: 10%;">Durée</th>
+          <th style="width: 40%;">Livrables</th>
+          <th style="width: 15%;">Priorité</th>
+          <th style="width: 15%;">Ressources</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Sprint 0</strong><br>Centralisation</td>
+          <td>2 semaines</td>
+          <td>Base Notion structurée + Sync HubSpot minimale + Démo interne</td>
+          <td><span class="badge badge-p0">P0</span></td>
+          <td>1 dev + 1 PM</td>
+        </tr>
+        <tr>
+          <td><strong>Sprint 1</strong><br>Pipeline sémantique</td>
+          <td>4 semaines</td>
+          <td>POC automation 5 000 mots-clés + Tests performance + Documentation</td>
+          <td><span class="badge badge-p1">P1</span></td>
+          <td>1 data eng + 1 dev</td>
+        </tr>
+        <tr>
+          <td><strong>Sprint 2</strong><br>Pré-audit</td>
+          <td>4 semaines</td>
+          <td>Formulaire public + Scraper + Rapport automatisé + Intégration HubSpot</td>
+          <td><span class="badge badge-p1">P1</span></td>
+          <td>1 dev full-stack</td>
+        </tr>
+        <tr>
+          <td><strong>Sprint 3</strong><br>Assistant & Dashboard</td>
+          <td>4 semaines</td>
+          <td>Assistant pré-brief + Routage rédaction + Dashboard KPI initial</td>
+          <td><span class="badge badge-p2">P2</span></td>
+          <td>1 dev + 1 UX</td>
+        </tr>
+        <tr>
+          <td><strong>Phase 2</strong><br>Gouvernance & Scale</td>
+          <td>8 semaines</td>
+          <td>Charte IA + SSO + Optimisations + Formation équipe + SLA</td>
+          <td><span class="badge badge-p3">P3</span></td>
+          <td>1 PM + 1 formateur</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subtitle">Visualisation Roadmap</h3>
+    <div class="chart avoid-break">
+      <div class="chart-c">
+        <canvas id="roadmapChart"></canvas>
+      </div>
+    </div>
+
+    <h3 class="subtitle">👥 Ressources Recommandées</h3>
+    <div class="card avoid-break">
+      <h4>Équipe Projet</h4>
+      <table style="width: 100%; margin-top: 15px;">
+        <thead style="background: #f1f5f9;">
+          <tr>
+            <th style="padding: 12px; color: #0f172a; font-size: 13px;">Rôle</th>
+            <th style="padding: 12px; color: #0f172a; font-size: 13px;">Charge (ETP)</th>
+            <th style="padding: 12px; color: #0f172a; font-size: 13px;">Compétences Clés</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 12px; font-size: 13px;"><strong>Chef de projet</strong></td>
+            <td style="padding: 12px; font-size: 13px;">0.5 ETP</td>
+            <td style="padding: 12px; font-size: 13px;">Agile, coordination, suivi budget</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-size: 13px;"><strong>Lead dev (Node/Python)</strong></td>
+            <td style="padding: 12px; font-size: 13px;">1 ETP</td>
+            <td style="padding: 12px; font-size: 13px;">APIs, NLP, architecture micro-services</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-size: 13px;"><strong>Dev intégration (Make/n8n)</strong></td>
+            <td style="padding: 12px; font-size: 13px;">0.5 ETP</td>
+            <td style="padding: 12px; font-size: 13px;">Workflows, webhooks, connecteurs</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-size: 13px;"><strong>Data engineer</strong></td>
+            <td style="padding: 12px; font-size: 13px;">0.75 ETP</td>
+            <td style="padding: 12px; font-size: 13px;">Pipeline ETL, clustering, performance</td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-size: 13px;"><strong>UX/QA</strong></td>
+            <td style="padding: 12px; font-size: 13px;">0.5 ETP</td>
+            <td style="padding: 12px; font-size: 13px;">Tests fonctionnels, accessibilité, recette</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="color: #64748b; font-size: 14px; margin-top: 15px;">
+        <strong>Budget estimatif :</strong> POC léger (outillage + 6 sprints) — à estimer précisément en fonction TJM (Taux Journalier Moyen).
+        Estimation indicative : <strong>80-120 J/H</strong> sur 6 mois = <strong>60-90 K€</strong> (hors licences).
+      </p>
+    </div>
+
+    <h3 class="subtitle">⚠️ Risques & Mitigations</h3>
+    <table class="avoid-break">
+      <thead>
+        <tr>
+          <th style="width: 30%;">Risque</th>
+          <th style="width: 15%;">Probabilité</th>
+          <th style="width: 15%;">Impact</th>
+          <th style="width: 40%;">Mitigation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Vendor-lock</strong> (Make/Zapier)</td>
+          <td style="color: #ea580c;">Moyenne</td>
+          <td style="color: #ea580c;">Moyen</td>
+          <td style="font-size: 13px;">Abstraction des scénarios, possibilité migration n8n open-source</td>
+        </tr>
+        <tr>
+          <td><strong>Données sensibles</strong> (RGPD)</td>
+          <td style="color: #dc2626;">Élevée</td>
+          <td style="color: #dc2626;">Élevé</td>
+          <td style="font-size: 13px;">Chiffrement, pseudonymisation, politique accès stricte, audit RGPD</td>
+        </tr>
+        <tr>
+          <td><strong>Qualité IA</strong> (biais, erreurs)</td>
+          <td style="color: #ea580c;">Moyenne</td>
+          <td style="color: #ea580c;">Moyen</td>
+          <td style="font-size: 13px;">Relecture humaine obligatoire, charte IA, revue périodique outputs</td>
+        </tr>
+        <tr>
+          <td><strong>Performance pipeline</strong> (5 000 lignes)</td>
+          <td style="color: #2563eb;">Faible</td>
+          <td style="color: #ea580c;">Moyen</td>
+          <td style="font-size: 13px;">Tests de charge, workers concurrents, optimisation algorithmes</td>
+        </tr>
+        <tr>
+          <td><strong>Adoption utilisateurs</strong></td>
+          <td style="color: #ea580c;">Moyenne</td>
+          <td style="color: #dc2626;">Élevé</td>
+          <td style="font-size: 13px;">Formation continue, documentation claire, support dédié phase 1</td>
+        </tr>
+        <tr>
+          <td><strong>Coûts IA</strong> (LLM tokens)</td>
+          <td style="color: #2563eb;">Faible</td>
+          <td style="color: #2563eb;">Faible</td>
+          <td style="font-size: 13px;">Monitoring consommation, cache résultats, modèles alternatifs si dépassement</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-box">
+      <h4 style="color: #0c4a6e; margin-bottom: 15px; font-size: 20px;">🎯 Indicateurs de Succès (KPIs Projet)</h4>
+      <ul style="list-style: none; padding: 0;">
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• <strong>Délai :</strong> Respect du planning (±10% tolérance)</li>
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• <strong>Budget :</strong> Respect de l'enveloppe (±15% tolérance)</li>
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• <strong>Performance :</strong> Atteinte des objectifs (2j→2h, 4h→10min)</li>
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• <strong>Qualité :</strong> Couverture tests > 70%, 0 bug critique en prod</li>
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;">• <strong>Adoption :</strong> Satisfaction utilisateurs ≥ 8/10 après 3 mois</li>
+      </ul>
+    </div>
+
+    <div style="margin-top: 50px; padding-top: 30px; border-top: 2px solid #e2e8f0; text-align: center; color: #64748b;">
+      <p style="font-size: 16px; margin-bottom: 10px;"><strong>Document rédigé pour INVOX</strong></p>
+      <p style="font-size: 14px; margin-bottom: 8px;">Livrable 2 : Cahier des Charges Fonctionnel & Technique</p>
+      <p style="font-size: 14px; margin-bottom: 8px;">Stratégie de Pivot vers le Conseil par l'IA</p>
+      <p style="font-size: 14px; font-weight: 600; color: #278bc7;">Date de rendu : 23 octobre 2025</p>
+    </div>
+  </div>
+
+</div>
+<script>
+// Chart 1: Priorisation (Doughnut)
+const ctx1 = document.getElementById('prioChart');
+if(ctx1) {
+  new Chart(ctx1, {
+    type: 'doughnut',
+    data: {
+      labels: ['P0 - Critique', 'P1 - Haute', 'P2 - Moyenne', 'P3 - Long terme'],
+      datasets: [{
+        data: [2, 2, 2, 1],
+        backgroundColor: ['#dc2626', '#ea580c', '#2563eb', '#64748b'],
+        borderWidth: 3,
+        borderColor: '#fff'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { 
+          position: 'bottom', 
+          labels: { 
+            padding: 20, 
+            font: { size: 14, weight: '600' },
+            color: '#475569'
+          }
+        },
+        title: { 
+          display: true, 
+          text: 'Répartition des Problématiques par Priorité', 
+          font: { size: 18, weight: 'bold' },
+          color: '#0f172a',
+          padding: { bottom: 20 }
+        }
+      }
+    }
+  });
+}
+
+// Chart 2: Matrice Effort/Impact (Bubble)
+const ctx2 = document.getElementById('matrixChart');
+if(ctx2) {
+  new Chart(ctx2, {
+    type: 'bubble',
+    data: {
+      datasets: [
+        {
+          label: 'P0 - Centralisation',
+          data: [{x: 6, y: 10, r: 15}],
+          backgroundColor: 'rgba(220, 38, 38, 0.6)',
+          borderColor: '#dc2626',
+          borderWidth: 2
+        },
+        {
+          label: 'P1 - Pipeline sémantique',
+          data: [{x: 8, y: 9, r: 18}],
+          backgroundColor: 'rgba(234, 88, 12, 0.6)',
+          borderColor: '#ea580c',
+          borderWidth: 2
+        },
+        {
+          label: 'P1 - Pré-audit',
+          data: [{x: 5, y: 9, r: 16}],
+          backgroundColor: 'rgba(234, 88, 12, 0.6)',
+          borderColor: '#ea580c',
+          borderWidth: 2
+        },
+        {
+          label: 'P2 - Assistant',
+          data: [{x: 6, y: 7, r: 14}],
+          backgroundColor: 'rgba(37, 99, 235, 0.6)',
+          borderColor: '#2563eb',
+          borderWidth: 2
+        },
+        {
+          label: 'P2 - Dashboard',
+          data: [{x: 4, y: 6, r: 12}],
+          backgroundColor: 'rgba(37, 99, 235, 0.6)',
+          borderColor: '#2563eb',
+          borderWidth: 2
+        },
+        {
+          label: 'P3 - Gouvernance',
+          data: [{x: 3, y: 5, r: 10}],
+          backgroundColor: 'rgba(100, 116, 139, 0.6)',
+          borderColor: '#64748b',
+          borderWidth: 2
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Effort (Complexité)',
+            font: { size: 14, weight: '600' },
+            color: '#475569'
+          },
+          min: 0,
+          max: 10,
+          ticks: {
+            font: { size: 12 },
+            color: '#64748b'
+          },
+          grid: {
+            color: '#e2e8f0'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'Impact (Valeur Business)',
+            font: { size: 14, weight: '600' },
+            color: '#475569'
+          },
+          min: 0,
+          max: 10,
+          ticks: {
+            font: { size: 12 },
+            color: '#64748b'
+          },
+          grid: {
+            color: '#e2e8f0'
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            font: { size: 13, weight: '600' },
+            padding: 15,
+            color: '#475569'
+          }
+        },
+        title: {
+          display: true,
+          text: 'Matrice Effort / Impact — Priorisation des Solutions',
+          font: { size: 18, weight: 'bold' },
+          color: '#0f172a',
+          padding: { bottom: 20 }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.dataset.label + ' (Effort: ' + context.parsed.x + ', Impact: ' + context.parsed.y + ')';
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+// Chart 3: Roadmap (Bar horizontal)
+const ctx3 = document.getElementById('roadmapChart');
+if(ctx3) {
+  new Chart(ctx3, {
+    type: 'bar',
+    data: {
+      labels: ['Sprint 0\nCentralisation', 'Sprint 1\nPipeline sémantique', 'Sprint 2\nPré-audit', 'Sprint 3\nAssistant & Dashboard', 'Phase 2\nGouvernance & Scale'],
+      datasets: [{
+        label: 'Durée (semaines)',
+        data: [2, 4, 4, 4, 8],
+        backgroundColor: ['#dc2626', '#ea580c', '#ea580c', '#2563eb', '#64748b'],
+        borderRadius: 8,
+        borderWidth: 0
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: 'Roadmap Projet — Phasage sur 6 mois (22 semaines)',
+          font: { size: 18, weight: 'bold' },
+          color: '#0f172a',
+          padding: { bottom: 20 }
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Durée (semaines)',
+            font: { size: 14, weight: '600' },
+            color: '#475569'
+          },
+          ticks: {
+            font: { size: 12 },
+            color: '#64748b'
+          },
+          grid: {
+            color: '#e2e8f0'
+          }
+        },
+        y: {
+          ticks: {
+            font: { size: 13, weight: '600' },
+            color: '#0f172a'
+          },
+          grid: {
+            display: false
+          }
+        }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>

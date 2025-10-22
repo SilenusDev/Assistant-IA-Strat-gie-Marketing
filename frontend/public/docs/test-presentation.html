@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Présentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .slide { display: none; }
+        .slide.active { display: flex; }
+    </style>
+</head>
+<body class="bg-slate-950 text-white">
+    
+    <div class="h-screen flex flex-col">
+        <header class="border-b border-slate-800 bg-slate-950/80 px-8 py-4">
+            <h1 class="text-lg font-semibold">Test Mermaid & Chart.js</h1>
+            <p id="slideCounter" class="text-sm text-slate-400">1 / 3</p>
+        </header>
+        
+        <main class="flex-1 relative overflow-hidden">
+            
+            <!-- Slide 1 : Titre -->
+            <div class="slide active h-full flex items-center justify-center px-16">
+                <div class="max-w-4xl w-full text-center">
+                    <h2 class="text-5xl font-bold text-white mb-8">Slide 1 : Titre</h2>
+                    <p class="text-xl text-slate-300">Ceci est un test</p>
+                </div>
+            </div>
+            
+            <!-- Slide 2 : Mermaid -->
+            <div class="slide h-full flex items-center justify-center px-16">
+                <div class="max-w-4xl w-full">
+                    <h2 class="text-5xl font-bold text-white mb-8">Slide 2 : Test Mermaid</h2>
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                        <pre class="mermaid">
+graph LR
+    A[Début] --> B[Milieu]
+    B --> C[Fin]
+    style A fill:#3b82f6,stroke:#fff,color:#fff
+    style B fill:#10b981,stroke:#fff,color:#fff
+    style C fill:#f59e0b,stroke:#fff,color:#fff
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3 : Chart.js -->
+            <div class="slide h-full flex items-center justify-center px-16">
+                <div class="max-w-4xl w-full">
+                    <h2 class="text-5xl font-bold text-white mb-8">Slide 3 : Test Chart.js</h2>
+                    <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                        <div style="height: 300px;">
+                            <canvas id="testChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+        
+        <footer class="border-t border-slate-800 bg-slate-950/80 px-8 py-6">
+            <div class="flex justify-between">
+                <button id="prevBtn" class="px-6 py-3 rounded-lg bg-slate-800 text-white">← Précédent</button>
+                <button id="nextBtn" class="px-6 py-3 rounded-lg bg-blue-600 text-white">Suivant →</button>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Scripts APRÈS le HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const slideCounter = document.getElementById('slideCounter');
+        
+        // Initialiser Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark'
+        });
+        
+        function showSlide(n) {
+            console.log('Affichage slide', n);
+            
+            slides.forEach(s => s.classList.remove('active'));
+            slides[n].classList.add('active');
+            
+            slideCounter.textContent = `${n + 1} / ${totalSlides}`;
+            prevBtn.disabled = n === 0;
+            nextBtn.disabled = n === totalSlides - 1;
+            
+            // Mermaid
+            if (n === 1) {
+                console.log('Rendu Mermaid...');
+                setTimeout(() => {
+                    mermaid.run();
+                }, 100);
+            }
+            
+            // Chart.js
+            if (n === 2) {
+                console.log('Rendu Chart.js...');
+                setTimeout(() => {
+                    const ctx = document.getElementById('testChart');
+                    if (ctx) {
+                        new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: ['A', 'B', 'C'],
+                                datasets: [{
+                                    label: 'Test',
+                                    data: [12, 19, 3],
+                                    backgroundColor: ['#3b82f6', '#10b981', '#f59e0b']
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false
+                            }
+                        });
+                    }
+                }, 100);
+            }
+        }
+        
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+        
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+        
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === 'ArrowRight') nextSlide();
+        });
+        
+        // Init
+        showSlide(0);
+    </script>
+</body>
+</html>

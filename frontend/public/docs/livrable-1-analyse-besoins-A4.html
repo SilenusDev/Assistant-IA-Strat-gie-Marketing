@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livrable 1 — Analyse de Besoins | INVOX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ 
+      startOnLoad: true, 
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#278bc7',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#1e6a9e',
+        lineColor: '#278bc7',
+        secondaryColor: '#4db8ff',
+        tertiaryColor: '#e0f2fe'
+      }
+    });
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* === FORMAT A4 POUR IMPRESSION/PDF === */
+    @page {
+      size: A4 portrait;
+      margin: 20mm;
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+      background-attachment: fixed; 
+      color: #0f172a; 
+      line-height: 1.6; 
+    }
+    
+    /* Mode impression : fond blanc */
+    @media print {
+      body {
+        background: white !important;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .no-print {
+        display: none !important;
+      }
+      
+      .page-break {
+        page-break-after: always;
+        break-after: page;
+      }
+      
+      .page-break-before {
+        page-break-before: always;
+        break-before: page;
+      }
+      
+      .avoid-break {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+    }
+    
+    /* Container A4 */
+    .a4-page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 20mm;
+      margin: 20mm auto;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    
+    @media print {
+      .a4-page {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        page-break-after: always;
+      }
+      
+      .a4-page:last-child {
+        page-break-after: auto;
+      }
+    }
+    
+    /* En-tête de page */
+    .page-header {
+      position: relative;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #278bc7;
+    }
+    
+    .page-header h1 {
+      font-size: 18px;
+      color: #278bc7;
+      margin: 0;
+    }
+    
+    .page-header .doc-info {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 5px;
+    }
+    
+    /* Pied de page */
+    .page-footer {
+      position: absolute;
+      bottom: 15mm;
+      left: 20mm;
+      right: 20mm;
+      padding-top: 10px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 10px;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    @media print {
+      .page-footer {
+        position: fixed;
+        bottom: 15mm;
+      }
+    }
+    
+    h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; font-weight: 700; }
+    .doc { max-width: 1400px; margin: 0 auto; padding: 60px 40px; }
+    .hero { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 30px; padding: 60px; text-align: center; margin-bottom: 50px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); }
+    .hero h1 { font-size: 56px; color: #fff; margin-bottom: 20px; text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2); }
+    .hero .sub { font-size: 24px; color: rgba(255, 255, 255, 0.95); margin-bottom: 30px; }
+    .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 25px; padding: 50px; margin-bottom: 40px; box-shadow: 0 15px 50px rgba(31, 38, 135, 0.2); }
+    @media print {
+      .glass { background: white; border: 1px solid #e2e8f0; box-shadow: none; backdrop-filter: none; }
+      .hero { display: none; }
+    }
+    .title { font-size: 36px; color: #278bc7; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 3px solid #278bc7; }
+    .subtitle { font-size: 26px; color: #1e6a9e; margin: 30px 0 20px 0; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin: 30px 0; }
+    .stat { background: linear-gradient(135deg, rgba(39, 139, 199, 0.1) 0%, rgba(77, 184, 255, 0.15) 100%); border: 2px solid rgba(39, 139, 199, 0.3); border-radius: 20px; padding: 30px; text-align: center; transition: all 0.3s ease; }
+    .stat:hover { transform: translateY(-5px); border-color: #278bc7; box-shadow: 0 10px 30px rgba(39, 139, 199, 0.3); }
+    .stat-num { font-size: 52px; font-weight: 900; background: linear-gradient(135deg, #278bc7 0%, #4db8ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+    .quote { background: rgba(39, 139, 199, 0.08); border-left: 5px solid #278bc7; border-radius: 12px; padding: 25px 30px; margin: 25px 0; font-style: italic; color: #334155; font-size: 15px; position: relative; }
+    .quote::before { content: '"'; position: absolute; top: -15px; left: 15px; font-size: 70px; color: #278bc7; opacity: 0.2; font-family: Georgia, serif; }
+    .info-box { background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border: 2px solid #278bc7; border-radius: 15px; padding: 25px; margin: 25px 0; }
+    .info-box h4 { color: #0c4a6e; margin-bottom: 15px; font-size: 20px; }
+    .info-box ul { list-style: none; padding: 0; }
+    .info-box li { padding: 8px 0; color: #0c4a6e; font-size: 15px; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); margin: 30px 0; }
+    thead { background: linear-gradient(135deg, #278bc7 0%, #1e6a9e 100%); }
+    th { color: #fff; padding: 18px; text-align: left; font-weight: 700; font-size: 14px; text-transform: uppercase; }
+    td { padding: 18px; background: #fff; border-bottom: 1px solid #e2e8f0; font-size: 14px; color: #475569; }
+    tbody tr:hover td { background: #f8fafc; }
+    .chart { background: #fff; border-radius: 20px; padding: 35px; margin: 30px 0; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); }
+    .chart-c { position: relative; height: 400px; }
+    .mermaid { background: #fff; padding: 35px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); margin: 30px 0; }
+    .need-card { background: #fff; border-left: 5px solid #278bc7; border-radius: 15px; padding: 25px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; }
+    .need-card:hover { transform: translateX(5px); box-shadow: 0 6px 25px rgba(39, 139, 199, 0.2); }
+    .need-card h4 { color: #278bc7; font-size: 20px; margin-bottom: 12px; }
+    .swot-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; margin: 30px 0; }
+    .swot-card { background: #fff; border-radius: 15px; padding: 25px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); }
+    .swot-card h4 { font-size: 20px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid; }
+    .swot-card ul { list-style: none; padding: 0; }
+    .swot-card li { padding: 8px 0 8px 25px; position: relative; font-size: 14px; color: #475569; }
+    .swot-card li::before { content: '●'; position: absolute; left: 0; font-size: 18px; }
+    .swot-card.forces h4 { color: #16a34a; border-color: #16a34a; }
+    .swot-card.forces li::before { color: #16a34a; }
+    .swot-card.faiblesses h4 { color: #dc2626; border-color: #dc2626; }
+    .swot-card.faiblesses li::before { color: #dc2626; }
+    .swot-card.opportunites h4 { color: #2563eb; border-color: #2563eb; }
+    .swot-card.opportunites li::before { color: #2563eb; }
+    .swot-card.menaces h4 { color: #ea580c; border-color: #ea580c; }
+    .swot-card.menaces li::before { color: #ea580c; }
+    @media print { body { background: #fff; } .glass { box-shadow: none; border: 1px solid #e2e8f0; page-break-inside: avoid; } .hero { background: #278bc7; page-break-after: always; } }
+  </style>
+</head>
+<body>
+
+<div class="doc">
+  
+  <!-- HERO HEADER -->
+  <div class="hero">
+    <h1>Livrable 1<br>Analyse de Besoins</h1>
+    <div class="sub">INVOX — Stratégie de Pivot vers le Conseil par l'IA</div>
+    <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; margin-top: 30px;">
+      <div style="background: rgba(255, 255, 255, 0.2); padding: 12px 24px; border-radius: 15px; color: #fff; font-weight: 600;">📅 Date de rendu : 23 octobre 2025</div>
+      <div style="background: rgba(255, 255, 255, 0.2); padding: 12px 24px; border-radius: 15px; color: #fff; font-weight: 600;">👥 Équipe projet</div>
+      <div style="background: rgba(255, 255, 255, 0.2); padding: 12px 24px; border-radius: 15px; color: #fff; font-weight: 600;">🎯 4 interviews réalisées</div>
+      <div style="background: rgba(255, 255, 255, 0.2); padding: 12px 24px; border-radius: 15px; color: #fff; font-weight: 600;">📊 7 cas d'usage identifiés</div>
+    </div>
+  </div>
+
+  <!-- SECTION CONTEXTE -->
+  <div class="glass avoid-break">
+    <h2 class="title">Contexte & Objectifs</h2>
+    
+    <p style="font-size: 17px; color: #475569; margin-bottom: 25px; line-height: 1.8;">
+      <strong>INVOX</strong>, agence spécialisée en <strong>création de contenu et stratégie marketing</strong>, 
+      souhaite pivoter vers le <strong>conseil en IA</strong> pour accompagner la mutation de son marché. 
+      Face à la généralisation de l'IA, les clients deviennent de plus en plus autonomes en production de contenu 
+      et recherchent désormais un accompagnement stratégique à haute valeur ajoutée.
+    </p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">3</div>
+        <div style="color: #64748b; font-weight: 600;">Objectifs Stratégiques</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">4</div>
+        <div style="color: #64748b; font-weight: 600;">Groupes Interviewés</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">7</div>
+        <div style="color: #64748b; font-weight: 600;">Cas d'Usage Identifiés</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">90%</div>
+        <div style="color: #64748b; font-weight: 600;">Gain Temps Potentiel</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <h4>🎯 Les 3 Objectifs Stratégiques d'INVOX</h4>
+      <ul>
+        <li><strong>1. Excellence opérationnelle</strong> — Réduire le temps non facturable et optimiser les processus internes chronophages</li>
+        <li><strong>2. Knowledge management</strong> — Transformer le savoir dispersé (Notion, Drive, Slides) en actif stratégique exploitable</li>
+        <li><strong>3. Pivot vers le conseil IA</strong> — Développer et monétiser une nouvelle offre d'accompagnement à haute valeur ajoutée</li>
+      </ul>
+    </div>
+
+    <div class="quote">
+      Il souhaite pivoter vers le conseil à haute valeur ajoutée. C'est finalement développer et monétiser une nouvelle offre de conseil en IA pour ses clients, c'est-à-dire être de plus en plus accompagnateur pour le déploiement de solutions en IA directement chez le client.
+    </div>
+  </div>
+  <!-- SECTION COLLECTE -->
+  <div class="glass avoid-break">
+    <h2 class="title">1. Moyens de Collecte d'Informations</h2>
+    
+    <h3 class="subtitle">Méthodologie</h3>
+    <p style="font-size: 16px; color: #475569; margin-bottom: 20px;">
+      <strong>4 interviews semi-dirigées</strong> ont été menées auprès des différentes parties prenantes d'INVOX, 
+      avec transcription et synthèse thématique des besoins exprimés.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 30px 0;">
+      <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); padding: 20px; border-radius: 15px; border-left: 4px solid #278bc7;">
+        <h4 style="color: #1e40af; margin-bottom: 10px; font-size: 18px;">👔 Groupe 1 : Direction (CEO)</h4>
+        <p style="color: #1e3a8a; font-size: 14px;">Vision stratégique et processus commercial</p>
+      </div>
+      <div style="background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%); padding: 20px; border-radius: 15px; border-left: 4px solid #6366f1;">
+        <h4 style="color: #4338ca; margin-bottom: 10px; font-size: 18px;">⚙️ Groupe 2 : COO (Ingrid)</h4>
+        <p style="color: #3730a3; font-size: 14px;">Production de contenu et content mapping</p>
+      </div>
+      <div style="background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%); padding: 20px; border-radius: 15px; border-left: 4px solid #a855f7;">
+        <h4 style="color: #7c3aed; margin-bottom: 10px; font-size: 18px;">📊 Groupe 3 : Pôle Audience (Pauline)</h4>
+        <p style="color: #6b21a8; font-size: 14px;">SEO, Social Media, Marketing Automation</p>
+      </div>
+      <div style="background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); padding: 20px; border-radius: 15px; border-left: 4px solid #ec4899;">
+        <h4 style="color: #be185d; margin-bottom: 10px; font-size: 18px;">📢 Groupe 4 : Marketing (Justine)</h4>
+        <p style="color: #9f1239; font-size: 14px;">Content factory et génération de leads</p>
+      </div>
+    </div>
+
+    <h3 class="subtitle">Répartition des Besoins Identifiés</h3>
+    <div class="chart avoid-break">
+      <div class="chart-c">
+        <canvas id="needsChart"></canvas>
+      </div>
+    </div>
+
+    <h3 class="subtitle">Besoins Utilisateurs Détaillés</h3>
+
+    <div class="need-card">
+      <h4>🎯 1. Automatisation du Content-Mapping</h4>
+      <p style="color: #64748b; margin-bottom: 15px; font-size: 15px;">
+        Récupérer automatiquement le contenu client (site web, réseaux sociaux, vidéos) et le catégoriser par thématique pour alimenter la content factory.
+      </p>
+      <div class="quote">
+        Le content mapping, c'est du web scrapping. Elle veut remonter à six mois. À partir de là, ils proposent au client une analyse en disant, voilà, votre directeur commercial, il fait trois postes par jour.
+      </div>
+    </div>
+
+    <div class="need-card">
+      <h4>📊 2. Analyse Sémantique Automatisée</h4>
+      <p style="color: #64748b; margin-bottom: 15px; font-size: 15px;">
+        Traitement semi-automatique de ~5 000 mots-clés par client. Actuellement : 2 jours de travail manuel. Objectif : 2 heures via automation IA.
+      </p>
+      <div class="quote">
+        Pour 5 000 mots-clés à traiter, c'est… deux jours. En deux heures, je pense qu'on peut passer de deux jours à deux heures. C'est la priorité où ils vont gagner le plus de temps.
+      </div>
+    </div>
+
+    <div class="need-card">
+      <h4>🚀 3. Pré-Audit Automatisé</h4>
+      <p style="color: #64748b; margin-bottom: 15px; font-size: 15px;">
+        Formulaire public + web-scraping pour produire un pré-audit rapide (produit d'appel commercial). Réduction de 3-4h à quelques minutes.
+      </p>
+      <div class="quote">
+        Un formulaire en ligne où tu mets l'URL du site, l'URL de l'entreprise sur LinkedIn, les cinq profils majeurs de la boîte, ça va récupérer toutes les données en automatique. Aujourd'hui, ça leur prend entre 3 et 4 heures.
+      </div>
+    </div>
+
+    <div class="need-card">
+      <h4>✍️ 4. Assistant de Production</h4>
+      <p style="color: #64748b; margin-bottom: 15px; font-size: 15px;">
+        Aide à l'inspiration pour proposer des angles éditoriaux, génération de pré-briefs intelligents pour les rédacteurs.
+      </p>
+      <div class="quote">
+        Elle produit du contenu et elle aimerait que l'assistant lui propose d'autres angles d'attaque. Elle arrive un peu à court d'inspiration. C'est un problème d'inspiration.
+      </div>
+    </div>
+
+    <div class="need-card">
+      <h4>📈 5. Dashboard KPI Centralisé</h4>
+      <p style="color: #64748b; margin-bottom: 15px; font-size: 15px;">
+        Consolider YouTube, LinkedIn, WordPress et autres sources pour suivre la performance des contenus produits.
+      </p>
+      <div class="quote">
+        Elle aimerait un dashboard qui puisse réunir [les KPI]. Aujourd'hui c'est un peu réparti dans WordPress, dans Youtube, dans LinkedIn etc.
+      </div>
+    </div>
+
+    <div class="need-card">
+      <h4>💼 6. Optimisation Processus Commercial</h4>
+      <p style="color: #64748b; margin-bottom: 15px; font-size: 15px;">
+        Préparation des RDV clients et génération rapide de propale pour réduire le délai critique entre RDV1 et RDV2.
+      </p>
+      <div class="quote">
+        Il est arrivé un peu, il me dit, normalement, je pensais arriver avec une vision de l'entreprise, sa santé financière, qui elle est, ses besoins. Mais à l'heure actuelle, c'est plutôt main dans les poches, j'ai ouvert mon PC deux minutes avant.
+      </div>
+    </div>
+
+    <div class="need-card">
+      <h4>🧠 7. Knowledge Management</h4>
+      <p style="color: #64748b; margin-bottom: 15px; font-size: 15px;">
+        Centraliser les savoirs dispersés (Notion, Drive, Slides) pour accélérer l'onboarding et homogénéiser la qualité des livrables.
+      </p>
+      <div class="quote">
+        Il veut mettre fin à la dispersion de l'information pour bâtir un avantage concurrentiel durable. Son métier c'est quand même de vendre une forme de savoir et d'exploiter en tout cas un savoir au bénéfice de ses clients.
+      </div>
+    </div>
+
+    <h3 class="subtitle">Synthèse Chiffrée — Gains Attendus</h3>
+    <table class="avoid-break">
+      <thead>
+        <tr>
+          <th>Tâche / KPI</th>
+          <th>État Actuel</th>
+          <th>Objectif Souhaité</th>
+          <th>Gain Temps</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Traitement fichier sémantique</strong><br>(~5 000 lignes par client)</td>
+          <td>~2 jours de travail manuel</td>
+          <td>~2 heures (automation + IA)</td>
+          <td><strong style="color: #16a34a;">90% ⬇️</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Pré-audit manuel</strong></td>
+          <td>3–4 heures par entreprise</td>
+          <td>< 10 minutes (automatisé)</td>
+          <td><strong style="color: #16a34a;">95% ⬇️</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Préparation propale</strong></td>
+          <td>Données éparpillées<br>Risque perte opportunité si délai > 3 semaines</td>
+          <td>1 journée ou moins<br>Données centralisées</td>
+          <td><strong style="color: #16a34a;">70% ⬇️</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Content mapping client</strong></td>
+          <td>Manuel, chronophage, non standardisé</td>
+          <td>Automatisé (web scraping + IA)</td>
+          <td><strong style="color: #16a34a;">80% ⬇️</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- SECTION AUDIT -->
+  <div class="glass avoid-break">
+    <h2 class="title">2. Audit de l'Existant</h2>
+    
+    <p style="font-size: 16px; color: #475569; margin-bottom: 25px;">
+      L'écosystème actuel d'INVOX repose sur plusieurs outils modernes (HubSpot, Notion, Make/Zapier, SEMrush) 
+      mais peu intégrés entre eux, créant une <strong>dispersion des données</strong> et une <strong>absence de centralisation</strong>.
+    </p>
+
+    <h3 class="subtitle">Écosystème Outils Actuel</h3>
+    <div class="mermaid avoid-break">
+graph TB
+    M[Équipe INVOX] --> A[HubSpot CRM]
+    M --> C[Notion]
+    M --> E[Google Drive]
+    M --> G[Make/Zapier/N8N]
+    M --> I[SEMrush]
+    M --> K[LinkedIn/YouTube]
+    
+    A --> B[Contacts & RDV]
+    C --> D[Documentation]
+    E --> F[Dossiers Clients]
+    G --> H[Automatisations ponctuelles]
+    I --> J[Audits SEO]
+    K --> L[Contenu Social]
+    
+    style M fill:#278bc7,stroke:#1e6a9e,stroke-width:3px,color:#fff
+    style A fill:#e0f2fe,stroke:#278bc7,stroke-width:2px,color:#0f172a
+    style C fill:#e0f2fe,stroke:#278bc7,stroke-width:2px,color:#0f172a
+    style E fill:#e0f2fe,stroke:#278bc7,stroke-width:2px,color:#0f172a
+    style G fill:#e0f2fe,stroke:#278bc7,stroke-width:2px,color:#0f172a
+    style I fill:#e0f2fe,stroke:#278bc7,stroke-width:2px,color:#0f172a
+    style K fill:#e0f2fe,stroke:#278bc7,stroke-width:2px,color:#0f172a
+    style B fill:#fff,stroke:#94a3b8,stroke-width:2px,color:#0f172a
+    style D fill:#fff,stroke:#94a3b8,stroke-width:2px,color:#0f172a
+    style F fill:#fff,stroke:#94a3b8,stroke-width:2px,color:#0f172a
+    style H fill:#fff,stroke:#94a3b8,stroke-width:2px,color:#0f172a
+    style J fill:#fff,stroke:#94a3b8,stroke-width:2px,color:#0f172a
+    style L fill:#fff,stroke:#94a3b8,stroke-width:2px,color:#0f172a
+    </div>
+
+    <h3 class="subtitle">Analyse SWOT</h3>
+    <div class="chart avoid-break">
+      <div class="chart-c">
+        <canvas id="swotChart"></canvas>
+      </div>
+    </div>
+
+    <div class="swot-grid">
+      <div class="swot-card forces">
+        <h4>✅ Forces</h4>
+        <ul>
+          <li>Équipe compétente en contenu et SEO, déjà formée à l'IA</li>
+          <li>Outils modernes présents (HubSpot, Make/Zapier) — base d'intégration possible</li>
+          <li>Culture collaborative (Slack, binômes CEO/marketing) facilitant l'adoption</li>
+          <li>Pas de besoin de prospection — clients viennent par bouche-à-oreille</li>
+          <li>Séminaire IA déjà réalisé avec experts externes</li>
+        </ul>
+      </div>
+
+      <div class="swot-card faiblesses">
+        <h4>❌ Faiblesses</h4>
+        <ul>
+          <li>Données dispersées (Drive, Notion, dossiers clients) — faible capitalisation du knowledge</li>
+          <li>Processus content non standardisés — usage IA hétérogène (GPT, Gemini) sans charte</li>
+          <li>Pas d'automatisation entre RDV / CRM (HubSpot) et préparation de propale</li>
+          <li>Contrainte de temps commercial (besoin forte réactivité entre RDV1 et RDV2)</li>
+          <li>Manque de dashboard centralisé pour mesurer la performance contenu</li>
+        </ul>
+      </div>
+
+      <div class="swot-card opportunites">
+        <h4>🎯 Opportunités</h4>
+        <ul>
+          <li>Automatiser content-mapping & analyses sémantiques (gain de 10x sur certaines tâches)</li>
+          <li>Transformer connaissances internes en produit (knowledge base + offres conseil IA)</li>
+          <li>Mettre en place un pré-audit web accessible depuis site pour attirer leads (produit d'appel)</li>
+          <li>Développer une offre de formation IA pour les clients (certification Calliope déjà acquise)</li>
+          <li>Capitaliser sur l'expérience acquise pour créer des templates réutilisables</li>
+        </ul>
+      </div>
+
+      <div class="swot-card menaces">
+        <h4>⚠️ Menaces</h4>
+        <ul>
+          <li>Concurrence diffuse et croissante (agences SEO, communication, freelances IA)</li>
+          <li>Clients de plus en plus autonomes avec l'IA — risque de cannibalisation du métier actuel</li>
+          <li>Marché en mutation rapide — nécessité de pivoter vite pour ne pas perdre parts de marché</li>
+          <li>Risque de "shadow AI" si pas de gouvernance claire</li>
+          <li>Dépendance aux outils tiers (Make, Zapier) — risque vendor-lock</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 5px solid #f59e0b; border-radius: 12px; padding: 25px; margin: 25px 0;">
+      <h4 style="color: #92400e; margin-bottom: 15px; font-size: 20px;">💡 Recommandations Clés</h4>
+      <ul style="list-style: none; padding: 0;">
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• <strong>Priorité P0</strong> : Centralisation des données avant toute automation</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• <strong>Priorité P1</strong> : Automatiser pipeline sémantique et pré-audit (ROI immédiat)</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• <strong>Gouvernance</strong> : Établir une charte IA avant industrialisation complète</li>
+        <li style="padding: 6px 0; color: #78350f; font-size: 14px;">• <strong>Formation</strong> : Montée en compétence des équipes sur les nouveaux outils</li>
+      </ul>
+    </div>
+  </div>
+  <!-- SECTION WORKFLOWS -->
+  <div class="glass avoid-break">
+    <h2 class="title">3. Workflows Utilisateurs</h2>
+    
+    <h3 class="subtitle">A. Processus Commercial (Prioritaire)</h3>
+    <p style="font-size: 16px; color: #475569; margin-bottom: 20px;">
+      <strong>But :</strong> Réduire le délai entre RDV1 → RDV2 et fournir une propale compétitive rapidement.
+    </p>
+    
+    <div class="mermaid avoid-break">
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#e0f2fe','primaryTextColor':'#0f172a','primaryBorderColor':'#278bc7','lineColor':'#278bc7','secondaryColor':'#fce7f3','tertiaryColor':'#fef3c7','noteBkgColor':'#fff','noteTextColor':'#0f172a','actorTextColor':'#0f172a','labelTextColor':'#0f172a'}}}%%
+sequenceDiagram
+    participant C as Commercial
+    participant S as Système IA
+    participant CRM as HubSpot
+    participant Client
+    
+    C->>S: Saisie URL client + LinkedIn
+    S->>S: Web scraping automatique
+    S->>S: Analyse données (3-4h → 10min)
+    S->>CRM: Sync automatique
+    S->>C: Rapport pré-audit généré
+    C->>Client: RDV1 avec données
+    Client->>C: Validation intérêt
+    C->>S: Génération propale
+    S->>C: Propale personnalisée
+    C->>Client: RDV2 avec propale
+    </div>
+
+    <div class="quote">
+      Il est arrivé un peu, il me dit, normalement, je pensais arriver avec une vision de l'entreprise, sa santé financière, qui elle est, ses besoins. Mais à l'heure actuelle, c'est plutôt main dans les poches, j'ai ouvert mon PC deux minutes avant. Parce que pas le temps.
+    </div>
+
+    <h3 class="subtitle">B. Content Factory (Brief → Production → Diffusion)</h3>
+    <p style="font-size: 16px; color: #475569; margin-bottom: 20px;">
+      <strong>But :</strong> Standardiser le process content pour gagner en productivité et qualité.
+    </p>
+    
+    <div class="mermaid avoid-break">
+flowchart LR
+    A[Brief client] --> B[Content mapping IA]
+    B --> C[Catégorisation thématique]
+    C --> D[Routage rédacteurs]
+    D --> E[Rédaction & SEO]
+    E --> F[Validation client]
+    F --> G[Diffusion multicanal]
+    
+    style A fill:#278bc7,color:#fff
+    style B fill:#4db8ff,color:#fff
+    style C fill:#4db8ff,color:#fff
+    style D fill:#4db8ff,color:#fff
+    style E fill:#0ea5e9,color:#fff
+    style F fill:#0ea5e9,color:#fff
+    style G fill:#16a34a,color:#fff
+    </div>
+
+    <div class="quote">
+      Le content mapping, c'est du web scrapping. Elle veut remonter à six mois. À partir de là, ils proposent au client une analyse. Le défi majeur, c'était quand même de collecter des données et de catégoriser ces données.
+    </div>
+
+    <h3 class="subtitle">C. Knowledge Management</h3>
+    <p style="font-size: 16px; color: #475569; margin-bottom: 20px;">
+      <strong>But :</strong> Transformer le savoir dispersé en actif stratégique exploitable.
+    </p>
+    
+    <div class="mermaid avoid-break">
+flowchart TD
+    A[Réunions & Comptes-rendus] --> B[Transcription IA]
+    C[Documents Drive] --> B
+    D[Slides & Présentations] --> B
+    E[Notion existant] --> B
+    
+    B --> F[Base Notion centralisée]
+    F --> G[Indexation & Tags]
+    
+    G --> H[Pack Onboarding]
+    G --> I[Templates réutilisables]
+    G --> J[Formation équipe]
+    G --> K[Offre conseil IA]
+    
+    style F fill:#278bc7,color:#fff
+    style G fill:#4db8ff,color:#fff
+    style H fill:#16a34a,color:#fff
+    style I fill:#16a34a,color:#fff
+    style J fill:#16a34a,color:#fff
+    style K fill:#16a34a,color:#fff
+    </div>
+
+    <div class="quote">
+      Il veut mettre fin à la dispersion de l'information pour bâtir un avantage concurrentiel durable. Son métier c'est quand même de vendre une forme de savoir et d'exploiter en tout cas un savoir au bénéfice de ses clients. Donc il veut en faire un vrai actif en créant un système de knowledge management centralisé et intelligent.
+    </div>
+
+    <div style="background: #e0f2fe; border: 2px solid #278bc7; border-radius: 15px; padding: 25px; margin: 30px 0;">
+      <h4 style="color: #0c4a6e; margin-bottom: 15px; font-size: 20px;">📋 Points Clés des Workflows</h4>
+      <ul style="list-style: none; padding: 0;">
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;"><strong>Processus commercial :</strong> Automatisation du pré-audit = gain de 95% du temps</li>
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;"><strong>Content factory :</strong> Standardisation = qualité homogène + routage intelligent</li>
+        <li style="padding: 8px 0; color: #0c4a6e; font-size: 15px;"><strong>Knowledge mgmt :</strong> Capitalisation = onboarding accéléré + offre conseil enrichie</li>
+      </ul>
+    </div>
+  </div>
+  <!-- SECTION CONCLUSIONS -->
+  <div class="glass avoid-break">
+    <h2 class="title">4. Conclusions & Recommandations</h2>
+    
+    <div style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%); border: 2px solid #278bc7; border-radius: 15px; padding: 30px; margin-bottom: 30px;">
+      <h3 style="color: #0c4a6e; margin-bottom: 20px; font-size: 24px;">🎯 Priorités Immédiates</h3>
+      <ol style="padding-left: 20px; color: #0c4a6e;">
+        <li style="padding: 10px 0; font-size: 16px;"><strong>Centralisation (P0)</strong> — Structurer la base de données (Notion) avant toute automation efficace</li>
+        <li style="padding: 10px 0; font-size: 16px;"><strong>Pipeline sémantique (P1)</strong> — Automatiser le traitement des 5 000 mots-clés (ROI immédiat : 2 jours → 2h)</li>
+        <li style="padding: 10px 0; font-size: 16px;"><strong>Pré-audit automatisé (P1)</strong> — Créer le produit d'appel pour accélérer le commercial (3-4h → 10min)</li>
+        <li style="padding: 10px 0; font-size: 16px;"><strong>Assistant de production (P2)</strong> — Aider Justine sur les angles éditoriaux et pré-briefs</li>
+        <li style="padding: 10px 0; font-size: 16px;"><strong>Dashboard KPI (P2)</strong> — Consolider YouTube, LinkedIn, WordPress pour pilotage opérationnel</li>
+      </ol>
+    </div>
+
+
+    <div style="background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%); border: 2px solid #16a34a; border-radius: 15px; padding: 25px; margin: 30px 0;">
+      <h4 style="color: #14532d; margin-bottom: 15px; font-size: 20px;">✅ Bénéfices Attendus</h4>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+        <div>
+          <p style="color: #15803d; font-size: 15px; margin-bottom: 8px;"><strong>Court terme (3 mois)</strong></p>
+          <ul style="list-style: none; padding: 0; color: #166534; font-size: 14px;">
+            <li>• Gain de 90% sur analyse sémantique</li>
+            <li>• Gain de 95% sur pré-audit</li>
+            <li>• Réduction délai RDV1-RDV2</li>
+          </ul>
+        </div>
+        <div>
+          <p style="color: #15803d; font-size: 15px; margin-bottom: 8px;"><strong>Moyen terme (6 mois)</strong></p>
+          <ul style="list-style: none; padding: 0; color: #166534; font-size: 14px;">
+            <li>• Knowledge base exploitable</li>
+            <li>• Offre conseil IA structurée</li>
+            <li>• Processus standardisés</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 50px; padding-top: 30px; border-top: 2px solid #e2e8f0; text-align: center; color: #64748b;">
+      <p style="font-size: 16px; margin-bottom: 10px;"><strong>Document rédigé pour INVOX</strong></p>
+      <p style="font-size: 14px; margin-bottom: 8px;">Livrable 1 : Analyse de Besoins — Stratégie de Pivot vers le Conseil par l'IA</p>
+      <p style="font-size: 14px; margin-bottom: 8px;">Sources : 4 interviews semi-dirigées (CEO, COO, Responsables Pôle Audience & Marketing)</p>
+      <p style="font-size: 14px; font-weight: 600; color: #278bc7;">Date de rendu : 23 octobre 2025</p>
+    </div>
+  </div>
+
+</div>
+<script>
+// Chart 1: Répartition des besoins (Bar horizontal)
+const ctx1 = document.getElementById('needsChart');
+if(ctx1) {
+  new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: ['Automatisation content-mapping', 'Knowledge management', 'Processus commercial', 'Dashboard KPI', 'Assistant production', 'Analyse SEO', 'Autres'],
+      datasets: [{
+        label: 'Importance (%)',
+        data: [25, 20, 18, 15, 12, 8, 2],
+        backgroundColor: [
+          '#dc2626',  // Rouge vif
+          '#ea580c',  // Orange
+          '#f59e0b',  // Ambre
+          '#16a34a',  // Vert
+          '#0ea5e9',  // Cyan
+          '#6366f1',  // Indigo
+          '#94a3b8'   // Gris
+        ],
+        borderRadius: 8,
+        borderWidth: 0
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { 
+          display: false
+        },
+        title: { 
+          display: true, 
+          text: 'Répartition des Besoins Utilisateurs par Importance (%)', 
+          font: { size: 18, weight: 'bold' },
+          color: '#0f172a',
+          padding: { bottom: 20 }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.parsed.x + '% d\'importance';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          max: 30,
+          title: {
+            display: true,
+            text: 'Importance (%)',
+            font: { size: 14, weight: '600' },
+            color: '#475569'
+          },
+          ticks: {
+            font: { size: 12 },
+            color: '#64748b',
+            callback: function(value) {
+              return value + '%';
+            }
+          },
+          grid: {
+            color: '#e2e8f0'
+          }
+        },
+        y: {
+          ticks: {
+            font: { size: 13, weight: '600' },
+            color: '#0f172a'
+          },
+          grid: {
+            display: false
+          }
+        }
+      }
+    }
+  });
+}
+
+// Chart 2: SWOT Radar
+const ctx2 = document.getElementById('swotChart');
+if(ctx2) {
+  new Chart(ctx2, {
+    type: 'radar',
+    data: {
+      labels: ['Compétences équipe', 'Outils modernes', 'Culture collaborative', 'Notoriété marché', 'Capacité innovation', 'Centralisation données'],
+      datasets: [
+        {
+          label: 'Forces',
+          data: [9, 8, 9, 8, 7, 3],
+          backgroundColor: 'rgba(22, 163, 74, 0.2)',
+          borderColor: '#16a34a',
+          borderWidth: 3,
+          pointBackgroundColor: '#16a34a',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 5
+        },
+        {
+          label: 'Faiblesses',
+          data: [3, 4, 4, 5, 5, 8],
+          backgroundColor: 'rgba(220, 38, 38, 0.2)',
+          borderColor: '#dc2626',
+          borderWidth: 3,
+          pointBackgroundColor: '#dc2626',
+          pointBorderColor: '#fff',
+          pointBorderWidth: 2,
+          pointRadius: 5
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 10,
+          ticks: {
+            stepSize: 2,
+            font: { size: 12 },
+            color: '#64748b'
+          },
+          pointLabels: {
+            font: { size: 13, weight: '600' },
+            color: '#0f172a'
+          },
+          grid: {
+            color: '#e2e8f0'
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            font: { size: 14, weight: '600' },
+            padding: 15,
+            color: '#475569'
+          }
+        },
+        title: {
+          display: true,
+          text: 'Analyse SWOT — Forces vs Faiblesses (Score sur 10)',
+          font: { size: 18, weight: 'bold' },
+          color: '#0f172a',
+          padding: { bottom: 20 }
+        }
+      }
+    }
+  });
+}
+
+// Chart 3: Gantt / Timeline
+</script>
+</body>
+</html>
