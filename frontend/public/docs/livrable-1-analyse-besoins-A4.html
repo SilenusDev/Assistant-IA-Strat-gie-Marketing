@@ -502,24 +502,114 @@ graph TB
       <strong>But :</strong> Réduire le délai entre RDV1 → RDV2 et fournir une propale compétitive rapidement.
     </p>
     
-    <div class="mermaid avoid-break">
-%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#e0f2fe','primaryTextColor':'#0f172a','primaryBorderColor':'#278bc7','lineColor':'#278bc7','secondaryColor':'#fce7f3','tertiaryColor':'#fef3c7','noteBkgColor':'#fff','noteTextColor':'#0f172a','actorTextColor':'#0f172a','labelTextColor':'#0f172a'}}}%%
-sequenceDiagram
-    participant C as Commercial
-    participant S as Système IA
-    participant CRM as HubSpot
-    participant Client
-    
-    C->>S: Saisie URL client + LinkedIn
-    S->>S: Web scraping automatique
-    S->>S: Analyse données (3-4h → 10min)
-    S->>CRM: Sync automatique
-    S->>C: Rapport pré-audit généré
-    C->>Client: RDV1 avec données
-    Client->>C: Validation intérêt
-    C->>S: Génération propale
-    S->>C: Propale personnalisée
-    C->>Client: RDV2 avec propale
+    <div class="avoid-break" style="background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%); padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(39, 139, 199, 0.15); margin: 30px 0; border: 2px solid #bae6fd;">
+      
+      <!-- Timeline verticale professionnelle -->
+      <div style="position: relative; padding-left: 60px;">
+        
+        <!-- Ligne verticale centrale -->
+        <div style="position: absolute; left: 30px; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, #278bc7 0%, #10b981 100%); border-radius: 4px;"></div>
+        
+        <!-- Étape 1 : Commercial → Système IA -->
+        <div style="position: relative; margin-bottom: 30px;">
+          <div style="position: absolute; left: -42px; top: 8px; width: 24px; height: 24px; background: #278bc7; border: 4px solid #fff; border-radius: 50%; box-shadow: 0 4px 12px rgba(39, 139, 199, 0.4);"></div>
+          <div style="background: white; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #278bc7;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 12px; font-weight: 600; color: #278bc7; text-transform: uppercase; letter-spacing: 1px;">👤 Commercial → 🤖 Système IA</span>
+              <span style="background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;">ÉTAPE 1</span>
+            </div>
+            <p style="font-size: 16px; color: #0f172a; font-weight: 600; margin: 0;">Saisie URL client + LinkedIn</p>
+          </div>
+        </div>
+        
+        <!-- Étape 2 : Traitement IA -->
+        <div style="position: relative; margin-bottom: 30px;">
+          <div style="position: absolute; left: -42px; top: 8px; width: 24px; height: 24px; background: #f59e0b; border: 4px solid #fff; border-radius: 50%; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);"></div>
+          <div style="background: white; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #f59e0b;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 12px; font-weight: 600; color: #f59e0b; text-transform: uppercase; letter-spacing: 1px;">🤖 Système IA</span>
+              <span style="background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;">ÉTAPE 2-3</span>
+            </div>
+            <p style="font-size: 16px; color: #0f172a; font-weight: 600; margin: 0 0 8px 0;">Web scraping + Analyse données</p>
+            <div style="background: #d1fae5; color: #065f46; padding: 8px 12px; border-radius: 8px; font-size: 14px; font-weight: 600; display: inline-block;">
+              ⚡ Gain : 3-4h → 10min
+            </div>
+          </div>
+        </div>
+        
+        <!-- Étape 4 : Sync HubSpot -->
+        <div style="position: relative; margin-bottom: 30px;">
+          <div style="position: absolute; left: -42px; top: 8px; width: 24px; height: 24px; background: #278bc7; border: 4px solid #fff; border-radius: 50%; box-shadow: 0 4px 12px rgba(39, 139, 199, 0.4);"></div>
+          <div style="background: white; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #278bc7;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 12px; font-weight: 600; color: #278bc7; text-transform: uppercase; letter-spacing: 1px;">🤖 Système IA → 💼 HubSpot</span>
+              <span style="background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;">ÉTAPE 4</span>
+            </div>
+            <p style="font-size: 16px; color: #0f172a; font-weight: 600; margin: 0;">Synchronisation automatique CRM</p>
+          </div>
+        </div>
+        
+        <!-- Étape 5 : Rapport généré -->
+        <div style="position: relative; margin-bottom: 30px;">
+          <div style="position: absolute; left: -42px; top: 8px; width: 24px; height: 24px; background: #278bc7; border: 4px solid #fff; border-radius: 50%; box-shadow: 0 4px 12px rgba(39, 139, 199, 0.4);"></div>
+          <div style="background: white; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #278bc7;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 12px; font-weight: 600; color: #278bc7; text-transform: uppercase; letter-spacing: 1px;">🤖 Système IA → 👤 Commercial</span>
+              <span style="background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;">ÉTAPE 5</span>
+            </div>
+            <p style="font-size: 16px; color: #0f172a; font-weight: 600; margin: 0;">Rapport pré-audit généré</p>
+          </div>
+        </div>
+        
+        <!-- Étape 6 : RDV1 -->
+        <div style="position: relative; margin-bottom: 30px;">
+          <div style="position: absolute; left: -42px; top: 8px; width: 24px; height: 24px; background: #10b981; border: 4px solid #fff; border-radius: 50%; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);"></div>
+          <div style="background: white; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #10b981;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 12px; font-weight: 600; color: #10b981; text-transform: uppercase; letter-spacing: 1px;">👤 Commercial → 🏢 Client</span>
+              <span style="background: #d1fae5; color: #065f46; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;">ÉTAPE 6</span>
+            </div>
+            <p style="font-size: 16px; color: #0f172a; font-weight: 600; margin: 0;">RDV1 avec données pré-audit</p>
+          </div>
+        </div>
+        
+        <!-- Étape 7 : Validation -->
+        <div style="position: relative; margin-bottom: 30px;">
+          <div style="position: absolute; left: -42px; top: 8px; width: 24px; height: 24px; background: #10b981; border: 4px solid #fff; border-radius: 50%; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);"></div>
+          <div style="background: white; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #10b981;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 12px; font-weight: 600; color: #10b981; text-transform: uppercase; letter-spacing: 1px;">🏢 Client → 👤 Commercial</span>
+              <span style="background: #d1fae5; color: #065f46; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;">ÉTAPE 7</span>
+            </div>
+            <p style="font-size: 16px; color: #0f172a; font-weight: 600; margin: 0;">Validation intérêt</p>
+          </div>
+        </div>
+        
+        <!-- Étape 8-9 : Génération propale -->
+        <div style="position: relative; margin-bottom: 30px;">
+          <div style="position: absolute; left: -42px; top: 8px; width: 24px; height: 24px; background: #278bc7; border: 4px solid #fff; border-radius: 50%; box-shadow: 0 4px 12px rgba(39, 139, 199, 0.4);"></div>
+          <div style="background: white; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #278bc7;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 12px; font-weight: 600; color: #278bc7; text-transform: uppercase; letter-spacing: 1px;">👤 Commercial ↔ 🤖 Système IA</span>
+              <span style="background: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;">ÉTAPE 8-9</span>
+            </div>
+            <p style="font-size: 16px; color: #0f172a; font-weight: 600; margin: 0;">Génération propale personnalisée</p>
+          </div>
+        </div>
+        
+        <!-- Étape 10 : RDV2 -->
+        <div style="position: relative;">
+          <div style="position: absolute; left: -42px; top: 8px; width: 24px; height: 24px; background: #10b981; border: 4px solid #fff; border-radius: 50%; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);"></div>
+          <div style="background: white; padding: 20px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); border-left: 4px solid #10b981;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 12px; font-weight: 600; color: #10b981; text-transform: uppercase; letter-spacing: 1px;">👤 Commercial → 🏢 Client</span>
+              <span style="background: #d1fae5; color: #065f46; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;">ÉTAPE 10 ✓</span>
+            </div>
+            <p style="font-size: 16px; color: #0f172a; font-weight: 600; margin: 0;">RDV2 avec propale</p>
+          </div>
+        </div>
+        
+      </div>
     </div>
 
     <div class="quote">
@@ -798,6 +888,15 @@ if(ctx2) {
 }
 
 // Chart 3: Gantt / Timeline
+
+// Forcer le rendu de tous les diagrammes Mermaid après chargement
+window.addEventListener('load', function() {
+  console.log('Forçage du rendu Mermaid...');
+  import('https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs').then(module => {
+    const mermaid = module.default;
+    mermaid.run();
+  });
+});
 </script>
 </body>
 </html>
