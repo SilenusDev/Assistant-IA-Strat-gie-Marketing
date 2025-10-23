@@ -14,7 +14,7 @@ import { ProgressBar } from "./ProgressBar";
 import { PlanSummary } from "./PlanSummary";
 import { suggestNewScenario, batchCreateScenarios, type ScenarioSuggestion } from "../api/client";
 import { handleConfigurationReady, handleNextToCibles, handleGeneratePlan } from "../handlers/configurationHandlers";
-import { Loader2 } from "lucide-solid";
+import { LoadingMessage } from "./LoadingMessage";
 
 export function ChatPanel() {
   const [draft, setDraft] = createSignal("");
@@ -193,11 +193,14 @@ Sélectionnez ceux qui vous intéressent :`,
                   when={message.content === "scanning"}
                   fallback={
                     <Show
-                      when={message.content === "suggestions"}
+                      when={message.content === "generating_plan"}
                       fallback={
                         <Show
-                          when={message.content === "plan_summary"}
+                          when={message.content === "suggestions"}
                           fallback={
+                            <Show
+                              when={message.content === "plan_summary"}
+                              fallback={
                             <Show
                               when={message.content === "objectif_flow"}
                               fallback={
@@ -307,6 +310,21 @@ Sélectionnez ceux qui vous intéressent :`,
         >
                       {/* Cartes de suggestions */}
                       <div class="mr-auto text-left w-full space-y-3">
+                        {/* Bouton enregistrer en haut */}
+                        <div class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50 border border-slate-700">
+                          <span class="text-sm text-slate-300">
+                            <span class="font-semibold">{selectedSuggestions().size}</span> scénario{selectedSuggestions().size > 1 ? 's' : ''} sélectionné{selectedSuggestions().size > 1 ? 's' : ''}
+                          </span>
+                          <button
+                            onClick={handleSaveSelected}
+                            disabled={selectedSuggestions().size === 0 || isSaving()}
+                            class="px-4 py-2 rounded-lg bg-primary text-white font-semibold hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition text-sm"
+                          >
+                            {isSaving() ? "Enregistrement..." : "Enregistrer les scénarios sélectionnés"}
+                          </button>
+                        </div>
+
+                        {/* Liste des suggestions */}
                         <div class="grid grid-cols-1 gap-3">
                           <For each={suggestions()}>
                             {(suggestion, index) => (
@@ -318,36 +336,21 @@ Sélectionnez ceux qui vous intéressent :`,
                             )}
                           </For>
                         </div>
-                        
-                        <div class="flex items-center justify-between pt-2">
-                          <span class="text-xs text-slate-400">
-                            {selectedSuggestions().size} scénario{selectedSuggestions().size > 1 ? 's' : ''} sélectionné{selectedSuggestions().size > 1 ? 's' : ''}
-                          </span>
-                          <button
-                            onClick={handleSaveSelected}
-                            disabled={selectedSuggestions().size === 0 || isSaving()}
-                            class="px-4 py-2 rounded-lg bg-primary text-white font-semibold hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition text-sm"
-                          >
-                            {isSaving() ? "Enregistrement..." : "Enregistrer les scénarios sélectionnés"}
-                          </button>
-                        </div>
                       </div>
                     </Show>
                   }
                 >
                   {/* Spinner de scan */}
-                  <div class="mr-auto text-left max-w-xl">
-                    <div class="inline-block rounded-xl px-4 py-3 text-sm shadow-md bg-slate-800 text-slate-100">
-                      <div class="flex items-center gap-3">
-                        <Loader2 size={20} class="animate-spin text-primary" />
-                        <p>Je scanne les scénarios existants pour vous proposer une approche inédite</p>
-                      </div>
-                    </div>
-                  </div>
+                  <LoadingMessage message="Je scanne les scénarios existants pour vous proposer une approche inédite" />
                 </Show>
               }
             >
-              {/* Message de bienvenue stylisé */}
+              {/* Spinner génération plan */}
+              <LoadingMessage message="Génération de votre plan marketing en cours..." />
+            </Show>
+          }
+        >
+          {/* Message de bienvenue stylisé */}
               <div class="mr-auto text-left w-full max-w-2xl">
                 <div class="rounded-xl px-5 py-4 text-sm shadow-lg bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20">
                   <p class="text-base font-semibold text-slate-100 mb-3">

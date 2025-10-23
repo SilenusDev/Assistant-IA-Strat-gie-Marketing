@@ -1,6 +1,17 @@
-# POC Assistant IA Marketing
+# 🤖 POC Assistant IA - Stratégie Marketing
 
-> **Proof of Concept** - Assistant conversationnel pour co-construire des scénarios marketing B2B
+> **Proof of Concept** - Assistant conversationnel pour co-construire des scénarios marketing B2B avec génération automatique de plans de diffusion
+
+[![Status](https://img.shields.io/badge/status-POC-blue)](https://github.com)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
+## 📖 Documentation
+
+- **📄 [Livrable 1 : Analyse des besoins](http://localhost:3000/docs/livrable-1-analyse-besoins-A4.html)** - Analyse détaillée des besoins utilisateurs
+- **📋 [Livrable 2 : Cahier des charges](http://localhost:3000/docs/livrable-2-cahier-des-charges-A4.html)** - Spécifications techniques complètes
+- **🎯 [Présentation POC (Slides)](http://localhost:3000/docs/presentation.html)** - Présentation interactive du projet
+
+💡 **Accès rapide** : Menu "Documentation" dans l'application (en haut à droite)
 
 ## 🚀 Démarrage rapide
 
@@ -63,14 +74,14 @@ make test          # Lancer les tests
 
 ## 🎯 Fonctionnalités
 
-### Flow d'accompagnement conversationnel
+### 💬 Flow d'accompagnement conversationnel
 1. **Création/Sélection de configuration** - L'utilisateur choisit ou crée une configuration marketing
 2. **Définition des objectifs** (max 2) - IA propose + liste existante + création manuelle
 3. **Définition des cibles** (max 3) - IA propose + liste existante + création manuelle
 4. **Génération de plan** - L'IA génère automatiquement un plan avec 5 articles de diffusion
 5. **Export et gestion** - Export JSON/CSV, visualisation des plans
 
-### Fonctionnalités techniques
+### ✨ Fonctionnalités principales
 ✅ **Chat conversationnel hybride** - Agent IA + composants interactifs (cartes cliquables)  
 ✅ **Gestion de scénarios** - CRUD complet sur les scénarios marketing B2B  
 ✅ **Gestion d'objectifs et cibles** - Tables globales réutilisables  
@@ -78,6 +89,13 @@ make test          # Lancer les tests
 ✅ **Sauvegarde progressive** - Chaque choix est sauvegardé immédiatement  
 ✅ **Export** - JSON et CSV  
 ✅ **Nettoyage automatique** - TTL 7 jours sur l'historique des messages  
+
+### 🎨 Interface utilisateur
+- **Design moderne** - TailwindCSS + Lucide Icons
+- **Responsive** - Adapté mobile et desktop
+- **Sidebar dynamique** - Liste des scénarios avec statuts
+- **Structure visuelle** - Arborescence configuration → objectifs → cibles
+- **Feedback temps réel** - Loading states et animations  
 
 ## 🏗️ Architecture
 
@@ -150,15 +168,35 @@ docker-compose down -v && docker-compose up -d --build
 podman-compose down -v && make dev
 ```
 
+## 📊 Résultats & Impact
+
+### Gains attendus
+- ⏱️ **15-20h/mois** gagnées sur la définition de stratégies marketing
+- 💰 **19 500€/an** valorisés en temps économisé
+- ✅ **Suppression des tâches détestées** (définition sujets/angles)
+- 🎯 **Vision complète** des dispositifs marketing
+
+### Métriques POC
+- ⚡ **3 jours** de développement
+- 🎨 **11 slides** de présentation interactive
+- 📄 **2 livrables** complets (analyse + cahier des charges)
+- 🤖 **GPT-4o-mini** pour la génération de contenu
+
 ## ⚠️ Note importante
 
 **Ceci est un POC de démonstration, pas un projet production.**
 
-Principes POC respectés :
-- Code simple et direct
-- Pas de sur-ingénierie
-- Focus sur la démonstration fonctionnelle
-- "Make it work, not perfect"
+### Principes POC respectés
+- ✅ Code simple et direct
+- ✅ Pas de sur-ingénierie
+- ✅ Focus sur la démonstration fonctionnelle
+- ✅ "Make it work, not perfect"
+
+### Limitations POC
+- ❌ Pas d'authentification utilisateur
+- ❌ Flow linéaire simplifié (pas de retour arrière)
+- ❌ Pas de reprise de session (si interruption, recommencer)
+- ❌ TTL messages limité à 7 jours
 
 ## 📝 Variables d'environnement
 

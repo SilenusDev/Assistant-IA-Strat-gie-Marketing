@@ -23,6 +23,9 @@ export const startConfigurationFlow = async (scenarioId: number) => {
     author: "assistant",
     content: `🎯 Parfait ! Développons ensemble le scénario.
 
+Un scénario peut avoir plusieurs configurations avec différents objectifs et cibles.
+Vous pouvez nommer vos configurations V1, V2, etc. pour différentes approches stratégiques !
+
 Pour commencer, souhaitez-vous créer une nouvelle configuration ou utiliser une existante ?`,
     createdAt: new Date()
   });
@@ -42,11 +45,15 @@ export const handleConfigurationReady = async (configId: number) => {
   progressStore.setConfigCompleted(true);
   progressStore.setStep(1); // Étape objectifs
   
-  // Clear du chat et message de succès
-  const successId = chatStore.addSuccessMessage(
-    "🎉 Parfait Justine ! Votre configuration est prête. Passons aux objectifs !"
-  );
-  chatStore.clearMessages([successId]);
+  // Clear du chat et afficher le flow objectifs
+  chatStore.clearMessages();
+  
+  chatStore.addMessage({
+    id: nanoid(),
+    author: "assistant",
+    content: "🎉 Parfait Justine ! Votre configuration est prête. Passons aux objectifs !",
+    createdAt: new Date()
+  });
   
   chatStore.addMessage({
     id: "objectif_flow",
@@ -61,11 +68,15 @@ export const handleNextToCibles = async () => {
   progressStore.setObjectifsCount(configurationStore.state.selectedObjectifs.length);
   progressStore.setStep(2); // Étape cibles
   
-  // Clear du chat et message de succès
-  const successId = chatStore.addSuccessMessage(
-    "👏 Excellent choix ! Vos objectifs sont bien définis. Place aux cibles !"
-  );
-  chatStore.clearMessages([successId]);
+  // Clear du chat et afficher le flow cibles
+  chatStore.clearMessages();
+  
+  chatStore.addMessage({
+    id: nanoid(),
+    author: "assistant",
+    content: "👏 Excellent choix ! Vos objectifs sont bien définis. Place aux cibles !",
+    createdAt: new Date()
+  });
   
   chatStore.addMessage({
     id: "cible_flow",
@@ -80,17 +91,21 @@ export const handleGeneratePlan = async () => {
   // Mettre à jour la progression
   progressStore.setCiblesCount(configurationStore.state.selectedCibles.length);
   
-  // Clear du chat et message de succès
-  const successId = chatStore.addSuccessMessage(
-    "🚀 Bravo ! Votre stratégie prend forme. Générons votre plan maintenant !"
-  );
-  chatStore.clearMessages([successId]);
+  // Clear du chat et message de génération
+  chatStore.clearMessages();
+  
+  chatStore.addMessage({
+    id: nanoid(),
+    author: "assistant",
+    content: "🚀 Bravo ! Votre stratégie prend forme. Générons votre plan maintenant !",
+    createdAt: new Date()
+  });
   
   // Afficher spinner de génération
   chatStore.addMessage({
     id: "generating_plan",
     author: "assistant",
-    content: "⏳ Génération de votre plan marketing en cours...",
+    content: "generating_plan",
     createdAt: new Date()
   });
   

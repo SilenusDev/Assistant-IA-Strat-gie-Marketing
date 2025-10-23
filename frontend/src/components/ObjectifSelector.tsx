@@ -43,41 +43,43 @@ export function ObjectifSelector(props: ObjectifSelectorProps) {
 
   return (
     <div class="space-y-6">
-      {/* Header - Info + Bouton Navigation */}
+      {/* Header - Info */}
       <div class="rounded-xl bg-gradient-to-r from-blue-600/10 to-purple-600/10 border border-blue-500/20 p-4">
-        <div class="flex items-start justify-between gap-4">
-          <div class="flex-1">
-            <div class="flex items-center gap-2 mb-2">
-              <Info size={18} class="text-blue-400" />
-              <h3 class="text-sm font-semibold text-slate-200">
-                Sélection des objectifs
-              </h3>
-            </div>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              <strong class="text-slate-300">Maximum {MAX_OBJECTIFS} objectifs.</strong>
-              {" "}
-              <Show
-                when={props.selectedObjectifs.length > 0}
-                fallback="Choisissez les objectifs marketing pour votre stratégie."
-              >
-                Vous avez choisi <strong class="text-blue-400">{props.selectedObjectifs.length}</strong> objectif{props.selectedObjectifs.length > 1 ? 's' : ''}.
-                {props.selectedObjectifs.length >= 1 && " Vous pouvez maintenant choisir vos cibles."}
-              </Show>
-            </p>
-          </div>
-          
-          {/* Bouton Passer aux cibles */}
-          <Show when={props.selectedObjectifs.length > 0}>
-            <button
-              onClick={props.onNextStep}
-              class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold shadow-lg transition-all hover:shadow-xl hover:scale-105"
-            >
-              <span class="text-sm whitespace-nowrap">Passer aux cibles</span>
-              <ArrowRight size={16} />
-            </button>
-          </Show>
+        <div class="flex items-center gap-2 mb-2">
+          <Info size={18} class="text-blue-400" />
+          <h3 class="text-sm font-semibold text-slate-200">
+            Sélection des objectifs
+          </h3>
         </div>
+        <p class="text-xs text-slate-400 leading-relaxed">
+          <strong class="text-slate-300">Maximum {MAX_OBJECTIFS} objectifs.</strong>
+          {" "}Choisissez les objectifs marketing pour votre stratégie.
+        </p>
       </div>
+
+      {/* Bouton de validation uniforme */}
+      <Show when={props.selectedObjectifs.length > 0}>
+        <div class="rounded-xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-slate-700 p-4">
+          <div class="flex items-center justify-between mb-3">
+            <div class="text-sm text-slate-300">
+              <span class="font-semibold">Objectifs sélectionnés :</span>
+              <span class="ml-2 text-blue-400 font-bold text-lg">
+                {props.selectedObjectifs.length}/{MAX_OBJECTIFS}
+              </span>
+              <span class="ml-2 text-xs text-slate-500">
+                {props.selectedObjectifs.length === MAX_OBJECTIFS ? "max" : ""}
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={props.onNextStep}
+            class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold shadow-lg transition-all hover:shadow-xl hover:scale-[1.02]"
+          >
+            <span>Passer aux cibles</span>
+            <ArrowRight size={18} />
+          </button>
+        </div>
+      </Show>
 
       {/* Layout 2 colonnes 50/50 */}
       <div class="grid grid-cols-2 gap-6">

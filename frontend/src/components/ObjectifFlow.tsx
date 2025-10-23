@@ -1,7 +1,7 @@
 import { Show, createSignal, onMount } from "solid-js";
-import { Loader2 } from "lucide-solid";
 import { ObjectifSelector } from "./ObjectifSelector";
 import { CreateObjectifModal } from "./CreateObjectifModal";
+import { LoadingMessage } from "./LoadingMessage";
 import { configurationStore } from "../stores/configurationStore";
 
 interface ObjectifFlowProps {
@@ -74,10 +74,7 @@ export function ObjectifFlow(props: ObjectifFlowProps) {
       <Show
         when={!configurationStore.state.isLoading}
         fallback={
-          <div class="flex items-center justify-center gap-3 p-6">
-            <Loader2 size={24} class="animate-spin text-primary" />
-            <p class="text-sm text-slate-400">Chargement des objectifs...</p>
-          </div>
+          <LoadingMessage message="Chargement des objectifs..." />
         }
       >
         <ObjectifSelector

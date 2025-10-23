@@ -64,7 +64,7 @@ export interface ConfigurationDetail extends Configuration {
 }
 
 export interface ScenarioDetail extends ScenarioSummary {
-  configurations: Configuration[];
+  configurations: ConfigurationDetail[];
 }
 
 export interface ChatMessage {

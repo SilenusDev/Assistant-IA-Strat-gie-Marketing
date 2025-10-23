@@ -84,24 +84,30 @@ export function ScenarioModal(props: ScenarioModalProps) {
                     <h3 class="text-lg font-semibold text-slate-100">Objectifs</h3>
                   </div>
                   <Show
-                    when={props.scenario!.objectifs && props.scenario!.objectifs.length > 0}
+                    when={props.scenario!.configurations && props.scenario!.configurations.length > 0}
                     fallback={
                       <p class="text-sm text-slate-400 italic">Aucun objectif défini</p>
                     }
                   >
                     <div class="space-y-3">
-                      <For each={props.scenario!.objectifs}>
-                        {(objectif) => (
-                          <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
-                            <p class="text-sm font-medium text-slate-200 mb-1">
-                              {objectif.label}
-                            </p>
-                            <Show when={objectif.description}>
-                              <p class="text-xs text-slate-400">
-                                {objectif.description}
-                              </p>
-                            </Show>
-                          </div>
+                      <For each={props.scenario!.configurations}>
+                        {(config) => (
+                          <Show when={config.objectifs && config.objectifs.length > 0}>
+                            <For each={config.objectifs}>
+                              {(objectif) => (
+                                <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+                                  <p class="text-sm font-medium text-slate-200 mb-1">
+                                    {objectif.label}
+                                  </p>
+                                  <Show when={objectif.description}>
+                                    <p class="text-xs text-slate-400">
+                                      {objectif.description}
+                                    </p>
+                                  </Show>
+                                </div>
+                              )}
+                            </For>
+                          </Show>
                         )}
                       </For>
                     </div>
@@ -151,13 +157,13 @@ export function ScenarioModal(props: ScenarioModalProps) {
                 </div>
               </div>
 
-              {/* Colonne 2 : Plan et Articles */}
+              {/* Colonne 2 : Plan avec Articles */}
               <div class="space-y-6">
                 {/* Plan */}
                 <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
                   <div class="flex items-center gap-2 mb-4">
                     <Calendar size={20} class="text-orange-400" />
-                    <h3 class="text-lg font-semibold text-slate-100">Plan</h3>
+                    <h3 class="text-lg font-semibold text-slate-100">Plan Marketing</h3>
                   </div>
                   <Show
                     when={props.scenario!.configurations && props.scenario!.configurations.length > 0}
@@ -165,34 +171,92 @@ export function ScenarioModal(props: ScenarioModalProps) {
                       <p class="text-sm text-slate-400 italic">Aucun plan défini</p>
                     }
                   >
-                    <div class="space-y-3">
+                    <div class="space-y-4">
                       <For each={props.scenario!.configurations}>
                         {(config) => (
-                          <Show when={config.plan && config.plan.length > 0}>
-                            <For each={config.plan}>
-                              {(planItem) => (
-                                <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
-                                  <div class="flex items-center justify-between mb-2">
-                                    <p class="text-sm font-medium text-slate-200">
-                                      {planItem.titre}
+                          <Show when={config.plans && config.plans.length > 0}>
+                            <For each={config.plans}>
+                              {(plan) => (
+                                <div class="bg-slate-900/50 rounded-lg p-4 border border-slate-700 space-y-3">
+                                  {/* En-tête du plan */}
+                                  <div class="flex items-center justify-between">
+                                    <p class="text-sm font-semibold text-slate-200">
+                                      Plan Marketing - {config.nom}
                                     </p>
-                                    <span class="text-xs px-2 py-1 rounded bg-orange-500/20 text-orange-300">
-                                      {planItem.type}
+                                    <span class="text-xs px-2 py-1 rounded bg-orange-500/20 text-orange-300 font-medium">
+                                      {new Date(plan.generated_at).toLocaleDateString('fr-FR')}
                                     </span>
                                   </div>
-                                  <Show when={planItem.description}>
-                                    <p class="text-xs text-slate-400 mb-2">
-                                      {planItem.description}
+                                  
+                                  <Show when={plan.resume}>
+                                    <p class="text-xs text-slate-400">
+                                      {plan.resume}
                                     </p>
                                   </Show>
-                                  <div class="flex items-center gap-3 text-xs text-slate-500">
-                                    <Show when={planItem.date_debut}>
-                                      <span>Début: {new Date(planItem.date_debut).toLocaleDateString('fr-FR')}</span>
-                                    </Show>
-                                    <Show when={planItem.date_fin}>
-                                      <span>Fin: {new Date(planItem.date_fin).toLocaleDateString('fr-FR')}</span>
-                                    </Show>
-                                  </div>
+
+                                  {/* Items du plan */}
+                                  <Show when={plan.items && plan.items.length > 0}>
+                                    <div class="space-y-2">
+                                      <h4 class="text-xs font-semibold text-slate-300 uppercase tracking-wide">
+                                        Actions ({plan.items.length})
+                                      </h4>
+                                      <For each={plan.items}>
+                                        {(item) => (
+                                          <div class="bg-slate-800/30 rounded-lg p-2.5 border border-slate-700/50">
+                                            <div class="flex items-start justify-between gap-2 mb-1">
+                                              <p class="text-xs font-medium text-slate-200">
+                                                {item.format}
+                                              </p>
+                                              <span class="text-xs px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 shrink-0">
+                                                {item.canal}
+                                              </span>
+                                            </div>
+                                            <p class="text-xs text-slate-400">
+                                              {item.message}
+                                            </p>
+                                            <Show when={item.frequence || item.kpi}>
+                                              <div class="flex gap-3 mt-1.5 text-xs text-slate-500">
+                                                <Show when={item.frequence}>
+                                                  <span>📅 {item.frequence}</span>
+                                                </Show>
+                                                <Show when={item.kpi}>
+                                                  <span>📊 {item.kpi}</span>
+                                                </Show>
+                                              </div>
+                                            </Show>
+                                          </div>
+                                        )}
+                                      </For>
+                                    </div>
+                                  </Show>
+
+                                  {/* Articles du plan */}
+                                  <Show when={plan.articles && plan.articles.length > 0}>
+                                    <div class="pt-3 border-t border-slate-700/50">
+                                      <div class="flex items-center gap-2 mb-2">
+                                        <FileText size={14} class="text-purple-400" />
+                                        <h4 class="text-xs font-semibold text-slate-300 uppercase tracking-wide">
+                                          Articles ({plan.articles.length})
+                                        </h4>
+                                      </div>
+                                      <div class="space-y-2">
+                                        <For each={plan.articles}>
+                                          {(article) => (
+                                            <div class="bg-slate-800/50 rounded-lg p-2.5 border border-slate-700/50">
+                                              <p class="text-xs font-medium text-slate-200 mb-1">
+                                                {article.nom}
+                                              </p>
+                                              <Show when={article.resume}>
+                                                <p class="text-xs text-slate-400 line-clamp-2">
+                                                  {article.resume}
+                                                </p>
+                                              </Show>
+                                            </div>
+                                          )}
+                                        </For>
+                                      </div>
+                                    </div>
+                                  </Show>
                                 </div>
                               )}
                             </For>
@@ -200,53 +264,18 @@ export function ScenarioModal(props: ScenarioModalProps) {
                         )}
                       </For>
                     </div>
-                  </Show>
-                </div>
 
-                {/* Articles */}
-                <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
-                  <div class="flex items-center gap-2 mb-4">
-                    <FileText size={20} class="text-purple-400" />
-                    <h3 class="text-lg font-semibold text-slate-100">Articles</h3>
-                  </div>
-                  <Show
-                    when={props.scenario!.configurations && props.scenario!.configurations.length > 0}
-                    fallback={
-                      <p class="text-sm text-slate-400 italic">Aucun article défini</p>
-                    }
-                  >
-                    <div class="space-y-3">
-                      <For each={props.scenario!.configurations}>
-                        {(config) => (
-                          <Show when={config.plan && config.plan.length > 0}>
-                            <For each={config.plan}>
-                              {(planItem) => (
-                                <Show when={planItem.articles && planItem.articles.length > 0}>
-                                  <For each={planItem.articles}>
-                                    {(article) => (
-                                      <div class="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
-                                        <p class="text-sm font-medium text-slate-200 mb-1">
-                                          {article.titre}
-                                        </p>
-                                        <Show when={article.contenu}>
-                                          <p class="text-xs text-slate-400 line-clamp-2">
-                                            {article.contenu}
-                                          </p>
-                                        </Show>
-                                        <Show when={article.statut}>
-                                          <span class="inline-block mt-2 text-xs px-2 py-1 rounded bg-purple-500/20 text-purple-300">
-                                            {article.statut}
-                                          </span>
-                                        </Show>
-                                      </div>
-                                    )}
-                                  </For>
-                                </Show>
-                              )}
-                            </For>
-                          </Show>
-                        )}
-                      </For>
+                    {/* Bouton Générer un autre plan */}
+                    <div class="pt-4 border-t border-slate-700">
+                      <button
+                        disabled
+                        class="w-full px-4 py-2.5 rounded-lg bg-gradient-to-r from-orange-600/20 to-purple-600/20 border border-orange-500/30 text-orange-300 font-semibold text-sm transition-all opacity-50 cursor-not-allowed"
+                      >
+                        🔄 Générer un autre plan
+                      </button>
+                      <p class="text-xs text-slate-500 text-center mt-2 italic">
+                        Fonctionnalité à venir
+                      </p>
                     </div>
                   </Show>
                 </div>
